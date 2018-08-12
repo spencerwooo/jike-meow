@@ -1,0 +1,94 @@
+* {
+  margin: 0;
+  padding: 0;
+  position: relative;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+
+img {
+  border: 0;
+  display: block;
+}
+
+div,
+p,
+span,
+a {
+  hyphens: auto;
+  overflow-wrap: break-word;
+  text-decoration: none;
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+body {
+  display: block;
+  font-family: sans-serif;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+}
+
+div#app {
+  display: block;
+  padding: 15px;
+  overflow: hidden;
+}
+
+div#qrcode-container {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+}
+
+div#qrcode-framer {
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(255, 255, 255, .8);
+  z-index: 99;
+}
+
+div#qrcode-framer>i {
+  display: block;
+  position: absolute;
+  height: 40px;
+  width: 40px;
+  top: calc(50% - 20px);
+  right: calc(50% - 20px);
+  background: url("../images/loading.svg") #fff center no-repeat;
+  background-size: 25px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+button {
+  cursor: pointer;
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  text-align: center;
+  padding: 6px 18px;
+  width: 170px;
+  margin-top: 15px;
+  outline: 0;
+  border: 1px solid transparent;
+  color: #404040;
+  border-radius: 18px;
+  background: #f0f3f5;
+  transition: all .3s linear;
+  user-select: none;
+}
+
+button.primary {
+  background: linear-gradient(105deg, #fad961, #ffe411);
+}
+
+button+button {
+  margin-top: 10px;
+}
