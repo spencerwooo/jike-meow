@@ -27,9 +27,7 @@ $("#logOut").click(function () {
 
 // 在即刻上粉我
 $("#followMe").click(function () {
-  chrome.tabs.executeScript(null, {
-    file: "scripts/follow-me.js"
-  })
+  window.open("https://web.okjike.com/user/F39BF844-7BF9-4754-8E7C-189CA3A35644/post")
 })
 
 // 触发 onMessage 回调
@@ -72,17 +70,17 @@ function getUuid() {
       $("#qrcode-framer").hide()
       waitForLogin(uuid)
     })
-    .fail(function () {})
+    .fail(function () { })
 }
 
 // 判断生成的二维码是否被扫描
 // 返回 res.logged_in === true 则扫描成功
 function waitForLogin(uuid) {
   $.get(url + "/sessions.wait_for_login", {
-      uuid: uuid
-    })
+    uuid: uuid
+  })
     .done(function (res) {
-      if (res.logged_in === true) {
+      if (res && res.logged_in === true) {
         waitForConfirmation(uuid)
       } else {
         getUuid()
@@ -97,8 +95,8 @@ function waitForLogin(uuid) {
 // 返回 res.confirmed === true 则获取 Token
 function waitForConfirmation(uuid) {
   $.get(url + "/sessions.wait_for_confirmation", {
-      uuid: uuid
-    })
+    uuid: uuid
+  })
     .done(function (res) {
       if (res.confirmed === true) {
         // 在 Storage 中存储 Token 传递给 store-token.js
