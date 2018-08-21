@@ -2,7 +2,7 @@
 (function () {
   var token = localStorage["auth-token"]
   if (token) {
-    localStorage.removeItem("auth-token")
+    localStorage.clear()
     location.reload()
   }
   chrome.runtime.sendMessage({
