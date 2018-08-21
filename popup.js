@@ -13,6 +13,21 @@ chrome.tabs.executeScript(null, {
   file: "scripts/detect-token.js"
 })
 
+// 触发 onMessage 回调
+chrome.runtime.onMessage.addListener(
+  function (request, sender, sendResponse) {
+    generateQrCode("https://t.cn/ReMJSA6")
+    if (request.token) {
+      $("#qrcode-framer").hide()
+      $("#logOut").show()
+      $("#refreshQR").hide()
+    } else {
+      $("#logOut").hide()
+      $("#refreshQR").show()
+      getUuid()
+    }
+  })
+
 // 二维码过期或失效时，手动刷新
 $("#refreshQR").click(function () {
   getUuid()
@@ -29,21 +44,6 @@ $("#logOut").click(function () {
 $("#followMe").click(function () {
   window.open("https://web.okjike.com/user/F39BF844-7BF9-4754-8E7C-189CA3A35644/post")
 })
-
-// 触发 onMessage 回调
-chrome.runtime.onMessage.addListener(
-  function (request, sender, sendResponse) {
-    generateQrCode("https://t.cn/ReMJSA6")
-    if (request.token) {
-      $("#qrcode-framer").hide()
-      $("#logOut").show()
-      $("#refreshQR").hide()
-    } else {
-      $("#logOut").hide()
-      $("#refreshQR").show()
-      getUuid()
-    }
-  })
 
 // 基于 QRcode.js 生成二维码
 function generateQrCode(url) {
@@ -101,7 +101,8 @@ function waitForConfirmation(uuid) {
       if (res.confirmed === true) {
         // 在 Storage 中存储 Token 传递给 store-token.js
         chrome.storage.local.set({
-          "token": res.token
+          "token": res.token,
+          "access-token": res["x-jike-access-token"]
         })
         chrome.tabs.executeScript(null, {
           file: "scripts/store-token.js"
