@@ -102,7 +102,8 @@ function waitForConfirmation(uuid) {
         // 在 Storage 中存储 Token 传递给 store-token.js
         chrome.storage.local.set({
           "token": res.token,
-          "access-token": res["x-jike-access-token"]
+          "access-token": res["x-jike-access-token"],
+          "refresh-token": res["x-jike-refresh-token"]
         })
         chrome.tabs.executeScript(null, {
           file: "scripts/store-token.js"

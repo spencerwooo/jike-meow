@@ -1,4 +1,16 @@
 // 在网页 LocalStorage 部署 Storage 传来的 Token
+chrome.storage.local.get(null, function (result) {
+  var date = new Date()
+  localStorage.setItem("auth-token", result.token)
+  localStorage.setItem("access-token", result["access-token"])
+  localStorage.setItem("token-timestamp", date.toIsoString())
+  location.href = "https://web.okjike.com/"
+  chrome.runtime.sendMessage({
+    token: result.token
+  }, null)
+})
+
+// 时间戳生成公式
 Date.prototype.toIsoString = function () {
   var tzo = -this.getTimezoneOffset(),
     dif = tzo >= 0 ? '+' : '-',
@@ -15,14 +27,3 @@ Date.prototype.toIsoString = function () {
     dif + pad(tzo / 60) +
     ':' + pad(tzo % 60);
 }
-
-chrome.storage.local.get(null, function (result) {
-  var date = new Date()
-  localStorage.setItem("auth-token", result.token)
-  localStorage.setItem("access-token", result["access-token"])
-  localStorage.setItem("token-timestamp", date.toIsoString())
-  location.href = "https://web.okjike.com/"
-  chrome.runtime.sendMessage({
-    token: result.token
-  }, null)
-})
