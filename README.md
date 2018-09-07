@@ -1,7 +1,7 @@
 # Jike Web QR
  即刻 Web 二维码登录插件，无需跳转登录界面即可实现登录。
 
- ![Chrome Store 截图](images/chrome-store-screenshot.jpg)
+ ![Chrome Store 截图](images/chrome-store-screenshot.png)
 
 ---
 
