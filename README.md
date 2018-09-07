@@ -1,6 +1,8 @@
 # Jike Web QR
  即刻 Web 二维码登录插件，无需跳转登录界面即可实现登录。
 
+ ![Chrome Store 截图](images/chrome-store-screenshot.jpg)
+
 ---
 
 该项目用到的皆为入门级 Chrome API，使用了 [jQuery 3](https://jquery.com)、[qrcode.js](https://github.com/davidshimjs/qrcodejs) 两个第三方库，基于即刻 Web API 和简单的 Popup > external js 交互逻辑实现。目前可实现的功能如下：
