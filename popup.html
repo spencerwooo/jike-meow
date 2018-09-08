@@ -3,23 +3,38 @@
 
 <head>
   <meta charset="utf-8">
-  <link rel="stylesheet" href="style/index.css">
+  <link rel="stylesheet"
+        href="style/index.css">
+  <script src="scripts/vue.min.js"></script>
 </head>
 
 <body>
   <div id="app">
-    <div id="qrcode-container">
-      <div id="qrcode-framer">
-        <i></i>
+    <div id="login">
+      <div id="qrcode-container">
+        <div id="qrcode-framer"
+             v-if="qr_loading">
+          <i></i>
+        </div>
+        <qrcode id="qrcode"
+                :value="qr"
+                tag="img"
+                :options="{ size: 200, foreground: '#404040' }"></qrcode>
       </div>
-      <div id="qrcode"></div>
+      <button id="refreshQR"
+              class="primary"
+              @click.self.stop="getUuid()"
+              v-if="!token">刷新二维码</button>
     </div>
-    <button id="followMe">关注我的即刻</button>
-    <button id="refreshQR" class="primary">刷新二维码</button>
-    <button id="logOut" class="primary">退出登录</button>
+    <button id="log-out"
+            class="primary"
+            v-if="token"
+            @click.self.stop="logOut()">退出登录</button>
+    <button id="follow-me"
+            @click.self.stop="window.open('https://web.okjike.com/user/F39BF844-7BF9-4754-8E7C-189CA3A35644/post', '_blank')">关注我的即刻</button>
   </div>
-  <script src="scripts/jquery-3.3.1.min.js"></script>
-  <script src="scripts/qrcode.min.js"></script>
+  <script src="scripts/axios.min.js"></script>
+  <script src="scripts/vue-qrcode.min.js"></script>
   <script src="popup.js"></script>
 </body>
 

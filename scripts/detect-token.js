@@ -5,14 +5,15 @@ var access_token = localStorage["access-token"]
 chrome.storage.local.get(null, function (result) {
   if (!token || !access_token) {
     if (result.token && result["access-token"] && result["refresh-token"]) {
-      $.ajax({
+      axios({
         url: url + "/app_auth_tokens.refresh",
-        type: "GET",
+        method: "get",
         headers: {
           "x-jike-refresh-token": result["refresh-token"]
         }
       })
-        .done(function (res) {
+        .then(function (response) {
+          var res = response.data
           var date = new Date()
           localStorage.setItem("auth-token", result.token)
           localStorage.setItem("access-token", res["x-jike-access-token"])
@@ -29,7 +30,7 @@ chrome.storage.local.get(null, function (result) {
             token: result.token
           }, null)
         })
-        .fail(function () {
+        .catch(function () {
           alert("数据异常")
           return false
         })

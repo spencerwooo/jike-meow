@@ -4,116 +4,106 @@
 
 'use strict'
 
-var token
-var uuid
-var url = "https://app.jike.ruguoapp.com"
+var VueQrcode = window.VueQrcode
+Vue.component('qrcode', VueQrcode)
 
-// 检测 Token 是否已经存在
-chrome.tabs.executeScript(null, {
-  file: "scripts/detect-token.js"
-})
-
-// 触发 onMessage 回调
-chrome.runtime.onMessage.addListener(
-  function (request, sender, sendResponse) {
-    generateQrCode("https://t.cn/ReMJSA6")
-    if (request.token) {
-      $("#qrcode-framer").hide()
-      $("#logOut").show()
-      $("#refreshQR").hide()
-    } else {
-      $("#logOut").hide()
-      $("#refreshQR").show()
-      getUuid()
+new Vue({
+  el: '#app',
+  data() {
+    return {
+      url: 'https://app.jike.ruguoapp.com',
+      uuid: '',
+      token: '',
+      qr: '',
+      qr_loading: true
     }
-  })
-
-// 二维码过期或失效时，手动刷新
-$("#refreshQR").click(function () {
-  getUuid()
-})
-
-// 退出登录
-$("#logOut").click(function () {
-  chrome.tabs.executeScript(null, {
-    file: "scripts/log-out.js"
-  })
-})
-
-// 在即刻上粉我
-$("#followMe").click(function () {
-  window.open("https://web.okjike.com/user/F39BF844-7BF9-4754-8E7C-189CA3A35644/post")
-})
-
-// 基于 QRcode.js 生成二维码
-function generateQrCode(url) {
-  if ($("#qrcode").children().length > 0) {
-    $("#qrcode").empty()
+  },
+  created() {
+    var _this = this
+    _this.qr = 'http://t.cn/RsK7PgI'
+    _this.qr_loading = false
+    chrome.tabs.executeScript(null, {
+      file: 'scripts/detect-token.js'
+    })
+    // script callback
+    chrome.runtime.onMessage.addListener(
+      function (request, sender, sendResponse) {
+        if (request.token) {
+          _this.token = request.token
+        } else {
+          _this.getUuid()
+        }
+      })
+  },
+  methods: {
+    getUuid() {
+      var _this = this
+      _this.qr_loading = true
+      axios.get(_this.url + '/sessions.create')
+        .then(function (res) {
+          var data = res.data
+          _this.qr_loading = false
+          _this.uuid = data.uuid
+          _this.qr = 'jike://page.jk/web?url=https%3A%2F%2Fruguoapp.com%2Faccount%2Fscan%3Fuuid%3D' + _this.uuid + '&displayHeader=false&displayFooter=false'
+          _this.waitForLogin()
+        })
+        .catch(function () {
+          _this.qr_loading = false
+          return false
+        })
+    },
+    waitForLogin() {
+      var _this = this
+      axios.get(_this.url + '/sessions.wait_for_login', {
+        params: {
+          uuid: _this.uuid
+        }
+      })
+        .then(function (res) {
+          var data = res.data
+          if (data && data.logged_in === true) {
+            _this.waitForConfirmation()
+          } else {
+            _this.getUuid()
+          }
+        })
+        .catch(function () {
+          _this.getUuid()
+        })
+    },
+    waitForConfirmation() {
+      var _this = this
+      axios.get(_this.url + '/sessions.wait_for_confirmation', {
+        params: {
+          uuid: _this.uuid
+        }
+      })
+        .then(function (res) {
+          var data = res.data
+          if (data.confirmed === true) {
+            _this.qr = 'http://t.cn/RsK7PgI'
+            // 在 Storage 中存储 Token 传递给 store-token.js
+            chrome.storage.local.set({
+              'token': data.token,
+              'access-token': data['x-jike-access-token'],
+              'refresh-token': data['x-jike-refresh-token']
+            })
+            chrome.tabs.executeScript(null, {
+              file: 'scripts/store-token.js'
+            })
+          } else {
+            _this.getUuid()
+          }
+        })
+        .catch(function () {
+          alert('验证接口请求异常，请手动刷新二维码')
+          return false
+        })
+    },
+    logOut() {
+      chrome.tabs.executeScript(null, {
+        file: 'scripts/log-out.js'
+      })
+    }
   }
-  new QRCode(document.getElementById("qrcode"), {
-    text: url,
-    width: 170,
-    height: 170,
-    colorDark: "#404040",
-    colorLight: "#ffffff",
-    correctLevel: QRCode.CorrectLevel.H
-  })
-}
-
-// 获取 UUID 并生成二维码
-function getUuid() {
-  $("#qrcode-framer").show()
-  $.get(url + "/sessions.create")
-    .done(function (res) {
-      uuid = res.uuid
-      generateQrCode("jike://page.jk/web?url=https%3A%2F%2Fruguoapp.com%2Faccount%2Fscan%3Fuuid%3D" + uuid + "&displayHeader=false&displayFooter=false")
-      $("#qrcode-framer").hide()
-      waitForLogin(uuid)
-    })
-    .fail(function () { })
-}
-
-// 判断生成的二维码是否被扫描
-// 返回 res.logged_in === true 则扫描成功
-function waitForLogin(uuid) {
-  $.get(url + "/sessions.wait_for_login", {
-    uuid: uuid
-  })
-    .done(function (res) {
-      if (res && res.logged_in === true) {
-        waitForConfirmation(uuid)
-      } else {
-        getUuid()
-      }
-    })
-    .fail(function () {
-      getUuid()
-    })
-}
-
-// 判断即刻客户端里是否点击确认登录
-// 返回 res.confirmed === true 则获取 Token
-function waitForConfirmation(uuid) {
-  $.get(url + "/sessions.wait_for_confirmation", {
-    uuid: uuid
-  })
-    .done(function (res) {
-      if (res.confirmed === true) {
-        // 在 Storage 中存储 Token 传递给 store-token.js
-        chrome.storage.local.set({
-          "token": res.token,
-          "access-token": res["x-jike-access-token"],
-          "refresh-token": res["x-jike-refresh-token"]
-        })
-        chrome.tabs.executeScript(null, {
-          file: "scripts/store-token.js"
-        })
-      } else {
-        getUuid()
-      }
-    })
-    .fail(function () {
-      alert("验证接口请求异常，请手动刷新二维码")
-      return false
-    })
-}
+})

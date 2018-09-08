@@ -24,7 +24,9 @@ a {
 
 body {
   display: block;
+  padding: 15px 10px;
   font-family: sans-serif;
+  color: #404040;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   -webkit-text-size-adjust: 100%;
@@ -32,14 +34,23 @@ body {
 
 div#app {
   display: block;
-  padding: 15px;
-  overflow: hidden;
+  width: 100%;
+}
+
+/* 登录 */
+
+div#login {
+  display: block;
+}
+
+img#qrcode {
+  display: block;
+  margin: -5px auto;
 }
 
 div#qrcode-container {
   display: block;
   width: 100%;
-  overflow: hidden;
 }
 
 div#qrcode-framer {
@@ -49,6 +60,8 @@ div#qrcode-framer {
   right: 0;
   bottom: 0;
   left: 0;
+  height: 100%;
+  width: 100%;
   background: rgba(255, 255, 255, .8);
   z-index: 99;
 }
@@ -63,8 +76,21 @@ div#qrcode-framer>i {
   background: url("../images/loading.svg") #fff center no-repeat;
   background-size: 25px;
   border-radius: 50%;
-  overflow: hidden;
 }
+
+/* 通知 */
+
+div#notification {
+  display: block;
+  max-height: 400px;
+  margin-top: -15px;
+  width: 300px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 按钮 */
 
 button {
   cursor: pointer;
@@ -74,8 +100,8 @@ button {
   line-height: 20px;
   text-align: center;
   padding: 6px 18px;
-  width: 170px;
-  margin-top: 15px;
+  width: 185px;
+  margin: 15px auto 0 auto;
   outline: 0;
   border: 1px solid transparent;
   color: #404040;
