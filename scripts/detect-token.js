@@ -41,7 +41,7 @@ chrome.storage.local.get(null, function (result) {
     }
   } else {
     chrome.runtime.sendMessage({
-      token: result.token
+      token: token
     }, null)
   }
 })
