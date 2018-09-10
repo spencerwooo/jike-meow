@@ -19,13 +19,13 @@
         <qrcode id="qrcode"
                 :value="qr"
                 tag="img"
-                :options="{ size: 200, foreground: '#404040' }"></qrcode>
+                :options="{ size: 200, padding: 10, foreground: '#404040' }"></qrcode>
       </div>
-      <button id="refreshQR"
+    </div>
+    <button id="refreshQR"
               class="primary"
               @click.self.stop="getUuid()"
               v-if="!token">刷新二维码</button>
-    </div>
     <button id="log-out"
             class="primary"
             v-if="token"
