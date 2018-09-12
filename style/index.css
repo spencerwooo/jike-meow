@@ -24,7 +24,7 @@ a {
 
 body {
   display: block;
-  padding: 15px 10px;
+  padding: 15px;
   font-family: sans-serif;
   color: #404040;
   -moz-osx-font-smoothing: grayscale;
@@ -50,7 +50,8 @@ img#qrcode {
 
 div#qrcode-container {
   display: block;
-  width: 100%;
+  height: 200px;
+  width: 200px;
 }
 
 div#qrcode-framer {
@@ -100,7 +101,7 @@ button {
   line-height: 20px;
   text-align: center;
   padding: 6px 18px;
-  width: 185px;
+  width: 200px;
   margin: 15px auto 0 auto;
   outline: 0;
   border: 1px solid transparent;

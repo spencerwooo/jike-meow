@@ -4,9 +4,6 @@
 
 'use strict'
 
-var VueQrcode = window.VueQrcode
-Vue.component('qrcode', VueQrcode)
-
 new Vue({
   el: '#app',
   data() {
@@ -14,13 +11,11 @@ new Vue({
       url: 'https://app.jike.ruguoapp.com',
       uuid: '',
       token: '',
-      qr: '',
       qr_loading: true
     }
   },
   created() {
     var _this = this
-    _this.qr = 'http://t.cn/RsK7PgI'
     _this.qr_loading = false
     chrome.tabs.executeScript(null, {
       file: 'scripts/detect-token.js'
@@ -30,12 +25,25 @@ new Vue({
       function (request, sender, sendResponse) {
         if (request.token) {
           _this.token = request.token
+          _this.newQRCode('http://t.cn/RsK7PgI')
         } else {
           _this.getUuid()
         }
       })
   },
   methods: {
+    newQRCode(url) {
+      document.getElementById('qrcode').innerHTML = ''
+      var qrcode = new QRCode(document.getElementById('qrcode'), {
+        text: '',
+        width: 200,
+        height: 200,
+        colorDark: '#000000',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.H
+      })
+      qrcode.makeCode(url)
+    },
     getUuid() {
       var _this = this
       _this.qr_loading = true
@@ -44,7 +52,7 @@ new Vue({
           var data = res.data
           _this.qr_loading = false
           _this.uuid = data.uuid
-          _this.qr = 'jike://page.jk/web?url=https%3A%2F%2Fruguoapp.com%2Faccount%2Fscan%3Fuuid%3D' + _this.uuid + '&displayHeader=false&displayFooter=false'
+          _this.newQRCode('jike://page.jk/web?url=https%3A%2F%2Fruguoapp.com%2Faccount%2Fscan%3Fuuid%3D' + _this.uuid + '&displayHeader=false&displayFooter=false')
           _this.waitForLogin()
         })
         .catch(function () {
@@ -81,7 +89,7 @@ new Vue({
         .then(function (res) {
           var data = res.data
           if (data.confirmed === true) {
-            _this.qr = 'http://t.cn/RsK7PgI'
+            _this.newQRCode('http://t.cn/RsK7PgI')
             // 在 Storage 中存储 Token 传递给 store-token.js
             chrome.storage.local.set({
               'token': data.token,
