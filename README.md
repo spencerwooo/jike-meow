@@ -5,7 +5,7 @@
 
 ---
 
-该项目用到的皆为入门级 Chrome API，使用了 [jQuery 3](https://jquery.com)、[qrcode.js](https://github.com/davidshimjs/qrcodejs) 两个第三方库，基于即刻 Web API Popup > Page Scripts 交互逻辑，实现了一次扫码永久登录。安装请前往 [Chrome Store](https://chrome.google.com/webstore/detail/jike-web-qr/gahlkoaglgmbpjoecaahganpccafojaa) 👈
+该项目用到的皆为入门级 Chrome API，使用了 [vue.js](https://cn.vuejs.org/index.html) 和 [qrcode.js](https://github.com/davidshimjs/qrcodejs) 两个第三方库，并在基于即刻 Web API 的前提下实现了「一次扫码永久登录」特性。体验请前往 [Chrome Store](https://chrome.google.com/webstore/detail/jike-web-qr/gahlkoaglgmbpjoecaahganpccafojaa) 👈
 
 对于未来的展望：
 
