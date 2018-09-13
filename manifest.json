@@ -1,6 +1,6 @@
 {
   "name": "Jike Web QR",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "author": "coder_ysj",
   "description": "即刻网页版二维码登录插件",
   "permissions": [
@@ -12,24 +12,13 @@
   "incognito": "not_allowed",
   "offline_enabled": false,
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
-  "content_scripts": [
-    {
-      "js": [
-        "scripts/axios.min.js"
-      ],
-      "matches": [
-        "http://*/*",
-        "https://*/*"
-      ]
-    }
-  ],
   "background": {
     "scripts": [
       "background.js"
     ],
     "persistent": false
   },
-  "page_action": {
+  "browser_action": {
     "default_popup": "popup.html",
     "default_icon": {
       "16": "images/jk16.png",
