@@ -61,7 +61,6 @@ new Vue({
         }, null)
       }
     })
-
     // 接收回调
     chrome.runtime.onMessage.addListener(
       function (request, sender, sendResponse) {
@@ -70,12 +69,8 @@ new Vue({
           _this.token = request.token
           _this.access_token = request.access_token
           _this.newQRCode('http://t.cn/RsK7PgI')
-          _this.getNotify()
-          // if (_this.current_url.toString().indexOf('web.okjike.com') > -1) {
-          //   chrome.tabs.executeScript(null, {
-          //     file: 'scripts/store-token.js'
-          //   })
-          // }
+          var background = chrome.extension.getBackgroundPage();
+          background.getNotify(_this.access_token);
         } else {
           _this.getUuid()
         }
@@ -181,34 +176,6 @@ new Vue({
     logOut() {
       chrome.tabs.executeScript(null, {
         file: 'scripts/log-out.js'
-      })
-    },
-    // 获取未读消息数量
-    getNotify() {
-      var _this = this
-      var notifyIO = io('wss://msgcenter.jike.ruguoapp.com?x-jike-access-token=' + _this.access_token)
-      notifyIO.on('connect', function () {
-        console.log('connected')
-      })
-      notifyIO.on('message', function (data) {
-        if (data.type === 'NOTIFICATION') {
-          chrome.browserAction.setBadgeText({ text: data.data.unreadCount.toString() })
-        }
-      })
-      notifyIO.on('connect_error', (error) => {
-        console.log('connect failed')
-        notifyIO.disconnect()
-        setTimeout(function () {
-          _this.getNotify()
-        }, 5000)
-      })
-      notifyIO.on('disconnect', function (response) {
-        if (response === 'transport close') {
-          notifyIO.disconnect()
-          setTimeout(function () {
-            _this.getNotify()
-          }, 5000)
-        }
       })
     }
   }

@@ -7,6 +7,7 @@
     "activeTab",
     "declarativeContent",
     "storage",
+    "background",
     "<all_urls>"
   ],
   "incognito": "not_allowed",
@@ -14,6 +15,8 @@
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "background": {
     "scripts": [
+      "scripts/axios.min.js",
+      "scripts/socket.io.dev.js",
       "background.js"
     ],
     "persistent": false
