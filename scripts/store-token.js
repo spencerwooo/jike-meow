@@ -1,12 +1,22 @@
+var token = localStorage['auth-token']
+var access_token = localStorage['access-token']
+
 // 在网页 LocalStorage 部署 Storage 传来的 Token
 chrome.storage.local.get(null, function (result) {
-  var date = new Date()
-  localStorage.setItem("auth-token", result.token)
-  localStorage.setItem("access-token", result["access-token"])
-  localStorage.setItem("token-timestamp", date.toIsoString())
-  location.href = "https://web.okjike.com/"
+  // 判断当面页面是否为 "web.okjike.com"
+  if (window.location.host.indexOf('web.okjike.com') > -1) {
+    var date = new Date()
+    localStorage.setItem("auth-token", result.token)
+    localStorage.setItem("access-token", result["access-token"])
+    localStorage.setItem("token-timestamp", date.toIsoString())
+    if (!token || !access_token) {
+      location.href = "https://web.okjike.com/"
+    }
+  }
   chrome.runtime.sendMessage({
-    token: result.token
+    current_url: window.location.host,
+    token: result.token,
+    access_token: result["access-token"]
   }, null)
 })
 
