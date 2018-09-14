@@ -1,4 +1,3 @@
-// 本插件使用的都是入门级 Chrome extension API
 // Google 官方手册访问 https://developer.chrome.com/extensions
 // 非官方中文教程访问 https://crxdoc-zh.appspot.com/extensions
 
@@ -42,23 +41,11 @@ new Vue({
             chrome.tabs.executeScript(null, {
               file: 'scripts/store-token.js'
             })
-            // 回传
-            chrome.runtime.sendMessage({
-              current_url: window.location.host,
-              token: result.token,
-              access_token: res['x-jike-access-token']
-            }, null)
           })
           .catch(function () {
             alert('数据异常')
             return false
           })
-      } else {
-        chrome.runtime.sendMessage({
-          current_url: window.location.host,
-          token: null,
-          access_token: null
-        }, null)
       }
     })
     // 接收回调
