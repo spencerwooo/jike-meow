@@ -5,7 +5,6 @@
   "description": "即刻网页版二维码登录插件",
   "permissions": [
     "activeTab",
-    "declarativeContent",
     "storage",
     "background",
     "<all_urls>"
