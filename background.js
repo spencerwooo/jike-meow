@@ -1,7 +1,10 @@
 'use strict'
 
+chrome.runtime.onMessage.addListener(getNotify)
+
 // 获取未读消息数量
-function getNotify(access_token) {
+function getNotify(result) {
+  var access_token = result.access_token
   var notifyIO = io('wss://msgcenter.jike.ruguoapp.com?x-jike-access-token=' + access_token, {
     reconnection: true,
     reconnectionDelay: 1000,
@@ -19,16 +22,10 @@ function getNotify(access_token) {
   notifyIO.on('connect_error', (error) => {
     console.log('connect failed')
     notifyIO.disconnect()
-    setTimeout(function () {
-      getNotify()
-    }, 5000)
   })
   notifyIO.on('disconnect', function (response) {
     if (response === 'transport close') {
       notifyIO.disconnect()
-      setTimeout(function () {
-        getNotify()
-      }, 5000)
     }
   })
 }
