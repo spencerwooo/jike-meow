@@ -8,8 +8,10 @@
       localStorage.clear()
       location.reload()
     }
-    chrome.runtime.sendMessage({
-      token: null
-    }, null)
   }
+  chrome.runtime.sendMessage({
+    current_url: null,
+    token: null,
+    access_token: null
+  }, null)
 })()
