@@ -51,6 +51,14 @@ new Vue({
         _this.getUuid()
       }
     })
+    // 接收 store-token.js 的判断
+    chrome.runtime.onMessage.addListener(function (result) {
+      if (!result.token) {
+        _this.token = ''
+        _this.access_token = ''
+        _this.getUuid()
+      }
+    })
   },
   methods: {
     // 生成二维码
