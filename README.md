@@ -7,7 +7,7 @@
 ---
 
 ## 前提概要
-不同于标准的前端开发，Chrome Extensions 拥有完全不同的 API 和底层设计，但这些并不影响你通过 React 或 Vue 类似的框架，来构建一个完整的 Chrome 应用，甚至还能在 GitHub 上找到一些第三方「脚手架」来达到这一目的。前提是你得了解，或者说至少得熟悉项目的结构和基本规范。
+不同于标准的前端开发，Chrome Extensions 拥有完全不同的 API 和底层设计，但这些并不影响你通过 React 或 Vue 类似的框架，来构建一个完整的 Chrome 应用，甚至还能在 GitHub 上找到一些第三方「脚手架」来达到这一目的。前提是你得了解，或者说至少得熟悉项目的结构和基本规范。
 
 这里提供两个我曾参考过的文档链接，它们对于这个项目的「成型」起到了至关重要的作用。尤其要感谢 [翻译者们](https://plus.google.com/+Crxdoc-zhAppspot) 的辛苦制作！🎉
 
@@ -43,7 +43,7 @@ background.js
 log-out.js
 
 * 清空 Chrome 应用本地 Token 数据
-* 清空即刻 Web 端 LocalStorage 继而退出
+* 清空即刻 Web 端 LocalStorage 继而退出
 
 store-token.js
 
