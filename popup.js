@@ -11,13 +11,15 @@ new Vue({
       uuid: '',
       token: '',
       access_token: '',
-      qr_loading: true
+      qr_loading: true,
+      qr_scanning: false
     }
   },
   created() {
     var _this = this
     _this.qr_loading = false
     chrome.storage.local.get(null, function (result) {
+      chrome.browserAction.setBadgeText({ text: '0' })
       // 判断 Storage 中是否存在 Token 数据
       if (result.token && result['access-token'] && result['refresh-token']) {
         // 刷新 Token
@@ -53,9 +55,10 @@ new Vue({
     })
     // 接收 store-token.js 的判断
     chrome.runtime.onMessage.addListener(function (result) {
-      if (!result.token) {
+      if (!result.access_token) {
         _this.token = ''
         _this.access_token = ''
+        chrome.browserAction.setBadgeText({ text: '0' })
         _this.getUuid()
       }
     })
@@ -80,7 +83,7 @@ new Vue({
         pad = function (num) {
           var norm = Math.floor(Math.abs(num))
           return (norm < 10 ? '0' : '') + norm
-        };
+        }
       return this.getFullYear() +
         '-' + pad(this.getMonth() + 1) +
         '-' + pad(this.getDate()) +
@@ -93,6 +96,7 @@ new Vue({
     // 获取二维码
     getUuid() {
       var _this = this
+      _this.qr_scanning = false
       _this.qr_loading = true
       axios.get(_this.url + '/sessions.create')
         .then(function (res) {
@@ -118,6 +122,8 @@ new Vue({
         .then(function (res) {
           var data = res.data
           if (data && data.logged_in === true) {
+            _this.qr_scanning = true
+            _this.qr_loading = true
             _this.waitForConfirmation()
           } else {
             _this.getUuid()
@@ -137,6 +143,8 @@ new Vue({
       })
         .then(function (res) {
           var data = res.data
+          _this.qr_loading = false
+          _this.qr_scanning = false
           if (data.confirmed === true) {
             _this.newQRCode('http://t.cn/RsK7PgI')
             _this.token = data.token
@@ -146,9 +154,6 @@ new Vue({
               'access-token': data['x-jike-access-token'],
               'refresh-token': data['x-jike-refresh-token']
             })
-            // 获取 Socket-io 数据
-            var background = chrome.extension.getBackgroundPage()
-            background.getNotify(_this.access_token)
             // 部署网页 LocalStorage 数据
             chrome.tabs.executeScript(null, {
               file: 'scripts/store-token.js'
