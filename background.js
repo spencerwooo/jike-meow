@@ -6,12 +6,7 @@ chrome.runtime.onMessage.addListener(getNotify)
 function getNotify(result) {
   if (result.access_token) {
     var access_token = result.access_token
-    var notifyIO = io('wss://msgcenter.jike.ruguoapp.com?x-jike-access-token=' + access_token, {
-      reconnection: true,
-      reconnectionDelay: 10000,
-      reconnectionDelayMax: 30000,
-      reconnectionAttempts: Infinity
-    })
+    var notifyIO = io('wss://msgcenter.jike.ruguoapp.com?x-jike-access-token=' + access_token)
     notifyIO.on('connect', function () {
       console.log('connected')
     })
@@ -32,8 +27,5 @@ function getNotify(result) {
         notifyIO.close()
       }
     })
-  } else {
-    console.log('无 access token')
-    chrome.runtime.reload()
   }
 }

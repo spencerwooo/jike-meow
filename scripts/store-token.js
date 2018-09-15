@@ -3,21 +3,15 @@ var access_token = localStorage['access-token']
 
 // 在网页 LocalStorage 部署 Storage 传来的 Token
 chrome.storage.local.get(null, function (result) {
+
   // 判断当面页面是否为 "web.okjike.com"
   if (window.location.host.indexOf('web.okjike.com') > -1) {
     var date = new Date()
     localStorage.setItem("auth-token", result.token)
     localStorage.setItem("access-token", result["access-token"])
     localStorage.setItem("token-timestamp", date.toIsoString())
-    if (!token || !access_token) {
-      location.href = "https://web.okjike.com/"
-    }
+    location.reload()
   }
-  chrome.runtime.sendMessage({
-    current_url: window.location.host,
-    token: result.token,
-    access_token: result["access-token"]
-  }, null)
 })
 
 // 时间戳生成公式

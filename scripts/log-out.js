@@ -14,4 +14,5 @@
     token: null,
     access_token: null
   }, null)
+  chrome.runtime.reload()
 })()
