@@ -18,7 +18,9 @@ new Vue({
   created() {
     var _this = this
     _this.qr_loading = false
+
     chrome.storage.local.get(null, function (result) {
+
       chrome.browserAction.setBadgeText({ text: '0' })
       // 判断 Storage 中是否存在 Token 数据
       if (result.token && result['access-token'] && result['refresh-token']) {
@@ -32,19 +34,23 @@ new Vue({
         })
           .then(function (response) {
             var res = response.data
+
             _this.token = res.token
             _this.access_token = res['x-jike-access-token']
             _this.newQRCode('http://t.cn/RsK7PgI')
+
             // 在 Storage 中存储 Token
             chrome.storage.local.set({
               'token': result.token,
               'access-token': res['x-jike-access-token'],
               'refresh-token': res['x-jike-refresh-token']
             })
-            // 部署网页 LocalStorage 数据
-            chrome.tabs.executeScript(null, {
-              file: 'scripts/store-token.js'
-            })
+
+            // 获取未读消息数量
+            chrome.runtime.sendMessage({
+              token: res.token,
+              access_token: res['x-jike-access-token']
+            }, null)
           })
           .catch(function () {
             alert('数据异常')
@@ -77,6 +83,7 @@ new Vue({
       })
       qrcode.makeCode(url)
     },
+    // 生成时间戳
     newTimestamp() {
       var tzo = -this.getTimezoneOffset(),
         dif = tzo >= 0 ? '+' : '-',
@@ -93,11 +100,12 @@ new Vue({
         dif + pad(tzo / 60) +
         ':' + pad(tzo % 60)
     },
-    // 获取二维码
+    // 获取 Session
     getUuid() {
       var _this = this
       _this.qr_scanning = false
       _this.qr_loading = true
+
       axios.get(_this.url + '/sessions.create')
         .then(function (res) {
           var data = res.data
@@ -114,6 +122,7 @@ new Vue({
     // 等待客户端确认
     waitForLogin() {
       var _this = this
+
       axios.get(_this.url + '/sessions.wait_for_login', {
         params: {
           uuid: _this.uuid
@@ -133,9 +142,10 @@ new Vue({
           _this.getUuid()
         })
     },
-    // 点击确认登录
+    // 确认登录
     waitForConfirmation() {
       var _this = this
+
       axios.get(_this.url + '/sessions.wait_for_confirmation', {
         params: {
           uuid: _this.uuid
@@ -154,10 +164,6 @@ new Vue({
               'access-token': data['x-jike-access-token'],
               'refresh-token': data['x-jike-refresh-token']
             })
-            // 部署网页 LocalStorage 数据
-            chrome.tabs.executeScript(null, {
-              file: 'scripts/store-token.js'
-            })
           } else {
             _this.getUuid()
           }
@@ -167,10 +173,36 @@ new Vue({
           return false
         })
     },
-    // 登出
+    // 网页端登录
+    logIn() {
+      // chrome:// URL 下不执行 Token 部署
+      chrome.tabs.query({
+        active: true,
+        currentWindow: true
+      }, function (tabs) {
+        var url = tabs[0].url
+        if (url.indexOf('chrome://') < 0) {
+          chrome.tabs.executeScript(null, {
+            file: 'scripts/store-token.js'
+          })
+        }
+      })
+    },
+    // 退出
     logOut() {
-      chrome.tabs.executeScript(null, {
-        file: 'scripts/log-out.js'
+      chrome.tabs.query({
+        active: true,
+        currentWindow: true
+      }, function (tabs) {
+        var url = tabs[0].url
+        if (url.indexOf('chrome://') < 0) {
+          chrome.tabs.executeScript(null, {
+            file: 'scripts/log-out.js'
+          })
+        } else {
+          chrome.storage.local.clear()
+          chrome.runtime.reload()
+        }
       })
     }
   }

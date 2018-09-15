@@ -22,11 +22,15 @@
     <button class="primary"
             @click.self.stop="getUuid()"
             v-if="!access_token">刷新二维码</button>
-    <button class="primary"
+    <button class="primary half"
+            @click.self.stop="logIn()"
+            v-if="access_token">网页登录</button>
+    <button class="primary half"
+            style="margin-left: 10px;"
             @click.self.stop="logOut()"
-            v-else>退出登录</button>
+            v-if="access_token">退出登录</button>
     <button id="follow-me"
-            @click.self.stop="window.open('https://web.okjike.com/user/F39BF844-7BF9-4754-8E7C-189CA3A35644/post', '_blank')">关注我的即刻</button>
+            @click.self.stop="window.open('https://web.okjike.com/user/F39BF844-7BF9-4754-8E7C-189CA3A35644/post', '_blank')">关注开发者的即刻</button>
   </div>
   <script src="scripts/axios.min.js"></script>
   <script src="scripts/qrcode.min.js"></script>
