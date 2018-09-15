@@ -8,8 +8,8 @@ function getNotify(result) {
     var access_token = result.access_token
     var notifyIO = io('wss://msgcenter.jike.ruguoapp.com?x-jike-access-token=' + access_token, {
       reconnection: true,
-      reconnectionDelay: 1000,
-      reconnectionDelayMax: 5000,
+      reconnectionDelay: 10000,
+      reconnectionDelayMax: 30000,
       reconnectionAttempts: Infinity
     })
     notifyIO.on('connect', function () {
@@ -23,11 +23,17 @@ function getNotify(result) {
     notifyIO.on('connect_error', (error) => {
       console.log('connect failed')
       notifyIO.disconnect()
+      chrome.browserAction.setBadgeText({ text: '0' })
     })
     notifyIO.on('disconnect', function (response) {
+      chrome.browserAction.setBadgeText({ text: '0' })
       if (response === 'transport close') {
         notifyIO.disconnect()
+        notifyIO.close()
       }
     })
+  } else {
+    console.log('无 access token')
+    chrome.runtime.reload()
   }
 }
