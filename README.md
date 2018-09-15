@@ -2,7 +2,7 @@
 基于 Vue.js 开发的 Web 版即刻登录插件。  
 传送门：[Chrome Store](https://chrome.google.com/webstore/detail/jike-web-qr/gahlkoaglgmbpjoecaahganpccafojaa) 👈
 
- ![Chrome Store 截图](images/demo_2@3x.png)
+ ![Chrome Store 截图](images/github_screenshot@1x.png)
 
 ---
 
@@ -89,7 +89,7 @@ newTimestamp() => {
 ## 安装方法
 
 
-1. 下载项目的源代码并解压缩到任意文件夹中
+1. 下载项目的源代码并解压缩到任意文件夹中
 2. 打开 Chrome 浏览器并进入到 More Tools => Extensions 页面
 3. 点击左上角「Load unpacked」选择解压缩后的文件夹
 4. 确认即可完成安装
