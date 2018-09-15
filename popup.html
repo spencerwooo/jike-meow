@@ -12,9 +12,9 @@
   <div id="app">
     <div id="login">
       <div id="qrcode-container">
-        <div id="qrcode-framer"
+        <div class="qrcode-framer"
              v-if="qr_loading">
-          <i></i>
+          <p v-if="qr_scanning">请在手机上点击<br><b>确认登陆</b></p>
         </div>
         <div id="qrcode"></div>
       </div>
