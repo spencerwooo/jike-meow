@@ -1,6 +1,6 @@
 {
   "name": "Jike Web QR",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "author": "coder_ysj",
   "description": "即刻网页版二维码登录插件",
   "permissions": [
@@ -18,7 +18,7 @@
       "scripts/socket.io.dev.js",
       "background.js"
     ],
-    "persistent": false
+    "persistent": true
   },
   "browser_action": {
     "default_popup": "popup.html",
