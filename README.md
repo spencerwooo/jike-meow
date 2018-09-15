@@ -2,7 +2,7 @@
 基于 Vue.js 开发的 Web 版即刻登录插件。  
 传送门：[Chrome Store](https://chrome.google.com/webstore/detail/jike-web-qr/gahlkoaglgmbpjoecaahganpccafojaa) 👈
 
- ![Chrome Store 截图](images/chrome-store-screenshot.png)
+ ![Chrome Store 截图](images/demo_2@3x.png)
 
 ---
 
