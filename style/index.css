@@ -54,7 +54,7 @@ div#qrcode-container {
   width: 200px;
 }
 
-div#qrcode-framer {
+div.qrcode-framer {
   display: block;
   position: absolute;
   top: 0;
@@ -67,16 +67,23 @@ div#qrcode-framer {
   z-index: 99;
 }
 
-div#qrcode-framer>i {
-  display: block;
+div.qrcode-framer > p {
   position: absolute;
-  height: 40px;
-  width: 40px;
-  top: calc(50% - 20px);
-  right: calc(50% - 20px);
-  background: url("../images/loading.svg") #fff center no-repeat;
-  background-size: 25px;
-  border-radius: 50%;
+  width: 120px;
+  padding: 5px 0;
+  top: 50%;
+  right: calc(50% - 60px);
+  transform: translateY(-50%);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.6;
+  background: #fff;
+  text-align: center;
+  border-radius: 8px;
+}
+
+div.qrcode-framer > p > b {
+  color: #03a9f4;
 }
 
 /* 通知 */
