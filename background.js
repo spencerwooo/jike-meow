@@ -27,5 +27,35 @@ function getNotify(result) {
         notifyIO.close()
       }
     })
+
+    // 定时刷新 Token
+    chrome.storage.local.get(null, function (res) {
+
+      for (var i = 1; i < 9999; i++) {
+        window.clearInterval(i);
+      }
+
+      setTimeout(function refreshToken() {
+        axios({
+          url: 'https://app.jike.ruguoapp.com/app_auth_tokens.refresh',
+          method: 'get',
+          headers: {
+            'x-jike-refresh-token': res['refresh-token']
+          }
+        })
+          .then(function (response) {
+            var data = response.data
+
+            // 在 Storage 中存储 Token
+            chrome.storage.local.set({
+              'token': res.token,
+              'access-token': data['x-jike-access-token'],
+              'refresh-token': data['x-jike-refresh-token']
+            })
+            setTimeout(refreshToken, 6e5)
+          })
+          .catch(function () { })
+      }, 6e5)
+    })
   }
 }
