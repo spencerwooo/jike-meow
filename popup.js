@@ -7,12 +7,14 @@ new Vue({
   el: '#app',
   data() {
     return {
+      ui: false, // 优化 UI 闪烁问题
       url: 'https://app.jike.ruguoapp.com',
       uuid: '',
       token: '',
       access_token: '',
       qr_loading: true,
-      qr_scanning: false
+      qr_scanning: false,
+      notifications: []
     }
   },
   created() {
@@ -35,9 +37,8 @@ new Vue({
           .then(function (response) {
             var res = response.data
 
-            _this.token = res.token
+            _this.token = result.token
             _this.access_token = res['x-jike-access-token']
-            _this.newQRCode('http://t.cn/RsK7PgI')
 
             // 在 Storage 中存储 Token
             chrome.storage.local.set({
@@ -49,14 +50,19 @@ new Vue({
             // 获取未读消息数量
             chrome.runtime.sendMessage({
               token: res.token,
-              access_token: res['x-jike-access-token']
+              access_token: res['x-jike-access-token'],
+              refresh_token: res['x-jike-refresh-token']
             }, null)
+
+            _this.ui = true
+            _this.getNotificationList()
           })
           .catch(function () {
             alert('数据异常')
           })
       } else {
         _this.getUuid()
+        _this.ui = true
       }
     })
     // 接收 store-token.js 的判断
@@ -74,31 +80,13 @@ new Vue({
     newQRCode(url) {
       document.getElementById('qrcode').innerHTML = ''
       var qrcode = new QRCode(document.getElementById('qrcode'), {
-        text: '',
+        text: url,
         width: 200,
         height: 200,
         colorDark: '#000000',
         colorLight: '#ffffff',
         correctLevel: QRCode.CorrectLevel.H
       })
-      qrcode.makeCode(url)
-    },
-    // 生成时间戳
-    newTimestamp() {
-      var tzo = -this.getTimezoneOffset(),
-        dif = tzo >= 0 ? '+' : '-',
-        pad = function (num) {
-          var norm = Math.floor(Math.abs(num))
-          return (norm < 10 ? '0' : '') + norm
-        }
-      return this.getFullYear() +
-        '-' + pad(this.getMonth() + 1) +
-        '-' + pad(this.getDate()) +
-        'T' + pad(this.getHours()) +
-        ':' + pad(this.getMinutes()) +
-        ':' + pad(this.getSeconds()) +
-        dif + pad(tzo / 60) +
-        ':' + pad(tzo % 60)
     },
     // 获取 Session
     getUuid() {
@@ -172,6 +160,24 @@ new Vue({
           alert('验证接口请求异常，请手动刷新二维码')
           return false
         })
+    },
+    // 获取通知列表
+    getNotificationList() {
+      var _this = this
+      axios({
+        method: 'post',
+        url: _this.url + '/1.0/notifications/list',
+        headers: {
+          'x-jike-app-auth-jwt': _this.token,
+          'app-version': '4.8.0'
+        }
+      })
+        .then(function (response) {
+          chrome.browserAction.setBadgeText({ text: '0' })
+          var res = response.data
+          _this.notifications = res.data
+        })
+        .catch(function () { })
     },
     // 网页端登录
     logIn() {

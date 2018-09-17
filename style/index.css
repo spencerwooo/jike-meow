@@ -42,6 +42,7 @@ div#app {
 
 div#login {
   display: block;
+  margin: auto;
 }
 
 img#qrcode {
@@ -91,12 +92,171 @@ div.qrcode-framer > p > b {
 
 div#notification {
   display: block;
-  max-height: 400px;
-  margin-top: -15px;
-  width: 300px;
+  height: 400px;
+  width: 350px;
+  margin: auto;
   overflow-x: hidden;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
+}
+
+/* 通知 - 点赞 */
+
+div.n-like-personal-update,
+div.n-personal-update-reposted,
+div.n-comment-personal-update {
+  display: block;
+  width: 100%;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #f0f3f5;
+  overflow: hidden;
+}
+
+div.n-item + div > div {
+  padding-top: 15px;
+}
+
+div.n-like-users {
+  display: inline-block;
+  vertical-align: top;
+  width: calc(100% - 90px);
+}
+
+div.n-like-users-name,
+p.n-repost-users-name,
+p.n-comment-users-name {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #777;
+}
+
+div.n-like-users-name > a,
+p.n-repost-users-name > span,
+p.n-comment-users-name > span {
+  color: #404040;
+  text-decoration: none;
+}
+
+div.n-like-users-name > a + a:before {
+  content: ', '
+}
+
+div.n-like-users-avatar {
+  display: block;
+  width: 100%;
+  margin-top: 5px;
+  overflow: hidden;
+}
+
+div.n-like-users-avatar > a {
+  display: inline-block;
+  vertical-align: middle;
+  height: 35px;
+  width: 35px;
+  border: 0;
+  border-radius: 50%;
+  background: #f0f3f5 center no-repeat;
+  background-size: cover;
+}
+
+div.n-like-users-avatar > a + a {
+  margin-left: 5px;
+}
+
+div.n-like-inline-block {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 10px;
+}
+
+a.n-like-post,
+a.n-repost-post,
+a.n-comment-post {
+  display: block;
+  height: 80px;
+  width: 80px;
+  padding: 11px 10px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #777;
+  background: center no-repeat;
+  background-size: cover;
+  border-radius: 8px;
+  border-color: #f0f3f5;
+  overflow: hidden;
+}
+
+a.n-like-post > span,
+a.n-repost-post > span,
+a.n-comment-post > span {
+  display: -webkit-box;
+  height: 58px;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+/* 通知 - 转发 */
+
+a.n-repost-avatar {
+  display: inline-block;
+  vertical-align: top;
+  height: 35px;
+  width: 35px;
+  margin-right: 10px;
+  border: 0;
+  border-radius: 50%;
+  background: #f0f3f5 center no-repeat;
+  background-size: cover;
+}
+
+div.n-repost-user {
+  display: inline-block;
+  vertical-align: top;
+  width: calc(100% - 135px);
+}
+
+p.n-repost-users-name,
+p.n-repost-users-comment {
+  display: block;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+p.n-repost-users-comment > a {
+  color: #03a9f4;
+}
+
+/* 通知 - 回复 */
+
+a.n-comment-avatar {
+  display: inline-block;
+  vertical-align: top;
+  height: 35px;
+  width: 35px;
+  margin-right: 10px;
+  border: 0;
+  border-radius: 50%;
+  background: #f0f3f5 center no-repeat;
+  background-size: cover;
+}
+
+div.n-comment-user {
+  display: inline-block;
+  vertical-align: top;
+  width: calc(100% - 135px);
+}
+
+p.n-comment-users-name,
+p.n-comment-users-comment {
+  display: block;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+p.n-comment-users-comment > a {
+  color: #03a9f4;
 }
 
 /* 按钮 */
@@ -116,8 +276,13 @@ button {
   color: #404040;
   border-radius: 18px;
   background: #f0f3f5;
-  transition: all .3s linear;
   user-select: none;
+}
+
+div#button-container {
+  display: block;
+  margin: auto;
+  text-align: center;
 }
 
 button.primary {
@@ -126,5 +291,6 @@ button.primary {
 
 button.primary.half {
   display: inline-block;
+  vertical-align: middle;
   width: 95px;
 }
