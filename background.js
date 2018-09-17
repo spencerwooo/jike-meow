@@ -35,7 +35,7 @@ function getNotify(result) {
         window.clearInterval(i);
       }
 
-      setTimeout(function refreshToken() {
+      setInterval(function refreshToken() {
         axios({
           url: 'https://app.jike.ruguoapp.com/app_auth_tokens.refresh',
           method: 'get',
@@ -52,7 +52,6 @@ function getNotify(result) {
               'access-token': data['x-jike-access-token'],
               'refresh-token': data['x-jike-refresh-token']
             })
-            setTimeout(refreshToken, 6e5)
           })
           .catch(function () { })
       }, 6e5)
