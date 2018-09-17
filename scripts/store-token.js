@@ -7,9 +7,9 @@ chrome.storage.local.get(null, function (result) {
   // 判断当面页面是否为 "web.okjike.com"
   if (window.location.host.indexOf('web.okjike.com') > -1) {
     var date = new Date()
-    localStorage.setItem("auth-token", result.token)
-    localStorage.setItem("access-token", result["access-token"])
-    localStorage.setItem("token-timestamp", date.toIsoString())
+    localStorage.setItem('auth-token', result.token)
+    localStorage.setItem('access-token', result['access-token'])
+    localStorage.setItem('token-timestamp', date.toIsoString())
     location.reload()
   }
 })
