@@ -2,11 +2,15 @@
 
 chrome.runtime.onMessage.addListener(getNotify)
 
-// 获取未读消息数量
+// Socket-io 获取未读消息数量
 function getNotify(result) {
   if (result.access_token) {
     var access_token = result.access_token
-    var notifyIO = io('wss://msgcenter.jike.ruguoapp.com?x-jike-access-token=' + access_token)
+    var notifyIO = io('wss://msgcenter.jike.ruguoapp.com?x-jike-access-token=' + access_token, {
+      reconnection: true,
+      reconnectionDelay: 3e5,
+      reconnectionAttempts: Infinity
+    })
     notifyIO.on('connect', function () {
       console.log('connected')
     })
@@ -28,13 +32,14 @@ function getNotify(result) {
       }
     })
 
-    // 定时刷新 Token
     chrome.storage.local.get(null, function (res) {
 
+      // 优化多线程问题
       for (var i = 1; i < 9999; i++) {
         window.clearInterval(i);
       }
 
+      // 每 10 分钟 刷新 Token
       setInterval(function refreshToken() {
         axios({
           url: 'https://app.jike.ruguoapp.com/app_auth_tokens.refresh',
