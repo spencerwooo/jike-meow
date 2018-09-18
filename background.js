@@ -35,12 +35,10 @@ function getNotify(result) {
     chrome.storage.local.get(null, function (res) {
 
       // 优化多线程问题
-      for (var i = 1; i < 9999; i++) {
-        window.clearInterval(i);
-      }
+      clearInterval(localStorage['timerId'])
 
       // 每 10 分钟 刷新 Token
-      setInterval(function refreshToken() {
+      var refreshToken = setInterval(function refreshToken() {
         axios({
           url: 'https://app.jike.ruguoapp.com/app_auth_tokens.refresh',
           method: 'get',
@@ -60,6 +58,7 @@ function getNotify(result) {
           })
           .catch(function () { })
       }, 6e5)
+      localStorage.setItem('timerId', refreshToken)
     })
   }
 }
