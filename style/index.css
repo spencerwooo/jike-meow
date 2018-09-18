@@ -122,11 +122,11 @@ div.n-comment-personal-update {
   display: block;
   width: 100%;
   padding-bottom: 15px;
-  border-bottom: 1px solid #f0f3f5;
   overflow: hidden;
 }
 
 div.n-item + div > div {
+  border-top: 1px solid #f0f3f5;
   padding-top: 15px;
 }
 
@@ -286,6 +286,20 @@ p.n-comment-users-comment > a {
   color: #03a9f4;
 }
 
+/* 通知 - 未知消息类型 */
+div.n-unknown {
+  display: block;
+  padding-top: 0 !important;
+  height: 80px;
+  width: 100%;
+  font-size: 14px;
+  line-height: 80px;
+  background: #f0f3f5;
+  border-radius: 8px;
+  text-align: center;
+  overflow: hidden;
+}
+
 /* 按钮 */
 
 button {
@@ -310,6 +324,7 @@ div#button-container {
   display: block;
   margin: auto;
   text-align: center;
+  border-top: 1px solid #f0f3f5;
 }
 
 button.primary {

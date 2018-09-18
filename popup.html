@@ -64,7 +64,7 @@
 
         <!-- 点赞 - 评论 -->
         <div class="n-like-personal-update"
-             v-if="item.type === 'LIKE_PERSONAL_UPDATE_COMMENT'">
+             v-else-if="item.type === 'LIKE_PERSONAL_UPDATE_COMMENT'">
           <div class="n-like-users">
             <div class="n-like-users-name">
               <a v-for="user in item.actionItem.users">{{ user.screenName }}</a>
@@ -88,7 +88,7 @@
 
         <!-- 转发 -->
         <div class="n-personal-update-reposted"
-             v-if="item.type === 'PERSONAL_UPDATE_REPOSTED'">
+             v-else-if="item.type === 'PERSONAL_UPDATE_REPOSTED'">
           <a class="n-repost-avatar"
              :class="{ verified: item.actionItem.users[0].isVerified }"
              :style="{ backgroundImage: 'url(' + item.actionItem.users[0].profileImageUrl + ')' }"
@@ -121,7 +121,7 @@
 
         <!-- 评论 -->
         <div class="n-comment-personal-update"
-             v-if="item.type === 'COMMENT_PERSONAL_UPDATE'">
+             v-else-if="item.type === 'COMMENT_PERSONAL_UPDATE'">
           <a class="n-comment-avatar"
              :class="{ verified: item.actionItem.users[0].isVerified }"
              :style="{ backgroundImage: 'url(' + item.actionItem.users[0].profileImageUrl + ')' }"
@@ -132,6 +132,7 @@
             </p>
             <p class="n-comment-users-comment">{{ item.actionItem.content ? item.actionItem.content : '' }}&nbsp;
               <a target="_blank"
+                 :href="item.actionItem.pictures[0].picUrl"
                  v-if="item.actionItem.pictures.length > 0">查看图片</a>
             </p>
           </div>
@@ -156,7 +157,7 @@
 
         <!-- 回复 -->
         <div class="n-comment-personal-update"
-             v-if="item.type === 'REPLIED_TO_PERSONAL_UPDATE_COMMENT'">
+             v-else-if="item.type === 'REPLIED_TO_PERSONAL_UPDATE_COMMENT'">
           <a class="n-comment-avatar"
              :class="{ verified: item.actionItem.users[0].isVerified }"
              :style="{ backgroundImage: 'url(' + item.actionItem.users[0].profileImageUrl + ')' }"
@@ -167,6 +168,7 @@
             </p>
             <p class="n-comment-users-comment">{{ item.actionItem.content ? item.actionItem.content : '' }}&nbsp;
               <a target="_blank"
+                 :href="item.actionItem.pictures[0].picUrl"
                  v-if="item.actionItem.pictures.length > 0">查看图片</a>
             </p>
           </div>
@@ -191,7 +193,7 @@
 
         <!-- 新关注 -->
         <div class="n-user-followed"
-             v-if="item.type === 'USER_FOLLOWED'">
+             v-else-if="item.type === 'USER_FOLLOWED'">
           <a class="n-comment-avatar"
              :class="{ verified: item.actionItem.users[0].isVerified }"
              :style="{ backgroundImage: 'url(' + item.actionItem.users[0].profileImageUrl + ')' }"
@@ -205,6 +207,10 @@
             <a class="n-comment-post"></a>
           </div>
         </div>
+
+        <!-- 未知消息类型 -->
+        <div class="n-unknown"
+             v-else>不支持的消息类型</div>
       </div>
     </div>
     <button class="primary"
