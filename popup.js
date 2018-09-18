@@ -15,13 +15,17 @@ new Vue({
       error: false,
       qr_loading: true,
       qr_scanning: false,
-      notifications: []
+      notifications: [],
+      notificationsIsLoading: false,
+      lastNotificationId: '',
+      loadMoreKey: ''
     }
   },
   created() {
     var _this = this
     _this.qr_loading = false
 
+    // 获取 storage Token 数据
     chrome.storage.local.get(null, function (result) {
 
       chrome.browserAction.setBadgeText({ text: '0' })
@@ -165,9 +169,15 @@ new Vue({
     // 获取通知列表
     getNotificationList() {
       var _this = this
+      _this.notificationsIsLoading = true
       axios({
         method: 'post',
         url: _this.url + '/1.0/notifications/list',
+        data: {
+          'loadMoreKey': {
+            lastNotificationId: _this.lastNotificationId
+          }
+        },
         headers: {
           'x-jike-app-auth-jwt': _this.token,
           'app-version': '4.8.0'
@@ -176,7 +186,23 @@ new Vue({
         .then(function (response) {
           chrome.browserAction.setBadgeText({ text: '0' })
           var res = response.data
-          _this.notifications = res.data
+          for (var i = 0; i < res.data.length; i++) {
+            _this.notifications.push(res.data[i])
+          }
+          _this.notificationsIsLoading = false
+
+          // 滚动加载
+          var notificationDom = document.getElementById('notification')
+          notificationDom.addEventListener('scroll', function () {
+            var scrollHeight = notificationDom.scrollHeight
+            var scrollTop = notificationDom.scrollTop
+            if (scrollHeight - scrollTop < 700 && _this.notificationsIsLoading === false) {
+              _this.lastNotificationId = _this.notifications[_this.notifications.length - 1].id
+              _this.getNotificationList()
+              _this.loadMoreKey = res.loadMoreKey
+              return false
+            }
+          })
         })
         .catch(function () {
           _this.error = true
