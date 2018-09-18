@@ -173,6 +173,19 @@ div.n-like-users-avatar > a {
   background-size: cover;
 }
 
+div.n-like-users-avatar > a.verified:after,
+a.n-comment-avatar.verified:after {
+  content: '';
+  display: block;
+  position: absolute;
+  right: -3px;
+  bottom: 0;
+  height: 13px;
+  width: 13px;
+  background: url('../images/verified.6e5b91e.svg') center no-repeat;
+  background-size: 100%;
+}
+
 div.n-like-users-avatar > a + a {
   margin-left: 5px;
 }
