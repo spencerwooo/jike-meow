@@ -183,6 +183,22 @@
             </a>
           </div>
         </div>
+
+        <!-- 新关注 -->
+        <div class="n-user-followed"
+             v-if="item.type === 'USER_FOLLOWED'">
+          <a class="n-comment-avatar"
+             :style="{ backgroundImage: 'url(' + item.actionItem.users[0].profileImageUrl + ')' }"
+             :href="'https://web.okjike.com/user/' + item.actionItem.users[0].username"></a>
+          <div class="n-comment-user">
+            <p class="n-comment-users-name">
+              <span>{{ item.actionItem.users[0].screenName }}</span> 关注了你
+            </p>
+          </div>
+          <div class="n-like-inline-block">
+            <a class="n-comment-post"></a>
+          </div>
+        </div>
       </div>
     </div>
     <button class="primary"
