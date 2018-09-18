@@ -145,7 +145,6 @@ new Vue({
           _this.qr_loading = false
           _this.qr_scanning = false
           if (data.confirmed === true) {
-            _this.newQRCode('http://t.cn/RsK7PgI')
             _this.token = data.token
             _this.access_token = data['x-jike-access-token']
             chrome.storage.local.set({
@@ -153,6 +152,7 @@ new Vue({
               'access-token': data['x-jike-access-token'],
               'refresh-token': data['x-jike-refresh-token']
             })
+            _this.getNotificationList()
           } else {
             _this.getUuid()
           }
