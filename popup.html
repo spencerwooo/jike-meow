@@ -64,7 +64,8 @@
 
         <!-- 点赞 - 评论 -->
         <div class="n-like-personal-update"
-             v-else-if="item.type === 'LIKE_PERSONAL_UPDATE_COMMENT'">
+             v-else-if="item.type === 'LIKE_PERSONAL_UPDATE_COMMENT' ||
+             item.type === 'LIKE_COMMENT'">
           <div class="n-like-users">
             <div class="n-like-users-name">
               <a v-for="user in item.actionItem.users">{{ user.screenName }}</a>
@@ -157,7 +158,8 @@
 
         <!-- 回复 -->
         <div class="n-comment-personal-update"
-             v-else-if="item.type === 'REPLIED_TO_PERSONAL_UPDATE_COMMENT'">
+             v-else-if="item.type === 'REPLIED_TO_PERSONAL_UPDATE_COMMENT' ||
+             item.type === 'REPLY_TO_COMMENT'">
           <a class="n-comment-avatar"
              :class="{ verified: item.actionItem.users[0].isVerified }"
              :style="{ backgroundImage: 'url(' + item.actionItem.users[0].profileImageUrl + ')' }"
