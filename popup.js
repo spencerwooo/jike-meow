@@ -12,6 +12,7 @@ new Vue({
       uuid: '',
       token: '',
       access_token: '',
+      error: false,
       qr_loading: true,
       qr_scanning: false,
       notifications: []
@@ -177,7 +178,10 @@ new Vue({
           var res = response.data
           _this.notifications = res.data
         })
-        .catch(function () { })
+        .catch(function () {
+          _this.error = true
+          return false
+        })
     },
     // 网页端登录
     logIn() {
