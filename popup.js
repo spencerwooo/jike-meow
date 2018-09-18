@@ -28,7 +28,7 @@ new Vue({
     // 获取 storage Token 数据
     chrome.storage.local.get(null, function (result) {
 
-      chrome.browserAction.setBadgeText({ text: '0' })
+      chrome.browserAction.setBadgeText({ text: '' })
       // 判断 Storage 中是否存在 Token 数据
       if (result.token && result['access-token'] && result['refresh-token']) {
         // 刷新 Token
@@ -75,7 +75,7 @@ new Vue({
       if (!result.access_token) {
         _this.token = ''
         _this.access_token = ''
-        chrome.browserAction.setBadgeText({ text: '0' })
+        chrome.browserAction.setBadgeText({ text: '' })
         _this.getUuid()
       }
     })
@@ -184,7 +184,7 @@ new Vue({
         }
       })
         .then(function (response) {
-          chrome.browserAction.setBadgeText({ text: '0' })
+          chrome.browserAction.setBadgeText({ text: '' })
           var res = response.data
           for (var i = 0; i < res.data.length; i++) {
             _this.notifications.push(res.data[i])

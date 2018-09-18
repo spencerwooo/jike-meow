@@ -16,16 +16,16 @@ function getNotify(result) {
     })
     notifyIO.on('message', function (data) {
       if (data.type === 'NOTIFICATION') {
-        chrome.browserAction.setBadgeText({ text: data.data.unreadCount.toString() })
+        chrome.browserAction.setBadgeText({ text: data.data.unreadCount === 0 ? '' : data.data.unreadCount.toString() })
       }
     })
     notifyIO.on('connect_error', (error) => {
       console.log('connect failed')
       notifyIO.disconnect()
-      chrome.browserAction.setBadgeText({ text: '0' })
+      chrome.browserAction.setBadgeText({ text: '' })
     })
     notifyIO.on('disconnect', function (response) {
-      chrome.browserAction.setBadgeText({ text: '0' })
+      chrome.browserAction.setBadgeText({ text: '' })
       if (response === 'transport close') {
         notifyIO.disconnect()
         notifyIO.close()
