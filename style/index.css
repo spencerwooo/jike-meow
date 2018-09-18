@@ -290,6 +290,7 @@ p.n-comment-users-comment > a {
 div.n-unknown {
   display: block;
   padding-top: 0 !important;
+  margin-bottom: 15px;
   height: 80px;
   width: 100%;
   font-size: 14px;
