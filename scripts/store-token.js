@@ -11,6 +11,8 @@ chrome.storage.local.get(null, function (result) {
     localStorage.setItem('access-token', result['access-token'])
     localStorage.setItem('token-timestamp', date.toIsoString())
     location.reload()
+  } else {
+    alert('请在即刻网页版（https://web.okjike.com）下使用该功能')
   }
 })
 
