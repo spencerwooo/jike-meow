@@ -81,6 +81,7 @@
           </div>
           <div class="n-like-inline-block">
             <a class="n-like-post"
+               :href="'https://web.okjike.com/post-detail/' + item.referenceItem.targetId + '/originalPost'"
                target="_blank">
               <span v-if="!item.referenceItem.referenceImageUrl">{{ item.referenceItem.content }}</span>
             </a>
@@ -96,7 +97,7 @@
              :href="'https://web.okjike.com/user/' + item.actionItem.users[0].username"></a>
           <div class="n-repost-user">
             <p class="n-repost-users-name">{{ item.actionItem.users[0].screenName }} 转发了你的动态</p>
-            <p class="n-repost-users-comment">{{ item.actionItem.content ? item.actionItem.content : '' }}&nbsp;
+            <p class="n-repost-users-comment">{{ item.actionItem.content ? item.actionItem.content + '&nbsp;' : '' }}
               <a target="_blank"
                  v-if="item.actionItem.pictures.length > 0">查看图片</a>
             </p>
@@ -131,7 +132,7 @@
             <p class="n-comment-users-name">
               <span>{{ item.actionItem.users[0].screenName }}</span> 评论了你
             </p>
-            <p class="n-comment-users-comment">{{ item.actionItem.content ? item.actionItem.content : '' }}&nbsp;
+            <p class="n-comment-users-comment">{{ item.actionItem.content ? item.actionItem.content + '&nbsp;' : '' }}
               <a target="_blank"
                  :href="item.actionItem.pictures[0].picUrl"
                  v-if="item.actionItem.pictures.length > 0">查看图片</a>
@@ -168,7 +169,7 @@
             <p class="n-comment-users-name">
               <span>{{ item.actionItem.users[0].screenName }}</span> 回复了你
             </p>
-            <p class="n-comment-users-comment">{{ item.actionItem.content ? item.actionItem.content : '' }}&nbsp;
+            <p class="n-comment-users-comment">{{ item.actionItem.content ? item.actionItem.content + '&nbsp;' : '' }}
               <a target="_blank"
                  :href="item.actionItem.pictures[0].picUrl"
                  v-if="item.actionItem.pictures.length > 0">查看图片</a>
@@ -179,14 +180,14 @@
             <a class="n-comment-post"
                v-if="item.referenceItem.referenceImageUrl"
                :style="{ backgroundImage: 'url(' + item.referenceItem.referenceImageUrl + ')' }"
-               :href="'https://web.okjike.com/post-detail/' + item.referenceItem.id + '/originalPost'"
+               :href="'https://web.okjike.com/post-detail/' + item.referenceItem.targetId + '/originalPost'"
                target="_blank">
               <span v-if="!item.referenceItem.referenceImageUrl">{{ item.referenceItem.content }}</span>
             </a>
             <!-- 动态 - 无图 -->
             <a class="n-comment-post"
                v-else
-               :href="'https://web.okjike.com/post-detail/' + item.referenceItem.id + '/originalPost'"
+               :href="'https://web.okjike.com/post-detail/' + item.referenceItem.targetId + '/originalPost'"
                target="_blank">
               <span v-if="!item.referenceItem.referenceImageUrl">{{ item.referenceItem.content }}</span>
             </a>
@@ -204,6 +205,7 @@
             <p class="n-comment-users-name">
               <span>{{ item.actionItem.users[0].screenName }}</span> 关注了你
             </p>
+            <p class="n-comment-users-comment">{{ item.actionItem.users[0].briefIntro }}</p>
           </div>
           <div class="n-like-inline-block">
             <a class="n-comment-post"></a>
@@ -212,7 +214,13 @@
 
         <!-- 未知消息类型 -->
         <div class="n-unknown"
-             v-else>不支持的消息类型</div>
+             v-else>
+          不支持的消息类型
+          <br>
+          <a href="https://github.com/coder-ysj/jike-web-qr/issues"
+             target="_blank">点击此处</a>
+          反馈给作者
+        </div>
       </div>
     </div>
     <button class="primary"

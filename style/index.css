@@ -202,7 +202,7 @@ a.n-comment-post {
   display: block;
   height: 80px;
   width: 80px;
-  padding: 11px 10px;
+  padding: 11px 0;
   font-size: 12px;
   line-height: 1.6;
   color: #777;
@@ -289,16 +289,21 @@ p.n-comment-users-comment > a {
 /* 通知 - 未知消息类型 */
 div.n-unknown {
   display: block;
-  padding-top: 0 !important;
+  padding: 18px 0 !important;
   margin-bottom: 15px;
   height: 80px;
   width: 100%;
   font-size: 14px;
-  line-height: 80px;
+  line-height: 1.6;
   background: #f0f3f5;
   border-radius: 8px;
   text-align: center;
   overflow: hidden;
+}
+
+div.n-unknown > a {
+  font-weight: 500;
+  color: #03a9f4;
 }
 
 /* 按钮 */
