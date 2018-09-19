@@ -100,18 +100,13 @@ div#notification {
   -webkit-overflow-scrolling: touch;
 }
 
+p#notification-loading,
 p#notification-error {
+  cursor: pointer;
   display: block;
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  font-size: 25px;
-  line-height: 400px;
+  font-size: 14px;
+  line-height: 3;
   text-align: center;
-  background: #fff;
-  z-index: 99;
 }
 
 /* 通知 - 点赞 */
@@ -167,10 +162,11 @@ div.n-like-users-avatar > a {
   vertical-align: middle;
   height: 35px;
   width: 35px;
-  border: 0;
+  border: 3px solid #fff;
   border-radius: 50%;
   background: #f0f3f5 center no-repeat;
   background-size: cover;
+  outline: 3px;
 }
 
 div.n-like-users-avatar > a.verified:after,
@@ -331,6 +327,11 @@ div#button-container {
   margin: auto;
   text-align: center;
   border-top: 1px solid #f0f3f5;
+}
+
+button.warn {
+  color: #fff;
+  background: #e4583e;
 }
 
 button.primary {

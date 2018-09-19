@@ -22,8 +22,6 @@
     </div>
     <div id="notification"
          v-if="access_token && notifications && ui">
-      <p id="notification-error"
-         v-if="error">╮(╯▽╰)╭</p>
       <div class="n-item"
            v-for="item in notifications">
 
@@ -92,6 +90,7 @@
         <div class="n-personal-update-reposted"
              v-else-if="item.type === 'PERSONAL_UPDATE_REPOSTED'">
           <a class="n-repost-avatar"
+             target="_blank"
              :class="{ verified: item.actionItem.users[0].isVerified }"
              :style="{ backgroundImage: 'url(' + item.actionItem.users[0].profileImageUrl + ')' }"
              :href="'https://web.okjike.com/user/' + item.actionItem.users[0].username"></a>
@@ -125,6 +124,7 @@
         <div class="n-comment-personal-update"
              v-else-if="item.type === 'COMMENT_PERSONAL_UPDATE'">
           <a class="n-comment-avatar"
+             target="_blank"
              :class="{ verified: item.actionItem.users[0].isVerified }"
              :style="{ backgroundImage: 'url(' + item.actionItem.users[0].profileImageUrl + ')' }"
              :href="'https://web.okjike.com/user/' + item.actionItem.users[0].username"></a>
@@ -162,6 +162,7 @@
              v-else-if="item.type === 'REPLIED_TO_PERSONAL_UPDATE_COMMENT' ||
              item.type === 'REPLY_TO_COMMENT'">
           <a class="n-comment-avatar"
+             target="_blank"
              :class="{ verified: item.actionItem.users[0].isVerified }"
              :style="{ backgroundImage: 'url(' + item.actionItem.users[0].profileImageUrl + ')' }"
              :href="'https://web.okjike.com/user/' + item.actionItem.users[0].username"></a>
@@ -198,6 +199,7 @@
         <div class="n-user-followed"
              v-else-if="item.type === 'USER_FOLLOWED'">
           <a class="n-comment-avatar"
+             target="_blank"
              :class="{ verified: item.actionItem.users[0].isVerified }"
              :style="{ backgroundImage: 'url(' + item.actionItem.users[0].profileImageUrl + ')' }"
              :href="'https://web.okjike.com/user/' + item.actionItem.users[0].username"></a>
@@ -214,20 +216,24 @@
 
         <!-- 未知消息类型 -->
         <div class="n-unknown"
-             v-else>
-          不支持的消息类型
-          <br>
+             v-else>不支持的消息类型<br>
           <a href="https://github.com/coder-ysj/jike-web-qr/issues"
-             target="_blank">点击此处</a>
-          反馈给作者
+             target="_blank">点击此处</a> 反馈给作者
         </div>
       </div>
+      <!-- 正在加载 -->
+      <p id="notification-loading"
+         v-if="notificationsIsLoading">🐱 正在加载数据…</p>
+      <!-- 加载失败 -->
+      <p id="notification-error"
+         v-if="error"
+         @click.self.stop="getNotificationList()">🌚 加载失败，请点击重试</p>
     </div>
     <button class="primary"
             @click.self.stop="getUuid()"
             v-if="!access_token && ui">刷新二维码</button>
     <div id="button-container"
-         v-if="ui">
+         v-if="access_token && ui">
       <button class="primary half"
               @click.self.stop="logIn()"
               v-if="access_token">网页登录</button>
@@ -235,9 +241,12 @@
               style="margin-left: 10px;"
               @click.self.stop="logOut()"
               v-if="access_token">退出登录</button>
-      <button id="follow-me"
-              @click.self.stop="window.open('https://web.okjike.com/user/F39BF844-7BF9-4754-8E7C-189CA3A35644/post', '_blank')">关注开发者的即刻</button>
     </div>
+    <button class="warn"
+            v-if="access_token"
+            @click.self.stop="getNotificationBadge()">开启消息通知角标</button>
+    <button id="follow-me"
+            @click.self.stop="window.open('https://web.okjike.com/user/F39BF844-7BF9-4754-8E7C-189CA3A35644/post', '_blank')">关注开发者的即刻</button>
   </div>
   <script src="scripts/axios.min.js"></script>
   <script src="scripts/qrcode.min.js"></script>
