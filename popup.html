@@ -242,11 +242,8 @@
               @click.self.stop="logOut()"
               v-if="access_token">退出登录</button>
     </div>
-    <button class="warn"
-            v-if="access_token"
+    <button v-if="access_token"
             @click.self.stop="getNotificationBadge()">开启消息通知角标</button>
-    <button id="follow-me"
-            @click.self.stop="window.open('https://web.okjike.com/user/F39BF844-7BF9-4754-8E7C-189CA3A35644/post', '_blank')">关注开发者的即刻</button>
   </div>
   <script src="scripts/axios.min.js"></script>
   <script src="scripts/qrcode.min.js"></script>

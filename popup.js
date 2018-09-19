@@ -18,8 +18,7 @@ new Vue({
       backgroundIsAllowed: false,
       notifications: [],
       notificationsIsLoading: false,
-      lastNotificationId: '',
-      loadMoreKey: '' // 最近阅读位置
+      lastNotificationId: ''
     }
   },
   created() {
@@ -207,7 +206,6 @@ new Vue({
             if (scrollHeight - scrollTop < 700 && _this.notificationsIsLoading === false) {
               _this.lastNotificationId = _this.notifications[_this.notifications.length - 1].id
               _this.getNotificationList()
-              _this.loadMoreKey = res.loadMoreKey
               return false
             }
           })

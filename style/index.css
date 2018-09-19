@@ -111,6 +111,7 @@ p#notification-error {
 
 /* 通知 - 点赞 */
 
+
 div.n-like-personal-update,
 div.n-personal-update-reposted,
 div.n-comment-personal-update {
@@ -183,7 +184,7 @@ a.n-comment-avatar.verified:after {
 }
 
 div.n-like-users-avatar > a + a {
-  margin-left: -10px;
+  margin-left: -7px;
 }
 
 div.n-like-inline-block {
