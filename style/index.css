@@ -187,7 +187,7 @@ a.n-comment-avatar.verified:after {
 }
 
 div.n-like-users-avatar > a + a {
-  margin-left: 5px;
+  margin-left: -10px;
 }
 
 div.n-like-inline-block {
