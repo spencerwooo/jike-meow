@@ -15,10 +15,11 @@ new Vue({
       error: false,
       qr_loading: true,
       qr_scanning: false,
+      backgroundIsAllowed: false,
       notifications: [],
       notificationsIsLoading: false,
       lastNotificationId: '',
-      loadMoreKey: ''
+      loadMoreKey: '' // 最近阅读位置
     }
   },
   created() {
@@ -51,14 +52,6 @@ new Vue({
               'access-token': res['x-jike-access-token'],
               'refresh-token': res['x-jike-refresh-token']
             })
-
-            // 获取未读消息数量
-            chrome.runtime.sendMessage({
-              token: res.token,
-              access_token: res['x-jike-access-token'],
-              refresh_token: res['x-jike-refresh-token']
-            }, null)
-
             _this.ui = true
             _this.getNotificationList()
           })
@@ -166,9 +159,24 @@ new Vue({
           return false
         })
     },
+    // 通知角标
+    getNotificationBadge() {
+      if (confirm('注意：该功能目前正在实验测试阶段，开启后可能会导致「消息推送失灵」等问题出现，并需要「重新登录」才可关闭，是否确认开启？') === true) {
+        chrome.storage.local.get(null, function (result) {
+          chrome.runtime.sendMessage({
+            token: result.token,
+            access_token: result['access-token'],
+            refresh_token: result['refresh-token']
+          }, null)
+        })
+      } else {
+        return false
+      }
+    },
     // 获取通知列表
     getNotificationList() {
       var _this = this
+      _this.error = false
       _this.notificationsIsLoading = true
       axios({
         method: 'post',
@@ -205,6 +213,7 @@ new Vue({
           })
         })
         .catch(function () {
+          _this.notificationsIsLoading = false
           _this.error = true
           return false
         })
