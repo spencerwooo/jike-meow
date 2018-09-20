@@ -2,10 +2,11 @@
 
 chrome.runtime.onMessage.addListener(getNotify)
 
-// Socket-io 获取未读消息数量
 function getNotify(result) {
   if (result.access_token) {
     var access_token = result.access_token
+
+    // socket-io 后台持续获取未读消息数量
     var notifyIO = io('wss://msgcenter.jike.ruguoapp.com?x-jike-access-token=' + access_token, {
       reconnection: true,
       reconnectionDelay: 3e5,
@@ -37,7 +38,7 @@ function getNotify(result) {
       // 优化多线程问题
       clearInterval(localStorage['timerId'])
 
-      // 每 10 分钟 刷新 Token
+      // 每 10 分钟刷新一次 access token 和 refresh token
       var refreshToken = setInterval(function refreshToken() {
         axios({
           url: 'https://app.jike.ruguoapp.com/app_auth_tokens.refresh',
@@ -49,15 +50,20 @@ function getNotify(result) {
           .then(function (response) {
             var data = response.data
 
-            // 在 Storage 中存储 Token
+            // 在本地 storage 中存储 token
             chrome.storage.local.set({
               'token': res.token,
               'access-token': data['x-jike-access-token'],
               'refresh-token': data['x-jike-refresh-token']
             })
           })
-          .catch(function () { })
+          .catch(function () {
+            // 根据接口分析可知, 这些 token 需要大约两周左右的时间才会过期
+            // 所以哪怕接口请求失败, 也不必要采取任何操作
+          })
       }, 6e5)
+
+      // 在 localStorage 中存储 timerid 用于 clearInterval 定位
       localStorage.setItem('timerId', refreshToken)
     })
   }
