@@ -72,14 +72,11 @@ new Vue({
 
     // 接收 store-token.js 回传
     // 仅用于作登出处理
-    // chrome.runtime.onMessage.addListener(function (result) {
-    // if (!result.access_token) {
-    //     _this.token = ''
-    //     _this.access_token = ''
-    //     chrome.browserAction.setBadgeText({ text: '' })
-    //     _this.getUuid()
-    //   }
-    // })
+    chrome.runtime.onMessage.addListener(function (result) {
+      if (!result.access_token) {
+        chrome.runtime.reload()
+      }
+    })
   },
   methods: {
     // 二维码生成

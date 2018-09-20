@@ -10,5 +10,11 @@
       location.reload()
     }
   }
-  chrome.runtime.reload()
+
+  // 登出回调 popup.js
+  chrome.runtime.sendMessage({
+    current_url: null,
+    token: null,
+    access_token: null
+  }, null)
 })()
