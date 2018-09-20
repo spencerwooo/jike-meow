@@ -8,30 +8,31 @@ new Vue({
   data() {
     return {
       ui: false, // 优化 UI 闪烁问题
-      url: 'https://app.jike.ruguoapp.com',
-      uuid: '',
-      token: '',
-      access_token: '',
-      error: false,
-      qr_loading: true,
-      qr_scanning: false,
-      backgroundIsAllowed: false,
-      notifications: [],
-      notificationsIsLoading: false,
-      lastNotificationId: ''
+      url: 'https://app.jike.ruguoapp.com', // 接口统一地址
+      uuid: '', // 用于生成供扫描的二维码
+      token: '', // auth-token
+      access_token: '', // access-token
+      error: false, // 通知列表加载失败
+      qr_loading: true, // 二维码是否正在加载
+      qr_scanning: false, // 二维码是否正在被扫描
+      backgroundIsAllowed: false, // 后台获取未读消息数量
+      notifications: [], // 通知消息列表
+      notificationsIsLoading: false, // 通知列表正在加载
+      lastNotificationId: '' // 通知列表分页显示
     }
   },
   created() {
     var _this = this
     _this.qr_loading = false
 
-    // 获取 storage Token 数据
+    // 先从 extension 本地 storage 获取详细 token 数据
     chrome.storage.local.get(null, function (result) {
 
-      chrome.browserAction.setBadgeText({ text: '' })
-      // 判断 Storage 中是否存在 Token 数据
+      // 判断 Storage 中是否存在 token 数据
       if (result.token && result['access-token'] && result['refresh-token']) {
-        // 刷新 Token
+        // 通过上传旧的 refresh token 来获取新的 access token 和 refresh token
+        // 官网的方案是每十分钟刷新一次
+        // 这一行为已放在 background.js 中处理
         axios({
           url: _this.url + '/app_auth_tokens.refresh',
           method: 'get',
@@ -41,40 +42,52 @@ new Vue({
         })
           .then(function (response) {
             var res = response.data
-
             _this.token = result.token
             _this.access_token = res['x-jike-access-token']
 
-            // 在 Storage 中存储 Token
+            // 在 chrome 本地 storage 中存储 token
             chrome.storage.local.set({
               'token': result.token,
               'access-token': res['x-jike-access-token'],
               'refresh-token': res['x-jike-refresh-token']
             })
+
+            // 加载 UI
             _this.ui = true
+
+            // 异步获取通知列表
             _this.getNotificationList()
           })
           .catch(function () {
             alert('数据异常')
           })
       } else {
+
+        // 如果 storage 本地没有 token 数据
+        // 则重新登录 => 显示二维码供用户扫描
         _this.getUuid()
         _this.ui = true
       }
     })
-    // 接收 store-token.js 的判断
-    chrome.runtime.onMessage.addListener(function (result) {
-      if (!result.access_token) {
-        _this.token = ''
-        _this.access_token = ''
-        chrome.browserAction.setBadgeText({ text: '' })
-        _this.getUuid()
-      }
-    })
+
+    // 接收 store-token.js 回传
+    // 仅用于作登出处理
+    // chrome.runtime.onMessage.addListener(function (result) {
+    // if (!result.access_token) {
+    //     _this.token = ''
+    //     _this.access_token = ''
+    //     chrome.browserAction.setBadgeText({ text: '' })
+    //     _this.getUuid()
+    //   }
+    // })
   },
   methods: {
-    // 生成二维码
+    // 二维码生成
     newQRCode(url) {
+
+      // 清空二维码所在 container #qrcode 的标签内容
+      // 以避免重复生成二维码
+      // 这一方法并不完美, 将来可以改进
       document.getElementById('qrcode').innerHTML = ''
       var qrcode = new QRCode(document.getElementById('qrcode'), {
         text: url,
@@ -101,6 +114,7 @@ new Vue({
         })
         .catch(function () {
           _this.qr_loading = false
+          alert('二维码生成失败')
           return false
         })
     },
@@ -141,6 +155,8 @@ new Vue({
           _this.qr_loading = false
           _this.qr_scanning = false
           if (data.confirmed === true) {
+
+            // 确认登录后将 token 数据存在本地 storage 中
             _this.token = data.token
             _this.access_token = data['x-jike-access-token']
             chrome.storage.local.set({
@@ -148,17 +164,19 @@ new Vue({
               'access-token': data['x-jike-access-token'],
               'refresh-token': data['x-jike-refresh-token']
             })
+
+            // 然后直接刷新通知列表
             _this.getNotificationList()
           } else {
             _this.getUuid()
           }
         })
         .catch(function () {
-          alert('验证接口请求异常，请手动刷新二维码')
+          alert('无法登录，请手动刷新二维码')
           return false
         })
     },
-    // 通知角标
+    // 刷新通知角标
     getNotificationBadge() {
       if (confirm('注意：该功能目前正在实验测试阶段，开启后可能会导致「消息推送失灵」等问题出现，并需要「重新登录」才可关闭，是否确认开启？') === true) {
         chrome.storage.local.get(null, function (result) {
@@ -177,6 +195,7 @@ new Vue({
       var _this = this
       _this.error = false
       _this.notificationsIsLoading = true
+
       axios({
         method: 'post',
         url: _this.url + '/1.0/notifications/list',
@@ -191,6 +210,8 @@ new Vue({
         }
       })
         .then(function (response) {
+
+          // 获取数据后需将角标归零
           chrome.browserAction.setBadgeText({ text: '' })
           var res = response.data
           for (var i = 0; i < res.data.length; i++) {
@@ -216,9 +237,12 @@ new Vue({
           return false
         })
     },
-    // 网页端登录
+    // 网页登录
     logIn() {
-      // chrome:// URL 下不执行 Token 部署
+      // chrome:// URL 下不执行 token 的部署
+      // 严格来说像 file:// 这样的 URL 也要判断
+      // 但考虑到这种情况发生的概率偏低且不影响功能的使用
+      // 所以没有作为条件之一来处理
       chrome.tabs.query({
         active: true,
         currentWindow: true
@@ -231,8 +255,12 @@ new Vue({
         }
       })
     },
-    // 退出
+    // 登出
     logOut() {
+      // chrome:// URL 下不执行 token 移除
+      // 严格来说像 file:// 这样的 URL 也要判断
+      // 但考虑到这种情况发生的概率偏低且不影响功能的使用
+      // 所以没有作为条件之一来处理
       chrome.tabs.query({
         active: true,
         currentWindow: true
@@ -243,6 +271,9 @@ new Vue({
             file: 'scripts/log-out.js'
           })
         } else {
+
+          // 清空本地 storage token 数据
+          // 并重新加载 extension
           chrome.storage.local.clear()
           chrome.runtime.reload()
         }

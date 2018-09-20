@@ -5,6 +5,7 @@ var access_token = localStorage['access-token']
 chrome.storage.local.get(null, function (result) {
 
   // 判断当面页面是否为 "web.okjike.com"
+  // 如果是, 这部署相关 token 至 localStorage 中并刷新页面
   if (window.location.host.indexOf('web.okjike.com') > -1) {
     var date = new Date()
     localStorage.setItem('auth-token', result.token)
