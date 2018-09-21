@@ -22,14 +22,14 @@ function messageCallback(result) {
       console.log('connect failed')
       notifyIO.disconnect()
       chrome.browserAction.setBadgeText({ text: '' })
-      setTimeout(messageCallback(result), 5000)
+      setTimeout(messageCallback(result), 6e4)
     })
     notifyIO.on('disconnect', function (response) {
       if (response === 'transport close') {
         console.log('connect disconnected')
         notifyIO.disconnect()
         chrome.browserAction.setBadgeText({ text: '' })
-        setTimeout(messageCallback(result), 5000)
+        setTimeout(messageCallback(result), 6e4)
       }
     })
 
