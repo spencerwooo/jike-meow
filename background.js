@@ -1,17 +1,15 @@
 'use strict'
 
-chrome.runtime.onMessage.addListener(getNotify)
+var notifyIO
 
-function getNotify(result) {
+chrome.runtime.onMessage.addListener(messageCallback)
+
+function messageCallback(result) {
   if (result.access_token) {
     var access_token = result.access_token
 
     // socket-io 后台持续获取未读消息数量
-    var notifyIO = io('wss://msgcenter.jike.ruguoapp.com?x-jike-access-token=' + access_token, {
-      reconnection: true,
-      reconnectionDelay: 3e5,
-      reconnectionAttempts: Infinity
-    })
+    notifyIO = io('wss://msgcenter.jike.ruguoapp.com?x-jike-access-token=' + access_token)
     notifyIO.on('connect', function () {
       console.log('connected')
     })
@@ -24,21 +22,23 @@ function getNotify(result) {
       console.log('connect failed')
       notifyIO.disconnect()
       chrome.browserAction.setBadgeText({ text: '' })
+      setTimeout(messageCallback(result), 5000)
     })
     notifyIO.on('disconnect', function (response) {
-      chrome.browserAction.setBadgeText({ text: '' })
       if (response === 'transport close') {
+        console.log('connect disconnected')
         notifyIO.disconnect()
-        notifyIO.close()
+        chrome.browserAction.setBadgeText({ text: '' })
+        setTimeout(messageCallback(result), 5000)
       }
     })
 
+    // 每 10 分钟刷新一次 access token 和 refresh token
     chrome.storage.local.get(null, function (res) {
 
       // 优化多线程问题
       clearInterval(localStorage['timerId'])
 
-      // 每 10 分钟刷新一次 access token 和 refresh token
       var refreshToken = setInterval(function refreshToken() {
         axios({
           url: 'https://app.jike.ruguoapp.com/app_auth_tokens.refresh',
