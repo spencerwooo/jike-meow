@@ -1,39 +1,58 @@
-# Jike Web QR
-基于 Vue.js 开发的 Web 版即刻登录插件。  
-传送门：[Chrome Store](https://chrome.google.com/webstore/detail/jike-web-qr/gahlkoaglgmbpjoecaahganpccafojaa) 👈
+# 即刻喵 🐱
+
+基于 Chrome 和 Vue.js 开发的第三方即刻通知插件。  
+下载传送门：[Chrome Store](https://chrome.google.com/webstore/detail/jike-web-qr/gahlkoaglgmbpjoecaahganpccafojaa?hl=zh-CN) 👈
 
  ![Chrome Store 截图](images/github_screenshot@1x.png)
 
+## 功能特点
+
+* **一键登录** - 只需在插件内登录一次，就能永久登录，并为网页端提供同样的功能 📦
+* **未读消息通知** - 实时显示你有几条未读通知 📡
+* **查看消息列表** - 无需打开即刻 App，直接在浏览器里查看消息的通知内容 🚀
+
+## 安装方法
+
+1. 下载项目的源代码并解压缩到任意文件夹中
+2. 打开 Chrome 浏览器并进入到 More Tools > Extensions 页面
+3. 点击左上角「Load unpacked」选择解压缩后的文件夹
+4. 确认即可完成安装
+
 ## 前提概要
-不同于标准的前端开发，Chrome Extensions 拥有完全不同的 API 和底层设计，但这些并不影响你通过 React 或 Vue 类似的框架，来构建一个完整的 Chrome 应用，甚至还能在 GitHub 上找到一些第三方「脚手架」来达到这一目的。前提是你得了解，或者说至少得熟悉项目的结构和基本规范。
 
-这里提供两个我曾参考过的文档链接，它们对于这个项目的「成型」起到了至关重要的作用。尤其要感谢 [翻译者们](https://plus.google.com/+Crxdoc-zhAppspot) 的辛苦制作！❤️
+不同于标准的前端开发，Chrome Extensions 拥有完全不同的 API 和底层设计，但这些并不影响你通过 React 或 Vue 类似的框架，来构建一个完整的 Chrome 应用，甚至还能在 GitHub 上找到一些第三方「脚手架」来达到这一目的。前提是你得熟悉项目的结构和基本规范。
 
-* Google 官方文档：[传送门](https://developer.chrome.com/extensions)
-* 非官方中文文档：[传送门](https://crxdoc-zh.appspot.com/extensions)
+这里提供两个我用于参考的文档链接，它们对于这个项目起到了至关重要的作用。感谢 [翻译者们](https://plus.google.com/+Crxdoc-zhAppspot) 的辛苦制作。
+
+* Chrome Extensions 官方开发文档：[传送门](https://developer.chrome.com/extensions)
+* 非官方中文开发文档：[传送门](https://crxdoc-zh.appspot.com/extensions)
+
+**还要感谢 [@糯米鸡](http://m.okjike.com/user/viko16) 在开发过程中提供的巨大帮助！️**❤️
 
 ## 项目结构
+
 * ./scripts 网页脚本及框架
 * ./scripts/log-out.js 登出
 * ./scripts/store-token.js 数据部署
-* background.js Socket-io
+* background.js socket-io & 定时刷新 access token
 * popup.js 核心功能
 
-## 代码结构
-就这个项目来说，它的逻辑可分为三个部分：窗口脚本、后台脚本和网页脚本。
+## 逻辑结构
+
+该项目的逻辑可分为三个部分：窗口脚本、后台脚本和网页脚本。它们的作用域和生命周期都各不相同，如果你有兴趣一起参与开发，请尽量不要跳过这个部分。
 
 ### 窗口脚本（popup.js）
 
-* 生成二维码并获取 Token 数据
-* 刷新旧的 Token 数据
+* 生成二维码并获取 token
+* 获取详细的通知列表
 
 ### 后台脚本（background.js）
 
-* 通过 Socket-io 来获取未读消息的数量
-* 保持后台持续运行
+* socket-io 获取未读消息的数量（实验性功能）
+* 定时刷新旧的 access token 和 refresh token
 
 ```json
-// 修改 manifest.json 配置以实现后台运行
+// 修改 manifest.json 配置以实现后台持续运行
 "permissions": [
   "activeTab",
   "storage",
@@ -49,21 +68,26 @@
 ```
 
 ### 网页脚本
-log-out.js
 
-* 清空 Chrome 本地 storage 数据
-* 清空 Web LocalStorage
+#### ./scripts/log-out.js
+
+* 清空 extension 本地 storage
+* 清空 LocalStorage
 
 ```javascript
+// 同时在插件和网页两端退出登录
+// 事实上 token 数据可以通过 sync 方法实现跨浏览器同步
+// 但出于安全考虑, 这一实现方式不值得推荐
 chrome.storage.local.clear()
 localStorage.clear()
 ```
 
-store-token.js
+#### ./scripts/store-token.js
 
-* 生成时间戳并部署 Token
+* 生成时间戳并部署 token
 
 ```javascript
+// 时间戳的生成公式
 newTimestamp() => {
   var tzo = -this.getTimezoneOffset(),
     dif = tzo >= 0 ? '+' : '-',
@@ -82,17 +106,24 @@ newTimestamp() => {
 }
 ```
 
----
+## Q&A
 
-## 安装方法
+### 问：为什么没有加入点赞、回复这样的功能？
 
+答：这些都是和用户行为有关的特性，需要经过极为严谨的测试才能上线，否则很可能会导致不必要的误会。由于这是个第三方插件，对接流程并不走官方渠道，所以暂时不会考虑上线这样的功能。
 
-1. 下载项目的源代码并解压缩到任意文件夹中
-2. 打开 Chrome 浏览器并进入到 More Tools => Extensions 页面
-3. 点击左上角「Load unpacked」选择解压缩后的文件夹
-4. 确认即可完成安装
+### 问：访问不了 Chrome Store 有什么办法解决吗？
 
-## 关于未来
-创建这个项目的初衷，一方面是希望自己能借此机会学习 Chrome 插件的开发，另一方面也是为了巩固自己的专业知识，并和社区用户一同进步。从现阶段来说，Jike Web QR 实现了最基本的需求（用户登录）以至于未来发展方向特别多，完全超出了我对它最开始的期望。
+这是个开源项目，并且与你的隐私信息有关，因此我希望该插件有一个绝对值得信赖的安装渠道，避免被他人篡改，也为了保护你的隐私，显然 [Chrome Store](https://chrome.google.com/webstore/detail/jike-web-qr/gahlkoaglgmbpjoecaahganpccafojaa?hl=zh-CN) 是「唯一」的选择，所以还请谅解。当然了，作为开发者我可以向你承诺，绝不收集你的任何隐私信息。
 
-似乎这成了一个挑战？哈哈哈或许吧，不过我十分乐意接受这个变化，而且可以很明确地告诉大家，Jike Web QR 很快就会迎来下一个大功能更新，敬请期待！🎉
+### 问：接下来的版本还会更新功能吗？
+
+会，只要版本号小数点后一位有变化，就会加入新特性，例如 1.0.0 > 1.1.0 这样。但 1.0.0 > 1.0.1 通常只是维护性的升级。但无论是何种情况，我都希望每一位用户能及时地更新至最新版本。
+
+## TODO
+
+- [ ] 时间显示
+- [ ] 加入对「问答」类型的通知支持
+
+## LICENSE
+MIT
