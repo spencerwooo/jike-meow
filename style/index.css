@@ -113,7 +113,8 @@ p#notification-error {
 
 div.n-like-personal-update,
 div.n-personal-update-reposted,
-div.n-comment-personal-update {
+div.n-comment-personal-update,
+div.n-user-followed {
   display: block;
   width: 100%;
   padding-bottom: 15px;
