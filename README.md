@@ -1,5 +1,7 @@
 # 即刻喵 🐱
 
+![Chrome Store](./images/chrome_@1x.png)
+
 [![chrome web store](https://img.shields.io/chrome-web-store/v/gahlkoaglgmbpjoecaahganpccafojaa.svg)](https://chrome.google.com/webstore/detail/jike-web-qr/gahlkoaglgmbpjoecaahganpccafojaa?hl=zh-CN)
 [![rating](https://img.shields.io/chrome-web-store/stars/gahlkoaglgmbpjoecaahganpccafojaa.svg)](https://chrome.google.com/webstore/detail/jike-web-qr/gahlkoaglgmbpjoecaahganpccafojaa?hl=zh-CN)
 [![vue: 2.5.17](https://img.shields.io/badge/vue-2.5.17-green.svg)](https://cn.vuejs.org/v2/guide/installation.html)
