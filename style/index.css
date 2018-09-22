@@ -221,6 +221,11 @@ a.n-comment-post > span {
   overflow: hidden;
 }
 
+p.n-comment-users-comment,
+p.n-repost-users-comment {
+  color: #999;
+}
+
 /* 通知 - 转发 */
 
 a.n-repost-avatar {
