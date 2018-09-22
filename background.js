@@ -9,27 +9,15 @@ function messageCallback(result) {
     var access_token = result.access_token
 
     // socket-io 后台持续获取未读消息数量
-    notifyIO = io('wss://msgcenter.jike.ruguoapp.com?x-jike-access-token=' + access_token)
-    notifyIO.on('connect', function () {
-      console.log('connected')
+    notifyIO = io('wss://msgcenter.jike.ruguoapp.com', {
+      query: {
+        'x-jike-access-token': access_token
+      },
+      reconnectionDelay: 3e3
     })
     notifyIO.on('message', function (data) {
       if (data.type === 'NOTIFICATION') {
         chrome.browserAction.setBadgeText({ text: data.data.unreadCount === 0 ? '' : data.data.unreadCount.toString() })
-      }
-    })
-    notifyIO.on('connect_error', (error) => {
-      console.log('connect failed')
-      notifyIO.disconnect()
-      chrome.browserAction.setBadgeText({ text: '' })
-      setTimeout(messageCallback(result), 6e4)
-    })
-    notifyIO.on('disconnect', function (response) {
-      if (response === 'transport close') {
-        console.log('connect disconnected')
-        notifyIO.disconnect()
-        chrome.browserAction.setBadgeText({ text: '' })
-        setTimeout(messageCallback(result), 6e4)
       }
     })
 
