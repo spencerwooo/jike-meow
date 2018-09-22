@@ -9,6 +9,7 @@ new Vue({
     return {
       ui: false, // 优化 UI 闪烁问题
       url: 'https://app.jike.ruguoapp.com', // 接口统一地址
+      current_url: '', // 当前页面 URL
       uuid: '', // 用于生成供扫描的二维码
       token: '', // auth-token
       access_token: '', // access-token
@@ -25,7 +26,16 @@ new Vue({
     var _this = this
     _this.qr_loading = false
 
-    // 先从 extension 本地 storage 获取详细 token 数据
+    // 优先获取当前 tab 页面的 URL
+    chrome.tabs.query({
+      active: true,
+      currentWindow: true
+    }, function (tabs) {
+      var url = tabs[0].url
+      _this.current_url = url
+    })
+
+    // 再从 extension 本地 storage 获取详细 token 数据
     chrome.storage.local.get(null, function (result) {
 
       // 判断 Storage 中是否存在 token 数据
@@ -236,16 +246,14 @@ new Vue({
     },
     // 网页登录
     logIn() {
-      // chrome:// URL 下不执行 token 的部署
-      // 严格来说像 file:// 这样的 URL 也要判断
-      // 但考虑到这种情况发生的概率偏低且不影响功能的使用
-      // 所以没有作为条件之一来处理
+      // chrome:// 和 file:// URL 下不执行 token 的部署
       chrome.tabs.query({
         active: true,
         currentWindow: true
       }, function (tabs) {
         var url = tabs[0].url
-        if (url.indexOf('chrome://') < 0) {
+        if (url.indexOf('chrome://') < 0 &&
+          url.indexOf('file://') < 0) {
           chrome.tabs.executeScript(null, {
             file: 'scripts/store-token.js'
           })
