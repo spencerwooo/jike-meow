@@ -79,7 +79,7 @@
           </div>
           <div class="n-like-inline-block">
             <a class="n-like-post"
-               :href="'https://web.okjike.com/post-detail/' + item.referenceItem.targetId + '/originalPost'"
+               :href="'https://web.okjike.com/post-detail/' + item.referenceItem.targetId + '/' + (item.referenceItem.targetType === 'ORIGINAL_POST' ? 'originalPost' : item.referenceItem.targetType)"
                target="_blank">
               <span v-if="!item.referenceItem.referenceImageUrl">{{ item.referenceItem.content }}</span>
             </a>
@@ -143,14 +143,14 @@
             <a class="n-comment-post"
                v-if="item.referenceItem.referenceImageUrl"
                :style="{ backgroundImage: 'url(' + item.referenceItem.referenceImageUrl + ')' }"
-               :href="'https://web.okjike.com/post-detail/' + item.referenceItem.id + '/' + item.referenceItem.targetType"
+               :href="'https://web.okjike.com/post-detail/' + item.referenceItem.id + '/' + (item.referenceItem.type === 'ORIGINAL_POST' ? 'originalPost' : item.referenceItem.type)"
                target="_blank">
               <span v-if="!item.referenceItem.referenceImageUrl">{{ item.referenceItem.content }}</span>
             </a>
             <!-- 动态 - 无图 -->
             <a class="n-comment-post"
                v-else
-               :href="'https://web.okjike.com/post-detail/' + item.referenceItem.id + '/' + item.referenceItem.targetType"
+               :href="'https://web.okjike.com/post-detail/' + item.referenceItem.id + '/' + (item.referenceItem.type === 'ORIGINAL_POST' ? 'originalPost' : item.referenceItem.type)"
                target="_blank">
               <span v-if="!item.referenceItem.referenceImageUrl">{{ item.referenceItem.content }}</span>
             </a>
@@ -181,14 +181,14 @@
             <a class="n-comment-post"
                v-if="item.referenceItem.referenceImageUrl"
                :style="{ backgroundImage: 'url(' + item.referenceItem.referenceImageUrl + ')' }"
-               :href="'https://web.okjike.com/post-detail/' + item.referenceItem.targetId + '/' + (item.referenceItem.type === 'ORIGINAL_POST' ? 'originalPost' : item.referenceItem.type)"
+               :href="'https://web.okjike.com/post-detail/' + item.referenceItem.targetId + '/' + (item.referenceItem.targetType === 'ORIGINAL_POST' ? 'originalPost' : item.referenceItem.type)"
                target="_blank">
               <span v-if="!item.referenceItem.referenceImageUrl">{{ item.referenceItem.content }}</span>
             </a>
             <!-- 动态 - 无图 -->
             <a class="n-comment-post"
                v-else
-               :href="'https://web.okjike.com/post-detail/' + item.referenceItem.targetId + '/' + (item.referenceItem.type === 'ORIGINAL_POST' ? 'originalPost' : item.referenceItem.type)"
+               :href="'https://web.okjike.com/post-detail/' + item.referenceItem.targetId + '/' + (item.referenceItem.targetType === 'ORIGINAL_POST' ? 'originalPost' : item.referenceItem.type)"
                target="_blank">
               <span v-if="!item.referenceItem.referenceImageUrl">{{ item.referenceItem.content }}</span>
             </a>
