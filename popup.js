@@ -262,23 +262,19 @@ new Vue({
     },
     // 登出
     logOut() {
-      // chrome:// URL 下不执行 token 移除
-      // 严格来说像 file:// 这样的 URL 也要判断
-      // 但考虑到这种情况发生的概率偏低且不影响功能的使用
-      // 所以没有作为条件之一来处理
+      // chrome:// 和 file:// URL 下不执行 token 移除
       chrome.tabs.query({
         active: true,
         currentWindow: true
       }, function (tabs) {
         var url = tabs[0].url
-        if (url.indexOf('chrome://') < 0) {
+        if (url.indexOf('chrome://') < 0 ||
+          url.indexOf('file://') < 0) {
           chrome.tabs.executeScript(null, {
             file: 'scripts/log-out.js'
           })
         } else {
-
-          // 清空本地 storage token 数据
-          // 并重新加载 extension
+          // 清空本地 storage token 数据, 并重新加载 extension
           chrome.storage.local.clear()
           chrome.runtime.reload()
         }
