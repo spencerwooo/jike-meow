@@ -1,17 +1,12 @@
 'use strict'
 
 let notifyIO;
-// let port = browser.runtime.connect();
-
-// port.onMessage.addListener(message => {
-// });
 
 // 监听 onMessage
 chrome.runtime.onMessage.addListener(messageCallback);
 async function messageCallback(result) {
   if (result.access_token) {
 
-    console.log(getToken())
     // 建立 socket 连接
     notifyIO = io('wss://msgcenter.jike.ruguoapp.com', {
       query: {
@@ -72,6 +67,16 @@ async function messageCallback(result) {
     });
   }
 }
+
+// 实时更新当前用户访问的 URL
+chrome.tabs.onUpdated.addListener(function (tabid, changeinfo, tab) {
+  var url = tab.url;
+  if (url !== undefined && changeinfo.status === "loading") {
+    chrome.runtime.sendMessage({
+      current_url: url
+    });
+  }
+});
 
 // 获取本地 token
 const getToken = () => {
