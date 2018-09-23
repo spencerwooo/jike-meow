@@ -73,6 +73,14 @@ new Vue({
         _this.ui = true
       }
     })
+
+    // 接收来自 background.js 的 current_url
+    // 实时更新 current_url
+    chrome.runtime.onMessage.addListener(function (result) {
+      if (result.current_url) {
+        _this.current_url = result.current_url
+      }
+    })
   },
   methods: {
     // 二维码生成
@@ -220,10 +228,14 @@ new Vue({
     logIn() {
       chrome.tabs.executeScript(null, { file: "scripts/store-token.js" })
     },
-    // 登出
+    // 退出登录
     logOut() {
-      chrome.storage.local.clear()
-      chrome.runtime.reload()
+      if (confirm('确认退出吗？') === true) {
+        chrome.storage.local.clear()
+        chrome.runtime.reload()
+      } else {
+        return
+      }
     },
     // 刷新通知角标
     getNotificationBadge() {
