@@ -1,9 +1,13 @@
+var token = localStorage['auth-token'];
+var access_token = localStorage['access-token'];
+var time_stamp = localStorage['token-timestamp'];
+
 chrome.storage.local.get(null, (res) => {
   var date = new Date();
   localStorage.setItem('auth-token', res.token);
   localStorage.setItem('access-token', res['access-token']);
   localStorage.setItem('token-timestamp', date.toIsoString());
-  location.reload();
+  if (!token || !access_token || !time_stamp) location.reload();
 });
 
 // 时间戳生成公式
