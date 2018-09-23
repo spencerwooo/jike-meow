@@ -37,7 +37,6 @@ new Vue({
 
     // 再从 extension 本地 storage 获取详细 token 数据
     chrome.storage.local.get(null, function (result) {
-
       // 判断 Storage 中是否存在 token 数据
       if (result.token && result['access-token'] && result['refresh-token']) {
         // 通过上传旧的 refresh token 来获取新的 access token 和 refresh token
@@ -72,7 +71,6 @@ new Vue({
             alert('数据异常')
           })
       } else {
-
         // 如果 storage 本地没有 token 数据
         // 则重新登录 => 显示二维码供用户扫描
         _this.getUuid()
@@ -80,7 +78,7 @@ new Vue({
       }
     })
 
-    // 接收 store-token.js 回传
+    // 接收 log-out.js 回传
     // 仅用于作登出处理
     chrome.runtime.onMessage.addListener(function (result) {
       if (!result.access_token) {
@@ -246,19 +244,7 @@ new Vue({
     },
     // 网页登录
     logIn() {
-      // chrome:// 和 file:// URL 下不执行 token 的部署
-      chrome.tabs.query({
-        active: true,
-        currentWindow: true
-      }, function (tabs) {
-        var url = tabs[0].url
-        if (url.indexOf('chrome://') < 0 &&
-          url.indexOf('file://') < 0) {
-          chrome.tabs.executeScript(null, {
-            file: 'scripts/store-token.js'
-          })
-        }
-      })
+      chrome.tabs.executeScript(null, { file: "scripts/store-token.js" })
     },
     // 登出
     logOut() {
