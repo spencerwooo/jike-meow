@@ -4,14 +4,15 @@ var notifyIO
 
 chrome.runtime.onMessage.addListener(messageCallback)
 
-function messageCallback(result) {
+async function messageCallback(result) {
   if (result.access_token) {
     var access_token = result.access_token
 
     // socket-io 后台持续获取未读消息数量
+    console.log(2, await getToken())
     notifyIO = io('wss://msgcenter.jike.ruguoapp.com', {
       query: {
-        'x-jike-access-token': access_token
+        'x-jike-access-token': await getToken()
       },
       reconnectionDelay: 3e3
     })
@@ -23,10 +24,8 @@ function messageCallback(result) {
 
     // 每 10 分钟刷新一次 access token 和 refresh token
     chrome.storage.local.get(null, function (res) {
-
       // 优化多线程问题
       clearInterval(localStorage['timerId'])
-
       var refreshToken = setInterval(function refreshToken() {
         axios({
           url: 'https://app.jike.ruguoapp.com/app_auth_tokens.refresh',
@@ -55,4 +54,13 @@ function messageCallback(result) {
       localStorage.setItem('timerId', refreshToken)
     })
   }
+}
+
+// 获取 token
+function getToken() {
+  return new Promise(resolve => {
+    chrome.storage.local.get(null, (res) => {
+      resolve(res['access-token'])
+    })
+  })
 }
