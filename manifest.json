@@ -5,6 +5,7 @@
   "description": "可独立使用的非官方「即刻」通知浏览插件，并为官方网页版（web.okjike.com）提供一键登录功能。",
   "permissions": [
     "activeTab",
+    "tabs",
     "storage",
     "background",
     "<all_urls>"
@@ -12,6 +13,17 @@
   "incognito": "not_allowed",
   "offline_enabled": false,
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  "content_scripts": [
+    {
+      "matches": [
+        "http://web.okjike.com/*",
+        "https://web.okjike.com/*"
+      ],
+      "js": [
+        "scripts/axios.min.js"
+      ]
+    }
+  ],
   "background": {
     "scripts": [
       "scripts/axios.min.js",
