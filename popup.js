@@ -26,7 +26,7 @@ new Vue({
     var _this = this
     _this.qr_loading = false
 
-    // 优先获取当前 tab 页面的 URL
+    // 获取当前 tab 页面的 URL
     chrome.tabs.query({
       active: true,
       currentWindow: true
@@ -35,9 +35,8 @@ new Vue({
       _this.current_url = url
     })
 
-    // 再从 extension 本地 storage 获取详细 token 数据
+    // 从本地 storage 获取 token 数据
     chrome.storage.local.get(null, function (result) {
-      // 判断 Storage 中是否存在 token 数据
       if (result.token && result['access-token'] && result['refresh-token']) {
         // 通过上传旧的 refresh token 来获取新的 access token 和 refresh token
         // 官网的方案是每十分钟刷新一次
@@ -61,10 +60,7 @@ new Vue({
               'refresh-token': res['x-jike-refresh-token']
             })
 
-            // 加载 UI
             _this.ui = true
-
-            // 异步获取通知列表
             _this.getNotificationList()
           })
           .catch(function () {
@@ -75,14 +71,6 @@ new Vue({
         // 则重新登录 => 显示二维码供用户扫描
         _this.getUuid()
         _this.ui = true
-      }
-    })
-
-    // 接收 log-out.js 回传
-    // 仅用于作登出处理
-    chrome.runtime.onMessage.addListener(function (result) {
-      if (!result.access_token) {
-        chrome.runtime.reload()
       }
     })
   },
@@ -181,20 +169,6 @@ new Vue({
           return false
         })
     },
-    // 刷新通知角标
-    getNotificationBadge() {
-      if (confirm('注意：该功能目前正在实验测试阶段，开启后可能会导致「消息推送失灵」等问题出现，并需要「重新登录」才可关闭，是否确认开启？') === true) {
-        chrome.storage.local.get(null, function (result) {
-          chrome.runtime.sendMessage({
-            token: result.token,
-            access_token: result['access-token'],
-            refresh_token: result['refresh-token']
-          }, null)
-        })
-      } else {
-        return false
-      }
-    },
     // 获取通知列表
     getNotificationList() {
       var _this = this
@@ -248,23 +222,22 @@ new Vue({
     },
     // 登出
     logOut() {
-      // chrome:// 和 file:// URL 下不执行 token 移除
-      chrome.tabs.query({
-        active: true,
-        currentWindow: true
-      }, function (tabs) {
-        var url = tabs[0].url
-        if (url.indexOf('chrome://') < 0 ||
-          url.indexOf('file://') < 0) {
-          chrome.tabs.executeScript(null, {
-            file: 'scripts/log-out.js'
+      chrome.storage.local.clear()
+      chrome.runtime.reload()
+    },
+    // 刷新通知角标
+    getNotificationBadge() {
+      if (confirm('注意：该功能目前正在实验阶段，体验上可能存在问题，确认开启？') === true) {
+        chrome.storage.local.get(null, function (result) {
+          chrome.runtime.sendMessage({
+            token: result.token,
+            access_token: result['access-token'],
+            refresh_token: result['refresh-token']
           })
-        } else {
-          // 清空本地 storage token 数据, 并重新加载 extension
-          chrome.storage.local.clear()
-          chrome.runtime.reload()
-        }
-      })
+        })
+      } else {
+        return
+      }
     }
   }
 })
