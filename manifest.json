@@ -1,6 +1,6 @@
 {
   "name": "即刻喵",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "coder_ysj",
   "description": "可独立使用的非官方「即刻」通知浏览插件，并为官方网页版（web.okjike.com）提供一键登录功能。",
   "permissions": [
@@ -18,7 +18,7 @@
       "scripts/socket.io.dev.js",
       "background.js"
     ],
-    "persistent": false
+    "persistent": true
   },
   "browser_action": {
     "default_popup": "popup.html",
