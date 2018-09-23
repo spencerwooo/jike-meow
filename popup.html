@@ -236,15 +236,10 @@
     <div id="button-container"
          v-if="access_token && ui">
       <button class="primary half"
-              @click.self.stop="logIn()"
-              v-if="current_url.indexOf('web.okjike.com') > -1">网页登录</button>
-      <button class="primary half"
-              @click.self.stop="window.open('https://web.okjike.com/')"
-              v-else>打开官网</button>
+              @click.self.stop="logIn()">网页登录</button>
       <button class="primary half"
               style="margin-left: 10px;"
-              @click.self.stop="logOut()"
-              v-if="access_token">退出登录</button>
+              @click.self.stop="logOut()">退出登录</button>
     </div>
     <button v-if="access_token"
             @click.self.stop="getNotificationBadge()">开启消息通知角标</button>

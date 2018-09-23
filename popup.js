@@ -226,7 +226,25 @@ new Vue({
     },
     // 网页登录
     logIn() {
-      chrome.tabs.executeScript(null, { file: "scripts/store-token.js" })
+      chrome.tabs.query({
+        active: true,
+        currentWindow: true
+      }, function (tabs) {
+        var url = tabs[0].url
+
+        // 当前页面为即刻官网时即直接登录
+        // 否则, 就打开即刻官网并登录
+        if (url.indexOf('web.okjike.com') > -1) {
+          chrome.tabs.executeScript(null, {
+            file: 'scripts/store-token.js'
+          })
+        } else {
+          window.open('https://web.okjike.com')
+          chrome.storage.local.set({
+            'new-tab-to-login': true
+          })
+        }
+      })
     },
     // 退出登录
     logOut() {

@@ -75,6 +75,18 @@ chrome.tabs.onUpdated.addListener(function (tabid, changeinfo, tab) {
     chrome.runtime.sendMessage({
       current_url: url
     });
+
+    // popup.js 的 logIn 方法点击直接登录
+    chrome.storage.local.get(null, (res) => {
+      if (res['new-tab-to-login'] && url.indexOf('web.okjike.com') > -1) {
+        if (res.token && res['access-token'] && res['refresh-token']) {
+          chrome.tabs.executeScript(null, { file: "scripts/store-token.js" });
+        }
+        chrome.storage.local.set({
+          'new-tab-to-login': false
+        });
+      }
+    });
   }
 });
 
