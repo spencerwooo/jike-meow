@@ -189,11 +189,14 @@ new Vue({
       })
         .then(function (response) {
 
-          // 获取数据后需将角标归零
-          chrome.browserAction.setBadgeText({ text: '' })
           var res = response.data
           for (var i = 0; i < res.data.length; i++) {
             _this.notifications.push(res.data[i])
+          }
+
+          // 获取数据后需将角标归零
+          if (status === 'refresh' || _this.notifications.length === res.data.length) {
+            chrome.browserAction.setBadgeText({ text: '' })
           }
           _this.notificationsIsLoading = false
 
