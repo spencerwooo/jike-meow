@@ -9,11 +9,19 @@
 
 基于 Chrome 和 Vue.js 开发的第三方即刻通知插件。
 
-## 功能特点
+## 主要功能
 
-* 📦 **一键登录** - 只需在插件内登录一次，就能永久登录，并为网页端提供同样的功能
-* 📡 **未读消息通知** - 实时显示未读通知数量
-* 🚀 **查看消息列表** - 无需打开即刻 App，直接在浏览器里查看详细的通知内容
+* 📦 **一键登录** - 不仅可以在插件里登录，还能同时登录网页端
+* 📡 **未读消息通知** - 实时显示未读通知数量，摸鱼党们的专属功能
+* 🚀 **查看消息列表** - 无需即刻 App，直接查看详细的通知内容
+
+## 项目结构
+
+* **./images** Chrome Store, GitHub, 图标等素材
+* **./scripts** 引用的第三方库和 Content Scripts
+* **./scripts/store-token.js** 「网页登录」脚本
+* **background.js** 「开启消息通知角标」脚本
+* **popup.js** 插件主视图的功能
 
 ## 安装方法
 
@@ -33,100 +41,25 @@
 
 **还要感谢 [@糯米鸡](http://m.okjike.com/user/viko16) 在开发过程中提供的巨大帮助！️**❤️
 
-## 项目结构
-
-* ./scripts 网页脚本及框架
-* ./scripts/log-out.js 登出
-* ./scripts/store-token.js 数据部署
-* background.js socket-io & 定时刷新 access token
-* popup.js 核心功能
-
-## 逻辑结构
-
-该项目的逻辑可分为三个部分：窗口脚本、后台脚本和网页脚本。它们的作用域和生命周期都各不相同，如果你有兴趣一起参与开发，请尽量不要跳过这个部分。
-
-### 窗口脚本（popup.js）
-
-* 生成二维码并获取 token
-* 获取详细的通知列表
-
-### 后台脚本（background.js）
-
-* socket-io 获取未读消息的数量（实验性功能）
-* 定时刷新旧的 access token 和 refresh token
-
-```json
-// 修改 manifest.json 配置以实现后台持续运行
-"permissions": [
-  "activeTab",
-  "storage",
-  "declarativeContent",
-  "background"
-],
-"background": {
-  "scripts": [
-    "background.js"
-  ],
-  "persistent": false
-}
-```
-
-### 网页脚本
-
-#### ./scripts/log-out.js
-
-* 清空 extension 本地 storage
-* 清空 LocalStorage
-
-```javascript
-// 同时在插件和网页两端退出登录
-// 事实上 token 数据可以通过 sync 方法实现跨浏览器同步
-// 但出于安全考虑, 这一实现方式不值得推荐
-chrome.storage.local.clear()
-localStorage.clear()
-```
-
-#### ./scripts/store-token.js
-
-* 生成时间戳并部署 token
-
-```javascript
-// 时间戳的生成公式
-newTimestamp() => {
-  var tzo = -this.getTimezoneOffset(),
-    dif = tzo >= 0 ? '+' : '-',
-    pad = function (num) {
-      var norm = Math.floor(Math.abs(num))
-      return (norm < 10 ? '0' : '') + norm
-    }
-  return this.getFullYear() +
-    '-' + pad(this.getMonth() + 1) +
-    '-' + pad(this.getDate()) +
-    'T' + pad(this.getHours()) +
-    ':' + pad(this.getMinutes()) +
-    ':' + pad(this.getSeconds()) +
-    dif + pad(tzo / 60) +
-    ':' + pad(tzo % 60)
-}
-```
-
 ## Q&A
 
-**问：为什么不支持点赞、回复这样的功能？**
+**1. 问：为什么不支持点赞、回复这样的功能？**
 
-答：这些都是和用户行为有关的特性，需要经过极为严谨的测试才能上线，否则很容易导致不必要的误会。由于这是个第三方插件，对接流程并不走官方渠道，所以暂时不会考虑上线这样的功能。
+答：这些都是和用户行为有关的特性，需要经过极为的测试才能上线，否则很容易导致不必要的误会。由于这是个第三方插件，对接流程并不走官方渠道，所以暂时不会考虑上线这样的功能。
 
-**问：访问不了 Chrome Store 有什么办法解决吗？**
+**2. 问：访问不了 Chrome Store 有什么办法解决吗？**
 
-这是个开源项目，并且与你的隐私信息有关，因此我希望它有一个绝对值得信赖的安装渠道，避免被他人篡改，也为了保护你的隐私，显然 [Chrome Store](https://chrome.google.com/webstore/detail/jike-web-qr/gahlkoaglgmbpjoecaahganpccafojaa?hl=zh-CN) 是「唯一」的选择，所以还请谅解。当然了，作为开发者我可以向你承诺，绝不收集任何隐私信息。
+这是个开源项目，并且与你的隐私信息有关，因此，一个值得信赖的安装渠道是十分重要的，这样不仅能够避免被他人篡改，也可以保护你的隐私，显然 [Chrome Store](https://chrome.google.com/webstore/detail/jike-web-qr/gahlkoaglgmbpjoecaahganpccafojaa?hl=zh-CN) 是「唯一」的选择，还请谅解。当然了，作为开发者我可以承诺，绝不收集你的任何隐私信息。
 
-**问：接下来的版本还会更新功能吗？**
+**3. 问：接下来的版本还会更新功能吗？**
 
 会，只要版本号小数点后一位有变化，就会加入新特性，例如 1.0.0 > 1.1.0 这样。但 1.0.0 > 1.0.1 通常只是维护性的升级。但无论是何种情况，我都希望每一位用户能及时地更新至最新版本。
 
 ## TODO
 
-- [ ] 时间显示
+- [ ] 加入时间显示
+- [ ] 加入上次阅读位置显示
+- [ ] 加入手动刷新功能
 - [ ] 加入对「问答」类型的通知支持
 
 ## LICENSE
