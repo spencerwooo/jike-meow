@@ -24,7 +24,6 @@
          v-if="access_token && notifications && ui">
       <div class="n-item"
            v-for="item in notifications">
-
         <!-- 点赞 - 动态 -->
         <div class="n-like-personal-update"
              v-if="item.type === 'LIKE_PERSONAL_UPDATE'">
@@ -59,7 +58,6 @@
             </a>
           </div>
         </div>
-
         <!-- 点赞 - 评论 -->
         <div class="n-like-personal-update"
              v-else-if="item.type === 'LIKE_PERSONAL_UPDATE_COMMENT' ||
@@ -85,7 +83,6 @@
             </a>
           </div>
         </div>
-
         <!-- 转发 -->
         <div class="n-personal-update-reposted"
              v-else-if="item.type === 'PERSONAL_UPDATE_REPOSTED'">
@@ -106,20 +103,19 @@
             <a class="n-repost-post"
                v-if="item.referenceItem.referenceImageUrl"
                :style="{ backgroundImage: 'url(' + item.referenceItem.referenceImageUrl + ')' }"
-               :href="'https://web.okjike.com/post-detail/' + item.referenceItem.id + '/' + item.referenceItem.type"
+               :href="'https://web.okjike.com/post-detail/' + item.referenceItem.id + '/' + (item.referenceItem.type === 'ORIGINAL_POST' ? 'originalPost' : item.referenceItem.type)"
                target="_blank">
               <span v-if="!item.referenceItem.referenceImageUrl">{{ item.referenceItem.content }}</span>
             </a>
             <!-- 动态 - 无图 -->
             <a class="n-repost-post"
                v-else
-               :href="'https://web.okjike.com/post-detail/' + item.referenceItem.id + '/' + item.referenceItem.type"
+               :href="'https://web.okjike.com/post-detail/' + item.referenceItem.id + '/' + (item.referenceItem.type === 'ORIGINAL_POST' ? 'originalPost' : item.referenceItem.type)"
                target="_blank">
               <span v-if="!item.referenceItem.referenceImageUrl">{{ item.referenceItem.content }}</span>
             </a>
           </div>
         </div>
-
         <!-- 评论 -->
         <div class="n-comment-personal-update"
              v-else-if="item.type === 'COMMENT_PERSONAL_UPDATE'">
@@ -156,7 +152,6 @@
             </a>
           </div>
         </div>
-
         <!-- 回复 -->
         <div class="n-comment-personal-update"
              v-else-if="item.type === 'REPLIED_TO_PERSONAL_UPDATE_COMMENT' ||
@@ -194,7 +189,6 @@
             </a>
           </div>
         </div>
-
         <!-- 新关注 -->
         <div class="n-user-followed"
              v-else-if="item.type === 'USER_FOLLOWED'">
@@ -213,7 +207,6 @@
             <a class="n-comment-post"></a>
           </div>
         </div>
-
         <!-- 未知消息类型 -->
         <div class="n-unknown"
              v-else>
