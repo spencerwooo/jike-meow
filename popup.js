@@ -1,6 +1,10 @@
 // Google 官方手册访问 https://developer.chrome.com/extensions
 // 非官方中文教程访问 https://crxdoc-zh.appspot.com/extensions
 
+// token = refresh token
+// auth token, 用来获取通知列表
+// access token, 后台获取未读消息数量等功能
+
 'use strict'
 
 new Vue({
@@ -11,7 +15,8 @@ new Vue({
       url: 'https://app.jike.ruguoapp.com', // 接口统一地址
       current_url: '', // 当前页面 URL
       uuid: '', // 用于生成供扫描的二维码
-      token: '', // auth-token
+      auth_token: '', // auth-token 用于获取通知列表
+      token: '', // refresh-token
       access_token: '', // access-token
       error: false, // 通知列表加载失败
       qr_loading: true, // 二维码是否正在加载
@@ -37,35 +42,12 @@ new Vue({
 
     // 从本地 storage 获取 token 数据
     chrome.storage.local.get(null, function (result) {
-      if (result.token && result['access-token'] && result['refresh-token']) {
-        // 通过上传旧的 refresh token 来获取新的 access token 和 refresh token
-        // 官网的方案是每十分钟刷新一次
-        // 这一行为已放在 background.js 中处理
-        axios({
-          url: _this.url + '/app_auth_tokens.refresh',
-          method: 'get',
-          headers: {
-            'x-jike-refresh-token': result['refresh-token']
-          }
-        })
-          .then(function (response) {
-            var res = response.data
-            _this.token = result.token
-            _this.access_token = res['x-jike-access-token']
-
-            // 在 chrome 本地 storage 中存储 token
-            chrome.storage.local.set({
-              'token': result.token,
-              'access-token': res['x-jike-access-token'],
-              'refresh-token': res['x-jike-refresh-token']
-            })
-
-            _this.ui = true
-            _this.getNotificationList()
-          })
-          .catch(function () {
-            alert('数据异常')
-          })
+      if (result['auth-token'] && result.token && result['access-token']) {
+        _this.auth_token = result['auth-token']
+        _this.token = result.token
+        _this.access_token = result['access-token']
+        _this.ui = true
+        _this.getNotificationList()
       } else {
         // 如果 storage 本地没有 token 数据
         // 则重新登录 => 显示二维码供用户扫描
@@ -158,12 +140,13 @@ new Vue({
           if (data.confirmed === true) {
 
             // 确认登录后将 token 数据存在本地 storage 中
-            _this.token = data.token
+            _this.auth_token = data.token
+            _this.token = data['x-jike-refresh-token']
             _this.access_token = data['x-jike-access-token']
             chrome.storage.local.set({
-              'token': data.token,
-              'access-token': data['x-jike-access-token'],
-              'refresh-token': data['x-jike-refresh-token']
+              'auth-token': data.token,
+              'token': data['x-jike-refresh-token'],
+              'access-token': data['x-jike-access-token']
             })
 
             // 然后直接刷新通知列表
@@ -192,7 +175,7 @@ new Vue({
           }
         },
         headers: {
-          'x-jike-app-auth-jwt': _this.token,
+          'x-jike-app-auth-jwt': _this.auth_token,
           'app-version': '4.8.0'
         }
       })

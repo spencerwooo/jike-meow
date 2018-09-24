@@ -29,42 +29,41 @@ async function messageCallback(result) {
     });
 
     // 每 10 分钟刷新一次 access token 和 refresh token
-    chrome.storage.local.get(null, res => {
+    // chrome.storage.local.get(null, res => {
 
-      // 避免 setInterval 多线程
-      clearInterval(localStorage['timerId']);
+    //   // 避免 setInterval 多线程
+    //   clearInterval(localStorage['timerId']);
 
-      // 创建一个 Interval
-      let refreshToken = setInterval(() => {
-        axios({
-          url: 'https://app.jike.ruguoapp.com/app_auth_tokens.refresh',
-          method: 'get',
-          headers: {
-            'x-jike-refresh-token': res['refresh-token']
-          }
-        })
-          .then(response => {
-            const data = response.data;
+    //   // 创建一个 Interval
+    //   let refreshToken = setInterval(() => {
+    //     axios({
+    //       url: 'https://app.jike.ruguoapp.com/app_auth_tokens.refresh',
+    //       method: 'get',
+    //       headers: {
+    //         'x-jike-refresh-token': res['refresh-token']
+    //       }
+    //     })
+    //       .then(response => {
+    //         const data = response.data;
 
-            // 刷新本地 token
-            chrome.storage.local.set({
-              'token': res.token,
-              'access-token': data['x-jike-access-token'],
-              'refresh-token': data['x-jike-refresh-token']
-            });
+    //         // 刷新本地 token
+    //         chrome.storage.local.set({
+    //           'token': data['x-jike-refresh-token'],
+    //           'access-token': data['x-jike-access-token']
+    //         });
 
-            // 要求 store-token.js 在网页端覆盖新的 token
-            chrome.tabs.executeScript(null, { file: "scripts/store-token.js" });
-          })
-          .catch(() => {
-            // 即刻官网对于刷新 token 的时间控制为十四天
-            // 所以这里不作严格处理
-          });
-      }, 6e5);
+    //         // 要求 store-token.js 在网页端覆盖新的 token
+    //         chrome.tabs.executeScript(null, { file: "scripts/store-token.js" });
+    //       })
+    //       .catch(() => {
+    //         // 即刻官网对于刷新 token 的时间控制为十四天
+    //         // 所以这里不作严格处理
+    //       });
+    //   }, 6e5);
 
-      // 在 localStorage 中存储 timerId 用于 clearInterval 定位
-      localStorage.setItem('timerId', refreshToken);
-    });
+    //   // 在 localStorage 中存储 timerId 用于 clearInterval 定位
+    //   localStorage.setItem('timerId', refreshToken);
+    // });
   }
 }
 
@@ -81,7 +80,7 @@ chrome.tabs.onUpdated.addListener(function (tabid, changeinfo, tab) {
     // 这一步的目的是实现一键打开 + 一键登录功能
     chrome.storage.local.get(null, (res) => {
       if (res['new-tab-to-login'] && url.indexOf('web.okjike.com') > -1) {
-        if (res.token && res['access-token'] && res['refresh-token']) {
+        if (res.token && res['access-token']) {
           chrome.tabs.executeScript(null, { file: "scripts/store-token.js" }, function (result) {
             chrome.storage.local.set({
               'new-tab-to-login': false
