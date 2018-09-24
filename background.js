@@ -17,7 +17,7 @@ chrome.tabs.onUpdated.addListener(function (tabid, changeinfo, tab) {
     // 这一步的目的是实现一键打开 + 一键登录功能
     chrome.storage.local.get(null, (res) => {
       if (res['new-tab-to-login'] && url.indexOf('web.okjike.com') > -1) {
-        if (res.token && res['access-token']) {
+        if (res['refresh-token'] && res['access-token']) {
           chrome.tabs.executeScript(null, { file: "scripts/store-token.js" }, () => {
             chrome.storage.local.set({
               'new-tab-to-login': false
@@ -65,18 +65,18 @@ function getToken() {
 clearInterval(localStorage['timerId']);
 let refreshToken = setInterval(() => {
   chrome.storage.local.get(null, (res) => {
-    if (res.token && res['access-token']) {
+    if (res['refresh-token'] && res['access-token']) {
       axios({
         url: 'https://app.jike.ruguoapp.com/app_auth_tokens.refresh',
         method: 'get',
         headers: {
-          'x-jike-refresh-token': res.token
+          'x-jike-refresh-token': res['refresh-token']
         }
       })
         .then(response => {
           const data = response.data;
           chrome.storage.local.set({
-            'token': data['x-jike-refresh-token'],
+            'refresh-token': data['x-jike-refresh-token'],
             'access-token': data['x-jike-access-token']
           });
         });

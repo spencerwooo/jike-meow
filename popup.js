@@ -1,8 +1,8 @@
 // Google 官方手册访问 https://developer.chrome.com/extensions
 // 非官方中文教程访问 https://crxdoc-zh.appspot.com/extensions
 
-// token === refresh token
 // auth token, 用来获取通知列表
+// refresh token, 可以换取新的 token
 // access token, 后台获取未读消息数量等功能
 
 'use strict'
@@ -15,9 +15,9 @@ new Vue({
       url: 'https://app.jike.ruguoapp.com', // 接口统一地址
       current_url: '', // 当前页面 URL
       uuid: '', // 用于生成供扫描的二维码
-      auth_token: '', // auth-token 用于获取通知列表
-      token: '', // refresh-token
-      access_token: '', // access-token
+      auth_token: '', // 用于获取通知列表
+      refresh_token: '',
+      access_token: '',
       error: false, // 通知列表加载失败
       qr_loading: true, // 二维码是否正在加载
       qr_scanning: false, // 二维码是否正在被扫描
@@ -42,9 +42,9 @@ new Vue({
 
     // 从本地 storage 获取 token 数据
     chrome.storage.local.get(null, function (result) {
-      if (result['auth-token'] && result.token && result['access-token']) {
+      if (result['auth-token'] && result['refresh-token'] && result['access-token']) {
         _this.auth_token = result['auth-token']
-        _this.token = result.token
+        _this.refresh_token = result['refresh-token']
         _this.access_token = result['access-token']
         _this.ui = true
         _this.getNotificationList()
@@ -141,11 +141,11 @@ new Vue({
 
             // 确认登录后将 token 数据存在本地 storage 中
             _this.auth_token = data.token
-            _this.token = data['x-jike-refresh-token']
+            _this.refresh_token = data['x-jike-refresh-token']
             _this.access_token = data['x-jike-access-token']
             chrome.storage.local.set({
               'auth-token': data.token,
-              'token': data['x-jike-refresh-token'],
+              'refresh-token': data['x-jike-refresh-token'],
               'access-token': data['x-jike-access-token']
             })
 
