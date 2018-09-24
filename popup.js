@@ -14,8 +14,8 @@ new Vue({
       ui: false, // 优化 UI 闪烁问题
       url: 'https://app.jike.ruguoapp.com', // 接口统一地址
       current_url: '', // 当前页面 URL
-      uuid: '', // 用于生成供扫描的二维码
-      auth_token: '', // 用于获取通知列表
+      uuid: '', // 生成扫描二维码
+      auth_token: '',
       refresh_token: '',
       access_token: '',
       error: false, // 通知列表加载失败
@@ -48,6 +48,11 @@ new Vue({
         _this.access_token = result['access-token']
         _this.ui = true
         _this.getNotificationList()
+
+        // 通知 background.js 开始建立 socket 连接
+        chrome.runtime.sendMessage({
+          logged_in: true
+        })
       } else {
         // 如果 storage 本地没有 token 数据
         // 则重新登录 => 显示二维码供用户扫描
@@ -151,6 +156,11 @@ new Vue({
 
             // 然后直接刷新通知列表
             _this.getNotificationList()
+
+            // 通知 background.js 开始建立 socket 连接
+            chrome.runtime.sendMessage({
+              logged_in: true
+            })
           } else {
             _this.getUuid()
           }

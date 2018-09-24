@@ -1,7 +1,14 @@
 'use strict'
 
 var notifyIO;
-socketConnection();
+
+// 监听 popup.js 中的 waitForConfirmation() 方法
+chrome.runtime.onMessage.addListener(
+  function (request, sender, sendResponse) {
+    if (request.logged_in === true) {
+      socketConnection();
+    }
+  });
 
 // 监听 url 更新
 chrome.tabs.onUpdated.addListener(function (tabid, changeinfo, tab) {
@@ -29,16 +36,19 @@ chrome.tabs.onUpdated.addListener(function (tabid, changeinfo, tab) {
   }
 });
 
-// 建立 socket 连接
+// socket-io 模块
 async function socketConnection() {
+  if (notifyIO) return;
+  if (navigator.onLine === false) return
+
+  // 开始建立 socket 连接
   notifyIO = io('wss://msgcenter.jike.ruguoapp.com', {
     query: {
       'x-jike-access-token': await getToken()
     },
     reconnectionDelay: 10000
   });
-
-  // 监听 socket 的 message 事件
+  // 监听 socket - message
   notifyIO.on('message', data => {
 
     // 判断接收的 data type
@@ -46,9 +56,20 @@ async function socketConnection() {
     // 还会接收 PERSONAL_UPDATE type
     if (data.type === 'NOTIFICATION') {
       chrome.browserAction.setBadgeText({
-        text: data.data.unreadCount === 0 ? '' : data.data.unreadCount.toString()
+        text: data.data.unreadCount === 0 ? '' : data.data.unreadCount > 99 ? '99+' : data.data.unreadCount.toString()
       });
     }
+  });
+  // 监听 socket - reconnect attempt
+  notifyIO.on('reconnect_attempt', () => {
+    if (navigator.onLine === false) {
+      console.log(123)
+      notifyIO.disconnect();
+    }
+  });
+  // 监听 socket - disconnect
+  notifyIO.on('disconnect', () => {
+    chrome.browserAction.setBadgeText({ text: '' });
   });
 }
 
