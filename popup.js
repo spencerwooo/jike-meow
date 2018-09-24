@@ -1,7 +1,7 @@
 // Google 官方手册访问 https://developer.chrome.com/extensions
 // 非官方中文教程访问 https://crxdoc-zh.appspot.com/extensions
 
-// token = refresh token
+// token === refresh token
 // auth token, 用来获取通知列表
 // access token, 后台获取未读消息数量等功能
 
@@ -214,6 +214,29 @@ new Vue({
           _this.error = true
           return false
         })
+    },
+    // 时间格式转换
+    reformatTime(updateTime) {
+      var oldTimestamp = (new Date(updateTime)).getTime()
+      var newTimestamp = (new Date().getTime())
+      var lastTime = newTimestamp - oldTimestamp
+      if (lastTime < 0) {
+        return '???'
+      } else {
+        if (lastTime < 60000) {
+          return '刚刚'
+        } else if (lastTime >= 60000 && lastTime < 3600000) {
+          return Math.round(lastTime / 60000) + '分钟前'
+        } else if (lastTime >= 3600000 && lastTime < 86400000) {
+          return Math.round(lastTime / 3600000) + '小时前'
+        } else if (lastTime >= 86400000 && lastTime < 2592000000) {
+          return Math.round(lastTime / 86400000) + '天前'
+        } else if (lastTime >= 2592000000 && lastTime < 31104000000) {
+          return Math.round(lastTime / 2592000000) + '月前'
+        } else if (lastTime >= 31104000000) {
+          return Math.round(lastTime / 31104000000) + '年前'
+        }
+      }
     },
     // 网页登录
     logIn() {
