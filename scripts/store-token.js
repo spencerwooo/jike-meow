@@ -1,7 +1,8 @@
-var token = localStorage['auth-token'];
-var access_token = localStorage['access-token'];
-var time_stamp = localStorage['token-timestamp'];
+var token = localStorage['auth-token'],
+  access_token = localStorage['access-token'],
+  time_stamp = localStorage['token-timestamp'];
 
+// 获取 storage token 并登录
 chrome.storage.local.get(null, (res) => {
   var date = new Date();
   localStorage.setItem('auth-token', res.token);
