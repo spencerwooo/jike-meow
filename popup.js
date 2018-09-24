@@ -161,10 +161,18 @@ new Vue({
         })
     },
     // 获取通知列表
-    getNotificationList() {
+    getNotificationList(status) {
       var _this = this
       _this.error = false
       _this.notificationsIsLoading = true
+
+      // 判断是滚动加载还是刷新
+      // 回传 string === "refresh" 时为刷新
+      // 没有回传即首次加载或滚动加载
+      if (status === 'refresh') {
+        _this.notifications = []
+        _this.lastNotificationId = ''
+      }
 
       axios({
         method: 'post',
@@ -234,20 +242,6 @@ new Vue({
       if (confirm('确认退出吗？') === true) {
         chrome.storage.local.clear()
         chrome.runtime.reload()
-      } else {
-        return
-      }
-    },
-    // 刷新通知角标
-    getNotificationBadge() {
-      if (confirm('注意：该功能目前正在实验阶段，体验上可能存在问题，确认开启？') === true) {
-        chrome.storage.local.get(null, function (result) {
-          chrome.runtime.sendMessage({
-            token: result.token,
-            access_token: result['access-token'],
-            refresh_token: result['refresh-token']
-          })
-        })
       } else {
         return
       }

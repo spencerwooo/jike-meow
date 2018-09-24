@@ -241,8 +241,10 @@
               style="margin-left: 10px;"
               @click.self.stop="logOut()">退出登录</button>
     </div>
-    <button v-if="access_token"
-            @click.self.stop="getNotificationBadge()">开启消息通知角标</button>
+    <button v-if="auth_token && !notificationsIsLoading"
+            @click.self.stop="getNotificationList('refresh')">看看有哪些新通知</button>
+    <button v-else-if="auth_token && notificationsIsLoading"
+            style="opacity: .6;">刷新中…</button>
   </div>
   <script src="scripts/axios.min.js"></script>
   <script src="scripts/qrcode.min.js"></script>
