@@ -16,7 +16,7 @@
   "background": {
     "scripts": [
       "scripts/axios.min.js",
-      "scripts/socket.io.dev.js",
+      "scripts/socket.io.slim.js",
       "background.js"
     ],
     "persistent": true
