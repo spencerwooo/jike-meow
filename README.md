@@ -36,10 +36,10 @@
 
 这里提供两个我用于参考的文档链接，它们对于这个项目起到了至关重要的作用。感谢 [翻译者们](https://plus.google.com/+Crxdoc-zhAppspot) 的辛苦制作。
 
-* Chrome Extensions 官方开发文档：[传送门](https://developer.chrome.com/extensions)
+* 官方开发文档：[传送门](https://developer.chrome.com/extensions)
 * 非官方中文开发文档：[传送门](https://crxdoc-zh.appspot.com/extensions)
 
-**还要感谢 [@糯米鸡](http://m.okjike.com/user/viko16) 在开发过程中提供的巨大帮助！️**❤️
+**特别感谢 [@糯米鸡](http://m.okjike.com/user/viko16) 提供的巨大帮助！️**❤️
 
 ## Q&A
 
@@ -61,6 +61,3 @@
 - [ ] 加入上次阅读位置显示
 - [ ] 加入手动刷新功能
 - [ ] 加入对「问答」类型的通知支持
-
-## LICENSE
-MIT
