@@ -2,11 +2,12 @@
 
 var notifyIO;
 
-// 监听 popup.js 中的 waitForConfirmation() 方法
+// 监听 popup.js 的回调
 chrome.runtime.onMessage.addListener(
   function (request, sender, sendResponse) {
     if (request.logged_in === true) {
       socketConnection();
+      refreshToken();
     }
   });
 
@@ -38,7 +39,6 @@ chrome.tabs.onUpdated.addListener(function (tabid, changeinfo, tab) {
 
 // socket-io 模块
 async function socketConnection() {
-  if (notifyIO) return;
   if (navigator.onLine === false) return
 
   // 开始建立 socket 连接
@@ -48,9 +48,7 @@ async function socketConnection() {
     },
     reconnectionDelay: 10000
   });
-  // 监听 socket - message
   notifyIO.on('message', data => {
-
     // 判断接收的 data type
     // 这一接口不仅接收 NOTIFICATION type
     // 还会接收 PERSONAL_UPDATE type
@@ -60,15 +58,29 @@ async function socketConnection() {
       });
     }
   });
-  // 监听 socket - reconnect attempt
   notifyIO.on('reconnect_attempt', () => {
     if (navigator.onLine === false) {
-      console.log(123)
       notifyIO.disconnect();
     }
   });
-  // 监听 socket - disconnect
+  notifyIO.on('reconnect_error', () => {
+    console.log(1);
+    notifyIO.disconnect();
+    chrome.browserAction.setBadgeText({ text: '' });
+  });
   notifyIO.on('disconnect', () => {
+    console.log(2);
+    notifyIO.disconnect();
+    chrome.browserAction.setBadgeText({ text: '' });
+  });
+  notifyIO.on('connect_error', () => {
+    console.log(3);
+    notifyIO.disconnect();
+    chrome.browserAction.setBadgeText({ text: '' });
+  });
+  notifyIO.on('error', () => {
+    console.log(4);
+    notifyIO.disconnect();
     chrome.browserAction.setBadgeText({ text: '' });
   });
 }
@@ -83,25 +95,27 @@ function getToken() {
 }
 
 // 每 10 分钟刷新一次 access token 和 refresh token
-clearInterval(localStorage['timerId']);
-let refreshToken = setInterval(() => {
-  chrome.storage.local.get(null, (res) => {
-    if (res['refresh-token'] && res['access-token']) {
-      axios({
-        url: 'https://app.jike.ruguoapp.com/app_auth_tokens.refresh',
-        method: 'get',
-        headers: {
-          'x-jike-refresh-token': res['refresh-token']
-        }
-      })
-        .then(response => {
-          const data = response.data;
-          chrome.storage.local.set({
-            'refresh-token': data['x-jike-refresh-token'],
-            'access-token': data['x-jike-access-token']
+function refreshToken() {
+  clearInterval(localStorage['timerId']);
+  let refreshToken = setInterval(() => {
+    chrome.storage.local.get(null, (res) => {
+      if (res['refresh-token'] && res['access-token']) {
+        axios({
+          url: 'https://app.jike.ruguoapp.com/app_auth_tokens.refresh',
+          method: 'get',
+          headers: {
+            'x-jike-refresh-token': res['refresh-token']
+          }
+        })
+          .then(response => {
+            const data = response.data;
+            chrome.storage.local.set({
+              'refresh-token': data['x-jike-refresh-token'],
+              'access-token': data['x-jike-access-token']
+            });
           });
-        });
-    }
-  })
-}, 6e5);
-localStorage.setItem('timerId', refreshToken);
+      }
+    })
+  }, 6e5);
+  localStorage.setItem('timerId', refreshToken);
+}

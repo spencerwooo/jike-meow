@@ -50,9 +50,27 @@ new Vue({
         _this.getNotificationList()
 
         // 通知 background.js 开始建立 socket 连接
-        chrome.runtime.sendMessage({
-          logged_in: true
+        axios({
+          url: 'https://app.jike.ruguoapp.com/app_auth_tokens.refresh',
+          method: 'get',
+          headers: {
+            'x-jike-refresh-token': result['refresh-token']
+          }
         })
+          .then(response => {
+            const data = response.data;
+            chrome.storage.local.set({
+              'refresh-token': data['x-jike-refresh-token'],
+              'access-token': data['x-jike-access-token']
+            })
+            chrome.runtime.sendMessage({
+              logged_in: true
+            })
+          })
+          .catch(() => {
+            alert('无法获取未读消息数量')
+            return
+          })
       } else {
         // 如果 storage 本地没有 token 数据
         // 则重新登录 => 显示二维码供用户扫描
