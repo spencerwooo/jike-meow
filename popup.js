@@ -24,7 +24,8 @@ new Vue({
       backgroundIsAllowed: false, // 后台获取未读消息数量
       notifications: [], // 通知消息列表
       notificationsIsLoading: false, // 通知列表正在加载
-      lastNotificationId: '' // 通知列表分页显示
+      lastNotificationId: '', // 通知列表分页显示
+      lastCheckNotificationsTime: '' // 最近一次查看通知的时间
     }
   },
   created() {
@@ -192,6 +193,7 @@ new Vue({
     getNotificationList(status) {
       var _this = this
       _this.error = false
+      _this.lastCheckNotificationsTime = ''
       _this.notificationsIsLoading = true
 
       // 判断是滚动加载还是刷新
@@ -216,13 +218,21 @@ new Vue({
         }
       })
         .then(function (response) {
-
           var res = response.data
+
+          // 获取上次刷新动态的时间
+          chrome.storage.local.get(null, function (result) {
+            if (result['last-check-notifications-time']) _this.lastCheckNotificationsTime = result['last-check-notifications-time']
+          })
           for (var i = 0; i < res.data.length; i++) {
             _this.notifications.push(res.data[i])
           }
+          // 覆盖新的刷动态时间
+          chrome.storage.local.set({
+            'last-check-notifications-time': (new Date(_this.notifications[0].updatedAt)).getTime()
+          })
 
-          // 获取数据后需将角标归零
+          // 获取最新数据
           if (status === 'refresh' || _this.notifications.length === res.data.length) {
             chrome.browserAction.setBadgeText({ text: '' })
           }
@@ -245,6 +255,15 @@ new Vue({
           _this.error = true
           return false
         })
+    },
+    // 返回上次刷新数据的时间
+    getLastCheckNotificationTime(updatedAt) {
+      var _this = this
+      if (((new Date(updatedAt)).getTime() <= _this.lastCheckNotificationsTime)) {
+        return .3
+      } else {
+        return 1
+      }
     },
     // 时间格式转换
     reformatTime(updateTime) {

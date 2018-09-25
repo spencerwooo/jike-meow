@@ -23,6 +23,7 @@
     <div id="notification"
          v-if="access_token && notifications && ui">
       <div class="n-item"
+           :style="{ opacity: getLastCheckNotificationTime(item.updatedAt) }"
            v-for="item in notifications">
         <!-- 点赞 - 动态 -->
         <div class="n-like-personal-update"

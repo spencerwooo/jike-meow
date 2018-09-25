@@ -61,25 +61,22 @@ async function socketConnection() {
   notifyIO.on('reconnect_attempt', () => {
     if (navigator.onLine === false) {
       notifyIO.disconnect();
+      chrome.browserAction.setBadgeText({ text: '' });
     }
   });
   notifyIO.on('reconnect_error', () => {
-    console.log(1);
     notifyIO.disconnect();
     chrome.browserAction.setBadgeText({ text: '' });
   });
   notifyIO.on('disconnect', () => {
-    console.log(2);
     notifyIO.disconnect();
     chrome.browserAction.setBadgeText({ text: '' });
   });
   notifyIO.on('connect_error', () => {
-    console.log(3);
     notifyIO.disconnect();
     chrome.browserAction.setBadgeText({ text: '' });
   });
   notifyIO.on('error', () => {
-    console.log(4);
     notifyIO.disconnect();
     chrome.browserAction.setBadgeText({ text: '' });
   });
