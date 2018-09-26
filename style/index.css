@@ -124,8 +124,12 @@ div.n-item {
   padding-bottom: 5px;
 }
 
+div.n-item:hover {
+  opacity: 1 !important;
+}
+
 div.n-item.viewed {
-  opacity: .3;
+  opacity: .4;
 }
 
 div.n-item + div > div {
