@@ -87,6 +87,7 @@ function refreshToken() {
 // 建立 Socket 连接
 async function newSocket() {
   console.log(socket);
+  if (socket && !socket.disconnected) return;
   socket = io('wss://msgcenter.jike.ruguoapp.com', {
     query: { 'x-jike-access-token': await getToken() },
     reconnectionAttempts: 3,
