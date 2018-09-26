@@ -7,13 +7,14 @@
 [![vue: 2.5.17](https://img.shields.io/badge/vue-2.5.17-green.svg)](https://cn.vuejs.org/v2/guide/installation.html)
 [![License: MIT](https://img.shields.io/github/license/mashape/apistatus.svg)](https://opensource.org/licenses/MIT)
 
-基于 Chrome 和 Vue.js 开发的第三方即刻通知插件。
+基于 Vue.js 和 Socket-io 开发的第三方即刻通知插件。
 
 ## 主要功能
 
-* 📦 **一键登录** - 不仅可以在插件里登录，还能同时登录网页端
-* 📡 **未读消息通知** - 实时显示未读通知数量，摸鱼党们的专属功能
-* 🚀 **查看消息列表** - 无需即刻 App，直接查看详细的通知内容
+* 📦 一键登录 - 不仅插件本身可以登录，还能登录网页端
+* 📡 未读通知 - 实时显示未读通知数量，摸鱼党的专属功能
+* 🚀 消息列表 - 无需即刻 App，直接查看详细的通知内容
+* 😉 保护隐私 - 不收集任何个人信息，不对接任何第三方平台
 
 ## 项目结构
 
