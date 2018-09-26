@@ -223,31 +223,31 @@ new Vue({
           // 获取上次刷新动态的时间
           chrome.storage.local.get(null, function (result) {
             if (result['last-check-notifications-time']) _this.lastCheckNotificationsTime = result['last-check-notifications-time']
-          })
-          for (var i = 0; i < res.data.length; i++) {
-            _this.notifications.push(res.data[i])
-          }
-          // 覆盖新的刷动态时间
-          chrome.storage.local.set({
-            'last-check-notifications-time': (new Date(_this.notifications[0].updatedAt)).getTime()
-          })
-
-          // 获取最新数据
-          if (status === 'refresh' || _this.notifications.length === res.data.length) {
-            chrome.browserAction.setBadgeText({ text: '' })
-          }
-          _this.notificationsIsLoading = false
-
-          // 滚动加载
-          var notificationDom = document.getElementById('notification')
-          notificationDom.addEventListener('scroll', function () {
-            var scrollHeight = notificationDom.scrollHeight
-            var scrollTop = notificationDom.scrollTop
-            if (scrollHeight - scrollTop < 700 && _this.notificationsIsLoading === false) {
-              _this.lastNotificationId = _this.notifications[_this.notifications.length - 1].id
-              _this.getNotificationList()
-              return false
+            for (var i = 0; i < res.data.length; i++) {
+              if ((new Date(res.data[i].updatedAt)).getTime() <= _this.lastCheckNotificationsTime) {
+                res.data[i].isViewed = true
+              }
+              _this.notifications.push(res.data[i])
             }
+
+            // 覆盖新的刷动态时间
+            var newTime = (new Date(_this.notifications[0].updatedAt)).getTime()
+            chrome.storage.local.set({
+              'last-check-notifications-time': newTime
+            })
+            _this.notificationsIsLoading = false
+
+            // 滚动加载
+            var notificationDom = document.getElementById('notification')
+            notificationDom.addEventListener('scroll', function () {
+              var scrollHeight = notificationDom.scrollHeight
+              var scrollTop = notificationDom.scrollTop
+              if (scrollHeight - scrollTop < 700 && _this.notificationsIsLoading === false) {
+                _this.lastNotificationId = _this.notifications[_this.notifications.length - 1].id
+                _this.getNotificationList()
+                return false
+              }
+            })
           })
         })
         .catch(function () {
@@ -255,15 +255,6 @@ new Vue({
           _this.error = true
           return false
         })
-    },
-    // 返回上次刷新数据的时间
-    getLastCheckNotificationTime(updatedAt) {
-      var _this = this
-      if (((new Date(updatedAt)).getTime() <= _this.lastCheckNotificationsTime)) {
-        return .3
-      } else {
-        return 1
-      }
     },
     // 时间格式转换
     reformatTime(updateTime) {

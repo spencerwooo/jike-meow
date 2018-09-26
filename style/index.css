@@ -124,6 +124,10 @@ div.n-item {
   padding-bottom: 5px;
 }
 
+div.n-item.viewed {
+  opacity: .3;
+}
+
 div.n-item + div > div {
   border-top: 1px solid #f0f3f5;
   padding-top: 15px;
