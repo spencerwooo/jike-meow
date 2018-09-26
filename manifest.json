@@ -2,11 +2,12 @@
   "name": "即刻喵",
   "version": "1.1.1",
   "author": "coder_ysj",
-  "description": "可独立使用的非官方「即刻」通知浏览插件，并为官方网页版（web.okjike.com）提供一键登录功能。",
+  "description": "可独立使用的「即刻」非官方通知插件，并为网页端（web.okjike.com）提供一键登录功能。",
   "permissions": [
     "activeTab",
     "tabs",
     "storage",
+    "alarms",
     "background",
     "<all_urls>"
   ],
@@ -16,6 +17,7 @@
   "background": {
     "scripts": [
       "scripts/axios.min.js",
+      "scripts/socket.io.js",
       "background.js"
     ],
     "persistent": false

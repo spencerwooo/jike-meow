@@ -3,7 +3,7 @@
 
 // auth token, 用来获取通知列表
 // refresh token, 可以换取新的 token
-// access token, 后台获取未读消息数量等功能
+// access token, Socket 和其它功能
 
 'use strict'
 
@@ -19,9 +19,8 @@ new Vue({
       refresh_token: '',
       access_token: '',
       error: false, // 通知列表加载失败
-      qr_loading: true, // 二维码是否正在加载
-      qr_scanning: false, // 二维码是否正在被扫描
-      backgroundIsAllowed: false, // 后台获取未读消息数量
+      qr_loading: true, // 二维码正在加载
+      qr_scanning: false, // 二维码正在被扫描
       notifications: [], // 通知消息列表
       notificationsIsLoading: false, // 通知列表正在加载
       lastNotificationId: '', // 通知列表分页显示
@@ -219,6 +218,7 @@ new Vue({
       })
         .then(function (response) {
           var res = response.data
+          chrome.browserAction.setBadgeText({ text: '' })
 
           // 获取上次刷新动态的时间
           chrome.storage.local.get(null, function (result) {
