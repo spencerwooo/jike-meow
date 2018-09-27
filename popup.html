@@ -48,14 +48,14 @@
                :style="{ backgroundImage: 'url(' + item.referenceItem.referenceImageUrl + ')' }"
                :href="'https://web.okjike.com/' + (item.referenceItem.type === 'OFFICIAL_MESSAGE' ? 'message-detail/' : 'post-detail/') + item.referenceItem.id + '/' + (item.referenceItem.type === 'ORIGINAL_POST' ? 'originalPost' : item.referenceItem.type === 'OFFICIAL_MESSAGE' ? 'officialMessage' : item.referenceItem.type)"
                target="_blank">
-              <span v-if="!item.referenceItem.referenceImageUrl">{{ item.referenceItem.content }}</span>
             </a>
             <!-- 动态 - 无图 -->
             <a class="n-like-post"
                v-else
                :href="'https://web.okjike.com/' + (item.referenceItem.type === 'OFFICIAL_MESSAGE' ? 'message-detail/' : 'post-detail/') + item.referenceItem.id + '/' + (item.referenceItem.type === 'ORIGINAL_POST' ? 'originalPost' : item.referenceItem.type === 'OFFICIAL_MESSAGE' ? 'officialMessage' : item.referenceItem.type)"
                target="_blank">
-              <span v-if="!item.referenceItem.referenceImageUrl">{{ item.referenceItem.content }}</span>
+              <span v-if="!item.referenceItem.referenceImageUrl"
+                    v-html="item.referenceItem.content.replace(/\n/g, '<br />')"></span>
             </a>
           </div>
         </div>
@@ -80,7 +80,54 @@
             <a class="n-like-post"
                :href="'https://web.okjike.com/' + (item.referenceItem.targetType === 'OFFICIAL_MESSAGE' ? 'message-detail/' : 'post-detail/') + item.referenceItem.targetId + '/' + (item.referenceItem.targetType === 'ORIGINAL_POST' ? 'originalPost' : item.referenceItem.targetType === 'OFFICIAL_MESSAGE' ? 'officialMessage' : item.referenceItem.targetType)"
                target="_blank">
-              <span v-if="!item.referenceItem.referenceImageUrl">{{ item.referenceItem.content }}</span>
+              <span v-if="!item.referenceItem.referenceImageUrl"
+                    v-html="item.referenceItem.content.replace(/\n/g, '<br />')"></span>
+            </a>
+          </div>
+        </div>
+        <!-- 点赞 - 提问 -->
+        <div class="n-like-personal-update"
+             v-else-if="item.type === 'LIKE_QUESTION'">
+          <div class="n-like-users">
+            <div class="n-like-users-name">
+              <a v-for="user in item.actionItem.users">{{ user.screenName }}</a>
+              <span v-if="item.actionItem.users.length > 1">等 {{ item.actionItem.usersCount }} 人</span>赞了你的提问
+            </div>
+            <div class="n-like-users-avatar">
+              <a v-for="avatar in item.actionItem.users"
+                 :class="{ verified: avatar.isVerified }"
+                 :href="'https://web.okjike.com/user/' + avatar.username"
+                 :style="{ backgroundImage: 'url(' + avatar.profileImageUrl + ')' }"
+                 target="_blank"></a>
+            </div>
+          </div>
+          <div class="n-like-inline-block">
+            <a class="n-like-post">
+              <span v-if="!item.referenceItem.referenceImageUrl"
+                    v-html="item.referenceItem.content.replace(/\n/g, '<br />')"></span>
+            </a>
+          </div>
+        </div>
+        <!-- 点赞 - 回答 -->
+        <div class="n-like-personal-update"
+             v-else-if="item.type === 'UPVOTE_ANSWER'">
+          <div class="n-like-users">
+            <div class="n-like-users-name">
+              <a v-for="user in item.actionItem.users">{{ user.screenName }}</a>
+              <span v-if="item.actionItem.users.length > 1">等 {{ item.actionItem.usersCount }} 人</span>赞了你的回答
+            </div>
+            <div class="n-like-users-avatar">
+              <a v-for="avatar in item.actionItem.users"
+                 :class="{ verified: avatar.isVerified }"
+                 :href="'https://web.okjike.com/user/' + avatar.username"
+                 :style="{ backgroundImage: 'url(' + avatar.profileImageUrl + ')' }"
+                 target="_blank"></a>
+            </div>
+          </div>
+          <div class="n-like-inline-block">
+            <a class="n-like-post">
+              <span v-if="!item.referenceItem.referenceImageUrl"
+                    v-html="item.referenceItem.content.replace(/\n/g, '<br />')"></span>
             </a>
           </div>
         </div>
@@ -106,14 +153,14 @@
                :style="{ backgroundImage: 'url(' + item.referenceItem.referenceImageUrl + ')' }"
                :href="'https://web.okjike.com/' + (item.referenceItem.type === 'OFFICIAL_MESSAGE' ? 'message-detail/' : 'post-detail/') + item.referenceItem.id + '/' + (item.referenceItem.type === 'ORIGINAL_POST' ? 'originalPost' : item.referenceItem.type === 'OFFICIAL_MESSAGE' ? 'officialMessage' : item.referenceItem.type)"
                target="_blank">
-              <span v-if="!item.referenceItem.referenceImageUrl">{{ item.referenceItem.content }}</span>
             </a>
             <!-- 动态 - 无图 -->
             <a class="n-repost-post"
                v-else
                :href="'https://web.okjike.com/' + (item.referenceItem.type === 'OFFICIAL_MESSAGE' ? 'message-detail/' : 'post-detail/') + item.referenceItem.id + '/' + (item.referenceItem.type === 'ORIGINAL_POST' ? 'originalPost' : item.referenceItem.type === 'OFFICIAL_MESSAGE' ? 'officialMessage' : item.referenceItem.type)"
                target="_blank">
-              <span v-if="!item.referenceItem.referenceImageUrl">{{ item.referenceItem.content }}</span>
+              <span v-if="!item.referenceItem.referenceImageUrl"
+                    v-html="item.referenceItem.content.replace(/\n/g, '<br />')"></span>
             </a>
           </div>
         </div>
@@ -142,14 +189,14 @@
                :style="{ backgroundImage: 'url(' + item.referenceItem.referenceImageUrl + ')' }"
                :href="'https://web.okjike.com/' + (item.referenceItem.type === 'OFFICIAL_MESSAGE' ? 'message-detail/' : 'post-detail/') + item.referenceItem.id + '/' + (item.referenceItem.type === 'ORIGINAL_POST' ? 'originalPost' : item.referenceItem.type === 'OFFICIAL_MESSAGE' ? 'officialMessage' : item.referenceItem.type)"
                target="_blank">
-              <span v-if="!item.referenceItem.referenceImageUrl">{{ item.referenceItem.content }}</span>
             </a>
             <!-- 动态 - 无图 -->
             <a class="n-comment-post"
                v-else
                :href="'https://web.okjike.com/' + (item.referenceItem.type === 'OFFICIAL_MESSAGE' ? 'message-detail/' : 'post-detail/') + item.referenceItem.id + '/' + (item.referenceItem.type === 'ORIGINAL_POST' ? 'originalPost' : item.referenceItem.type === 'OFFICIAL_MESSAGE' ? 'officialMessage' : item.referenceItem.type)"
                target="_blank">
-              <span v-if="!item.referenceItem.referenceImageUrl">{{ item.referenceItem.content }}</span>
+              <span v-if="!item.referenceItem.referenceImageUrl"
+                    v-html="item.referenceItem.content.replace(/\n/g, '<br />')"></span>
             </a>
           </div>
         </div>
@@ -179,14 +226,78 @@
                :style="{ backgroundImage: 'url(' + item.referenceItem.referenceImageUrl + ')' }"
                :href="'https://web.okjike.com/' + (item.referenceItem.targetType === 'OFFICIAL_MESSAGE' ? 'message-detail/' : 'post-detail/') + item.referenceItem.targetId + '/' + (item.referenceItem.targetType === 'ORIGINAL_POST' ? 'originalPost' : item.referenceItem.targetType === 'OFFICIAL_MESSAGE' ? 'officialMessage' : item.referenceItem.targetType)"
                target="_blank">
-              <span v-if="!item.referenceItem.referenceImageUrl">{{ item.referenceItem.content }}</span>
             </a>
             <!-- 动态 - 无图 -->
             <a class="n-comment-post"
                v-else
                :href="'https://web.okjike.com/' + (item.referenceItem.targetType === 'OFFICIAL_MESSAGE' ? 'message-detail/' : 'post-detail/') + item.referenceItem.targetId + '/' + (item.referenceItem.targetType === 'ORIGINAL_POST' ? 'originalPost' : item.referenceItem.targetType === 'OFFICIAL_MESSAGE' ? 'officialMessage' : item.referenceItem.targetType)"
                target="_blank">
-              <span v-if="!item.referenceItem.referenceImageUrl">{{ item.referenceItem.content }}</span>
+              <span v-if="!item.referenceItem.referenceImageUrl"
+                    v-html="item.referenceItem.content.replace(/\n/g, '<br />')"></span>
+            </a>
+          </div>
+        </div>
+        <!-- 回复 - 提问 -->
+        <div class="n-comment-personal-update"
+             v-else-if="item.type === 'ANSWER_QUESTION'">
+          <a class="n-comment-avatar"
+             target="_blank"
+             :class="{ verified: item.actionItem.users[0].isVerified }"
+             :style="{ backgroundImage: 'url(' + item.actionItem.users[0].profileImageUrl + ')' }"
+             :href="'https://web.okjike.com/user/' + item.actionItem.users[0].username"></a>
+          <div class="n-comment-user">
+            <p class="n-comment-users-name">
+              <span>{{ item.actionItem.users[0].screenName }}</span> 回答了你的问题
+            </p>
+            <p class="n-comment-users-comment">{{ item.actionItem.content ? item.actionItem.content + '&nbsp;' : '' }}
+              <a target="_blank"
+                 :href="item.actionItem.pictures[0].picUrl"
+                 v-if="item.actionItem.pictures.length > 0">查看图片</a>
+            </p>
+          </div>
+          <div class="n-like-inline-block">
+            <!-- 动态 - 有图 -->
+            <a class="n-comment-post"
+               v-if="item.referenceItem.referenceImageUrl"
+               :style="{ backgroundImage: 'url(' + item.referenceItem.referenceImageUrl + ')' }">
+            </a>
+            <!-- 动态 - 无图 -->
+            <a class="n-comment-post"
+               v-else>
+              <span v-if="!item.referenceItem.referenceImageUrl"
+                    v-html="item.referenceItem.content.replace(/\n/g, '<br />')"></span>
+            </a>
+          </div>
+        </div>
+        <!-- 评论 - 回答 -->
+        <div class="n-comment-personal-update"
+             v-else-if="item.type === 'COMMENT_ANSWER'">
+          <a class="n-comment-avatar"
+             target="_blank"
+             :class="{ verified: item.actionItem.users[0].isVerified }"
+             :style="{ backgroundImage: 'url(' + item.actionItem.users[0].profileImageUrl + ')' }"
+             :href="'https://web.okjike.com/user/' + item.actionItem.users[0].username"></a>
+          <div class="n-comment-user">
+            <p class="n-comment-users-name">
+              <span>{{ item.actionItem.users[0].screenName }}</span> 评论了你的回答
+            </p>
+            <p class="n-comment-users-comment">{{ item.actionItem.content ? item.actionItem.content + '&nbsp;' : '' }}
+              <a target="_blank"
+                 :href="item.actionItem.pictures[0].picUrl"
+                 v-if="item.actionItem.pictures.length > 0">查看图片</a>
+            </p>
+          </div>
+          <div class="n-like-inline-block">
+            <!-- 动态 - 有图 -->
+            <a class="n-comment-post"
+               v-if="item.referenceItem.referenceImageUrl"
+               :style="{ backgroundImage: 'url(' + item.referenceItem.referenceImageUrl + ')' }">
+            </a>
+            <!-- 动态 - 无图 -->
+            <a class="n-comment-post"
+               v-else>
+              <span v-if="!item.referenceItem.referenceImageUrl"
+                    v-html="item.referenceItem.content.replace(/\n/g, '<br />')"></span>
             </a>
           </div>
         </div>
