@@ -86,8 +86,7 @@ function refreshToken() {
 
 // 建立 Socket 连接
 async function newSocket() {
-  console.log(socket);
-  if (socket && !socket.disconnected) return;
+  if (socket) socket.disconnect();
   socket = io('wss://msgcenter.jike.ruguoapp.com', {
     query: { 'x-jike-access-token': await getToken() },
     reconnectionAttempts: 3,
@@ -103,7 +102,12 @@ async function newSocket() {
       });
     }
   });
+  socket.on('error', () => {
+    socket.disconnect();
+    chrome.browserAction.setBadgeText({ text: 'X' });
+  });
   socket.on('disconnect', () => {
+    socket.disconnect();
     chrome.browserAction.setBadgeText({ text: 'X' });
   });
 }
