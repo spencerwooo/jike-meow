@@ -1,13 +1,13 @@
 # 即刻喵 🐱
 
-![Chrome Store](./images/chrome_@2x.jpg)
+![Chrome Store](./images/chrome_1@2x.jpg)
 
 [![chrome web store](https://img.shields.io/chrome-web-store/v/gahlkoaglgmbpjoecaahganpccafojaa.svg)](https://chrome.google.com/webstore/detail/jike-web-qr/gahlkoaglgmbpjoecaahganpccafojaa?hl=zh-CN)
 [![rating](https://img.shields.io/chrome-web-store/stars/gahlkoaglgmbpjoecaahganpccafojaa.svg)](https://chrome.google.com/webstore/detail/jike-web-qr/gahlkoaglgmbpjoecaahganpccafojaa?hl=zh-CN)
 [![vue: 2.5.17](https://img.shields.io/badge/vue-2.5.17-green.svg)](https://cn.vuejs.org/v2/guide/installation.html)
 [![License: MIT](https://img.shields.io/github/license/mashape/apistatus.svg)](https://opensource.org/licenses/MIT)
 
-基于 Vue.js 和 Socket-io 开发的第三方即刻通知插件。
+基于 Vue.js 和 Socket.io 开发的第三方即刻通知插件。
 
 ## 主要功能
 
