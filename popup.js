@@ -24,6 +24,7 @@ new Vue({
       notifications: [], // 通知消息列表
       notificationsIsLoading: false, // 通知列表正在加载
       lastNotificationId: '', // 通知列表分页显示
+      lastCheckNotificationsEnabled: true, // 历史位置记录功能状态
       lastCheckNotificationsTime: '' // 最近一次查看通知的时间
     }
   },

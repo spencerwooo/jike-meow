@@ -122,6 +122,7 @@ div.n-user-followed {
 
 div.n-item {
   padding-bottom: 5px;
+  transition: opacity .3s linear;
 }
 
 div.n-item:hover {
@@ -353,11 +354,15 @@ button {
   user-select: none;
 }
 
-div#button-container {
+div.button-container {
   display: block;
   margin: auto;
   text-align: center;
   border-top: 1px solid #f0f3f5;
+}
+
+div.button-container + div {
+  border-top: 0;
 }
 
 button.warn {
@@ -369,8 +374,8 @@ button.primary {
   background: linear-gradient(105deg, #fad961, #ffe411);
 }
 
-button.primary.half {
+button.half {
   display: inline-block;
   vertical-align: middle;
-  width: 95px;
+  width: 125px;
 }

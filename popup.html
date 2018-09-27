@@ -24,7 +24,7 @@
          v-if="access_token && notifications && ui">
       <div class="n-item"
            v-for="item in notifications"
-           :class="{ viewed: item.isViewed }">
+           :class="{ viewed: item.isViewed && lastCheckNotificationsEnabled }">
         <!-- 点赞 - 动态 -->
         <div class="n-like-personal-update"
              v-if="item.type === 'LIKE_PERSONAL_UPDATE'">
@@ -229,7 +229,7 @@
     <button class="primary"
             @click.self.stop="getUuid()"
             v-if="!access_token && ui">刷新二维码</button>
-    <div id="button-container"
+    <div class="button-container"
          v-if="access_token && ui">
       <button class="primary half"
               @click.self.stop="logIn()">网页登录</button>
@@ -237,10 +237,22 @@
               style="margin-left: 10px;"
               @click.self.stop="logOut()">退出登录</button>
     </div>
-    <button v-if="auth_token && !notificationsIsLoading"
-            @click.self.stop="getNotificationList('refresh')">看看有哪些新通知</button>
-    <button v-else-if="auth_token && notificationsIsLoading"
-            style="opacity: .6;">刷新中…</button>
+    <div class="button-container"
+         v-if="auth_token">
+      <button v-if="!notificationsIsLoading"
+              class="half"
+              style="margin-right: 10px;"
+              @click.self.stop="getNotificationList('refresh')">查看最新通知</button>
+      <button v-else="notificationsIsLoading"
+              class="half"
+              style="opacity: .6; margin-right: 10px;">刷新中…</button>
+      <button class="half"
+              v-if="!lastCheckNotificationsEnabled"
+              @click.self.stop="lastCheckNotificationsEnabled = true">开启阅读历史</button>
+      <button class="half"
+              v-else
+              @click.self.stop="lastCheckNotificationsEnabled = false">关闭阅读历史</button>
+    </div>
   </div>
   <script src="scripts/axios.min.js"></script>
   <script src="scripts/socket.io.js"></script>
