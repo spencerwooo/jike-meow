@@ -1,9 +1,11 @@
 // Google 官方手册访问 https://developer.chrome.com/extensions
 // 非官方中文教程访问 https://crxdoc-zh.appspot.com/extensions
 
-// auth token, 用来获取通知列表
-// refresh token, 可以换取新的 token
-// access token, Socket 和其它功能
+/*
+auth token, 用来获取通知列表
+refresh token, 可以换取新的 token
+access token, Socket 和其它功能
+*/
 
 'use strict'
 
