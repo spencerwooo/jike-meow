@@ -13,26 +13,26 @@ new Vue({
   el: '#app',
   data() {
     return {
-      ui: false, // 优化 UI 闪烁问题
-      url: 'https://app.jike.ruguoapp.com', // 接口统一地址
-      current_url: '', // 当前页面 URL
-      uuid: '', // 生成扫描二维码
-      auth_token: '',
-      refresh_token: '',
-      access_token: '',
-      error: false, // 通知列表加载失败
-      qr_loading: true, // 二维码正在加载
-      qr_scanning: false, // 二维码正在被扫描
+      isUIEnabled: false, // 优化 UI 闪烁问题
+      apiURL: 'https://app.jike.ruguoapp.com',
+      currentPageURL: '',
+      uuid: '',
+      authToken: '',
+      refreshToken: '',
+      accessToken: '',
+      isError: false, // 通知列表加载失败
+      isQrCodeLoading: true,
+      isQrCodeScanning: false,
       notifications: [], // 通知消息列表
-      notificationsIsLoading: false, // 通知列表正在加载
-      lastNotificationId: '', // 通知列表分页显示
-      lastCheckNotificationsEnabled: true, // 历史位置记录功能状态
-      lastCheckNotificationsTime: '' // 最近一次查看通知的时间
+      isNotificationLoading: false,
+      lastCheckedNotificationId: '', // 通知列表分页显示
+      isNotificationCheckingFunctionEnabled: true, // 历史位置记录功能状态
+      lastNotificationCheckingTime: '' // 最近一次查看通知的时间
     }
   },
   created() {
     var _this = this
-    _this.qr_loading = false
+    _this.isQrCodeLoading = false
 
     // 获取当前 tab 页面的 URL
     chrome.tabs.query({
@@ -40,16 +40,16 @@ new Vue({
       currentWindow: true
     }, function (tabs) {
       var url = tabs[0].url
-      _this.current_url = url
+      _this.currentPageURL = url
     })
 
     // 从本地 storage 获取 token 数据
     chrome.storage.local.get(null, function (result) {
       if (result['auth-token'] && result['refresh-token'] && result['access-token']) {
-        _this.auth_token = result['auth-token']
-        _this.refresh_token = result['refresh-token']
-        _this.access_token = result['access-token']
-        _this.ui = true
+        _this.authToken = result['auth-token']
+        _this.refreshToken = result['refresh-token']
+        _this.accessToken = result['access-token']
+        _this.isUIEnabled = true
         _this.getNotificationList()
 
         // 通知 background.js 开始建立 socket 连接
@@ -78,7 +78,7 @@ new Vue({
         // 如果 storage 本地没有 token 数据
         // 则重新登录 => 显示二维码供用户扫描
         _this.getUuid()
-        _this.ui = true
+        _this.isUIEnabled = true
       }
     })
 
@@ -86,7 +86,7 @@ new Vue({
     // 实时更新 current_url
     chrome.runtime.onMessage.addListener(function (result) {
       if (result.current_url) {
-        _this.current_url = result.current_url
+        _this.currentPageURL = result.current_url
       }
     })
   },
@@ -110,19 +110,19 @@ new Vue({
     // 获取 Session
     getUuid() {
       var _this = this
-      _this.qr_scanning = false
-      _this.qr_loading = true
+      _this.isQrCodeScanning = false
+      _this.isQrCodeLoading = true
 
-      axios.get(_this.url + '/sessions.create')
+      axios.get(_this.apiURL + '/sessions.create')
         .then(function (res) {
           var data = res.data
-          _this.qr_loading = false
+          _this.isQrCodeLoading = false
           _this.uuid = data.uuid
           _this.newQRCode('jike://page.jk/web?url=https%3A%2F%2Fruguoapp.com%2Faccount%2Fscan%3Fuuid%3D' + _this.uuid + '&displayHeader=false&displayFooter=false')
           _this.waitForLogin()
         })
         .catch(function () {
-          _this.qr_loading = false
+          _this.isQrCodeLoading = false
           alert('二维码生成失败')
           return false
         })
@@ -131,7 +131,7 @@ new Vue({
     waitForLogin() {
       var _this = this
 
-      axios.get(_this.url + '/sessions.wait_for_login', {
+      axios.get(_this.apiURL + '/sessions.wait_for_login', {
         params: {
           uuid: _this.uuid
         }
@@ -139,8 +139,8 @@ new Vue({
         .then(function (res) {
           var data = res.data
           if (data && data.logged_in === true) {
-            _this.qr_scanning = true
-            _this.qr_loading = true
+            _this.isQrCodeScanning = true
+            _this.isQrCodeLoading = true
             _this.waitForConfirmation()
           } else {
             _this.getUuid()
@@ -154,21 +154,21 @@ new Vue({
     waitForConfirmation() {
       var _this = this
 
-      axios.get(_this.url + '/sessions.wait_for_confirmation', {
+      axios.get(_this.apiURL + '/sessions.wait_for_confirmation', {
         params: {
           uuid: _this.uuid
         }
       })
         .then(function (res) {
           var data = res.data
-          _this.qr_loading = false
-          _this.qr_scanning = false
+          _this.isQrCodeLoading = false
+          _this.isQrCodeScanning = false
           if (data.confirmed === true) {
 
             // 确认登录后将 token 数据存在本地 storage 中
-            _this.auth_token = data.token
-            _this.refresh_token = data['x-jike-refresh-token']
-            _this.access_token = data['x-jike-access-token']
+            _this.authToken = data.token
+            _this.refreshToken = data['x-jike-refresh-token']
+            _this.accessToken = data['x-jike-access-token']
             chrome.storage.local.set({
               'auth-token': data.token,
               'refresh-token': data['x-jike-refresh-token'],
@@ -194,28 +194,28 @@ new Vue({
     // 获取通知列表
     getNotificationList(status) {
       var _this = this
-      _this.error = false
-      _this.lastCheckNotificationsTime = ''
-      _this.notificationsIsLoading = true
+      _this.isError = false
+      _this.lastNotificationCheckingTime = ''
+      _this.isNotificationLoading = true
 
       // 判断是滚动加载还是刷新
       // 回传 string === "refresh" 时为刷新
       // 没有回传即首次加载或滚动加载
       if (status === 'refresh') {
         _this.notifications = []
-        _this.lastNotificationId = ''
+        _this.lastCheckedNotificationId = ''
       }
 
       axios({
         method: 'post',
-        url: _this.url + '/1.0/notifications/list',
+        url: _this.apiURL + '/1.0/notifications/list',
         data: {
           'loadMoreKey': {
-            lastNotificationId: _this.lastNotificationId
+            lastNotificationId: _this.lastCheckedNotificationId
           }
         },
         headers: {
-          'x-jike-app-auth-jwt': _this.auth_token,
+          'x-jike-app-auth-jwt': _this.authToken,
           'app-version': '4.8.0'
         }
       })
@@ -225,9 +225,9 @@ new Vue({
 
           // 获取上次刷新动态的时间
           chrome.storage.local.get(null, function (result) {
-            if (result['last-check-notifications-time']) _this.lastCheckNotificationsTime = result['last-check-notifications-time']
+            if (result['last-check-notifications-time']) _this.lastNotificationCheckingTime = result['last-check-notifications-time']
             for (var i = 0; i < res.data.length; i++) {
-              if ((new Date(res.data[i].updatedAt)).getTime() <= _this.lastCheckNotificationsTime) {
+              if ((new Date(res.data[i].updatedAt)).getTime() <= _this.lastNotificationCheckingTime) {
                 res.data[i].isViewed = true
               }
               _this.notifications.push(res.data[i])
@@ -238,15 +238,15 @@ new Vue({
             chrome.storage.local.set({
               'last-check-notifications-time': newTime
             })
-            _this.notificationsIsLoading = false
+            _this.isNotificationLoading = false
 
             // 滚动加载
             var notificationDom = document.getElementById('notification')
             notificationDom.addEventListener('scroll', function () {
               var scrollHeight = notificationDom.scrollHeight
               var scrollTop = notificationDom.scrollTop
-              if (scrollHeight - scrollTop < 700 && _this.notificationsIsLoading === false) {
-                _this.lastNotificationId = _this.notifications[_this.notifications.length - 1].id
+              if (scrollHeight - scrollTop < 700 && _this.isNotificationLoading === false) {
+                _this.lastCheckedNotificationId = _this.notifications[_this.notifications.length - 1].id
                 _this.getNotificationList()
                 return false
               }
@@ -254,8 +254,8 @@ new Vue({
           })
         })
         .catch(function () {
-          _this.notificationsIsLoading = false
-          _this.error = true
+          _this.isNotificationLoading = false
+          _this.isError = true
           return false
         })
     },

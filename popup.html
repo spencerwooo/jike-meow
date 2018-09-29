@@ -11,20 +11,20 @@
 <body>
   <div id="app">
     <div id="login"
-         v-if="!access_token && ui">
+         v-if="!accessToken && isUIEnabled">
       <div id="qrcode-container">
         <div class="qrcode-framer"
-             v-if="qr_loading">
-          <p v-if="qr_scanning">请在手机上点击<br><b>确认登陆</b></p>
+             v-if="isQrCodeLoading">
+          <p v-if="isQrCodeScanning">请在手机上点击<br><b>确认登陆</b></p>
         </div>
         <div id="qrcode"></div>
       </div>
     </div>
     <div id="notification"
-         v-if="access_token && notifications && ui">
+         v-if="accessToken && notifications && isUIEnabled">
       <div class="n-item"
            v-for="item in notifications"
-           :class="{ viewed: item.isViewed && lastCheckNotificationsEnabled }">
+           :class="{ viewed: item.isViewed && isNotificationCheckingFunctionEnabled }">
         <!-- 点赞 - 动态 -->
         <div class="n-item-list"
              v-if="item.type === 'LIKE_PERSONAL_UPDATE'">
@@ -55,7 +55,7 @@
                :href="'https://web.okjike.com/' + (item.referenceItem.type === 'OFFICIAL_MESSAGE' ? 'message-detail/' : 'post-detail/') + item.referenceItem.id + '/' + (item.referenceItem.type === 'ORIGINAL_POST' ? 'originalPost' : item.referenceItem.type === 'OFFICIAL_MESSAGE' ? 'officialMessage' : item.referenceItem.type)"
                target="_blank">
               <span v-if="!item.referenceItem.referenceImageUrl"
-                    v-html="item.referenceItem.content.replace(/\n/g, '<br />')"></span>
+                    v-html="item.referenceItem.content.replace(/\n/g, '<br/>')"></span>
             </a>
           </div>
         </div>
@@ -81,7 +81,7 @@
                :href="'https://web.okjike.com/' + (item.referenceItem.targetType === 'OFFICIAL_MESSAGE' ? 'message-detail/' : 'post-detail/') + item.referenceItem.targetId + '/' + (item.referenceItem.targetType === 'ORIGINAL_POST' ? 'originalPost' : item.referenceItem.targetType === 'OFFICIAL_MESSAGE' ? 'officialMessage' : item.referenceItem.targetType)"
                target="_blank">
               <span v-if="!item.referenceItem.referenceImageUrl"
-                    v-html="item.referenceItem.content.replace(/\n/g, '<br />')"></span>
+                    v-html="item.referenceItem.content.replace(/\n/g, '<br/>')"></span>
             </a>
           </div>
         </div>
@@ -104,7 +104,7 @@
           <div class="n-like-inline-block">
             <a class="n-like-post">
               <span v-if="!item.referenceItem.referenceImageUrl"
-                    v-html="item.referenceItem.content.replace(/\n/g, '<br />')"></span>
+                    v-html="item.referenceItem.content.replace(/\n/g, '<br/>')"></span>
             </a>
           </div>
         </div>
@@ -127,7 +127,7 @@
           <div class="n-like-inline-block">
             <a class="n-like-post">
               <span v-if="!item.referenceItem.referenceImageUrl"
-                    v-html="item.referenceItem.content.replace(/\n/g, '<br />')"></span>
+                    v-html="item.referenceItem.content.replace(/\n/g, '<br/>')"></span>
             </a>
           </div>
         </div>
@@ -160,7 +160,7 @@
                :href="'https://web.okjike.com/' + (item.referenceItem.type === 'OFFICIAL_MESSAGE' ? 'message-detail/' : 'post-detail/') + item.referenceItem.id + '/' + (item.referenceItem.type === 'ORIGINAL_POST' ? 'originalPost' : item.referenceItem.type === 'OFFICIAL_MESSAGE' ? 'officialMessage' : item.referenceItem.type)"
                target="_blank">
               <span v-if="!item.referenceItem.referenceImageUrl"
-                    v-html="item.referenceItem.content.replace(/\n/g, '<br />')"></span>
+                    v-html="item.referenceItem.content.replace(/\n/g, '<br/>')"></span>
             </a>
           </div>
         </div>
@@ -196,7 +196,7 @@
                :href="'https://web.okjike.com/' + (item.referenceItem.type === 'OFFICIAL_MESSAGE' ? 'message-detail/' : 'post-detail/') + item.referenceItem.id + '/' + (item.referenceItem.type === 'ORIGINAL_POST' ? 'originalPost' : item.referenceItem.type === 'OFFICIAL_MESSAGE' ? 'officialMessage' : item.referenceItem.type)"
                target="_blank">
               <span v-if="!item.referenceItem.referenceImageUrl"
-                    v-html="item.referenceItem.content.replace(/\n/g, '<br />')"></span>
+                    v-html="item.referenceItem.content.replace(/\n/g, '<br/>')"></span>
             </a>
           </div>
         </div>
@@ -233,7 +233,7 @@
                :href="'https://web.okjike.com/' + (item.referenceItem.targetType === 'OFFICIAL_MESSAGE' ? 'message-detail/' : 'post-detail/') + item.referenceItem.targetId + '/' + (item.referenceItem.targetType === 'ORIGINAL_POST' ? 'originalPost' : item.referenceItem.targetType === 'OFFICIAL_MESSAGE' ? 'officialMessage' : item.referenceItem.targetType)"
                target="_blank">
               <span v-if="!item.referenceItem.referenceImageUrl"
-                    v-html="item.referenceItem.content.replace(/\n/g, '<br />')"></span>
+                    v-html="item.referenceItem.content.replace(/\n/g, '<br/>')"></span>
             </a>
           </div>
         </div>
@@ -265,7 +265,7 @@
             <a class="n-comment-post"
                v-else>
               <span v-if="!item.referenceItem.referenceImageUrl"
-                    v-html="item.referenceItem.content.replace(/\n/g, '<br />')"></span>
+                    v-html="item.referenceItem.content.replace(/\n/g, '<br/>')"></span>
             </a>
           </div>
         </div>
@@ -297,7 +297,7 @@
             <a class="n-comment-post"
                v-else>
               <span v-if="!item.referenceItem.referenceImageUrl"
-                    v-html="item.referenceItem.content.replace(/\n/g, '<br />')"></span>
+                    v-html="item.referenceItem.content.replace(/\n/g, '<br/>')"></span>
             </a>
           </div>
         </div>
@@ -329,7 +329,7 @@
             <a class="n-comment-post"
                v-else>
               <span v-if="!item.referenceItem.referenceImageUrl"
-                    v-html="item.referenceItem.content.replace(/\n/g, '<br />')"></span>
+                    v-html="item.referenceItem.content.replace(/\n/g, '<br/>')"></span>
             </a>
           </div>
         </div>
@@ -363,17 +363,17 @@
       </div>
       <!-- 正在加载 -->
       <p id="notification-loading"
-         v-if="notificationsIsLoading">🐱 正在加载数据…</p>
+         v-if="isNotificationLoading">🐱 正在加载数据…</p>
       <!-- 加载失败 -->
       <p id="notification-error"
-         v-if="error"
+         v-if="isError"
          @click.self.stop="getNotificationList()">🌚 加载失败，请点击重试</p>
     </div>
     <button class="primary"
             @click.self.stop="getUuid()"
-            v-if="!access_token && ui">刷新二维码</button>
+            v-if="!accessToken && isUIEnabled">刷新二维码</button>
     <div class="button-container"
-         v-if="access_token && ui">
+         v-if="accessToken && isUIEnabled">
       <button class="primary half"
               @click.self.stop="logIn()">网页登录</button>
       <button class="primary half"
@@ -381,20 +381,20 @@
               @click.self.stop="logOut()">退出登录</button>
     </div>
     <div class="button-container"
-         v-if="auth_token">
-      <button v-if="!notificationsIsLoading"
+         v-if="authToken">
+      <button v-if="!isNotificationLoading"
               class="half"
               style="margin-right: 10px;"
               @click.self.stop="getNotificationList('refresh')">查看最新通知</button>
-      <button v-else="notificationsIsLoading"
+      <button v-else="isNotificationLoading"
               class="half"
               style="opacity: .6; margin-right: 10px;">刷新中…</button>
       <button class="half"
-              v-if="!lastCheckNotificationsEnabled"
-              @click.self.stop="lastCheckNotificationsEnabled = true">开启阅读历史</button>
+              v-if="!isNotificationCheckingFunctionEnabled"
+              @click.self.stop="isNotificationCheckingFunctionEnabled = true">开启阅读历史</button>
       <button class="half"
               v-else
-              @click.self.stop="lastCheckNotificationsEnabled = false">关闭阅读历史</button>
+              @click.self.stop="isNotificationCheckingFunctionEnabled = false">关闭阅读历史</button>
     </div>
   </div>
   <script src="scripts/axios.min.js"></script>
