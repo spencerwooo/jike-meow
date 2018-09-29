@@ -2,7 +2,7 @@
 
 let socket;
 
-// 创建 Chrome 计时器
+// 创建 chrome 计时器
 chrome.runtime.onInstalled.addListener(function () {
   refreshToken();
   chrome.alarms.clearAll();
@@ -20,7 +20,7 @@ chrome.runtime.onInstalled.addListener(function () {
 
 // 监听 popup.js 的回调
 chrome.runtime.onMessage.addListener(
-  function (request, sender, sendResponse) {
+  function (request) {
     if (request.logged_in === true) {
       refreshToken();
       newSocket();
@@ -32,7 +32,7 @@ chrome.tabs.onUpdated.addListener(function (tabid, changeinfo, tab) {
   var url = tab.url;
   if (url !== undefined && changeinfo.status === "complete") {
 
-    // 实时更新当前用户访问的 URL
+    // 实时更新当前用户访问的 url
     chrome.runtime.sendMessage({
       current_url: url
     });
@@ -54,7 +54,7 @@ chrome.tabs.onUpdated.addListener(function (tabid, changeinfo, tab) {
 });
 
 // 同步返回 access token
-function getToken() {
+function syncReturnToken() {
   return new Promise(resolve => {
     chrome.storage.local.get(null, (res) => {
       if (res['access-token']) resolve(res['access-token']); else return;
@@ -84,18 +84,15 @@ function refreshToken() {
   });
 }
 
-// 建立 Socket 连接
+// 建立 socket 连接
 async function newSocket() {
+
+  // 断开已有连接
   if (socket) socket.disconnect();
   socket = io('wss://msgcenter.jike.ruguoapp.com', {
-    query: { 'x-jike-access-token': await getToken() },
-    reconnectionAttempts: 3,
-    reconnectionDelay: 5e3
+    query: { 'x-jike-access-token': await syncReturnToken() }
   });
   socket.on('message', data => {
-    // 判断接收的 data type
-    // 因为这一接口不仅接收 NOTIFICATION type
-    // 还会接收 PERSONAL_UPDATE type
     if (data.type === 'NOTIFICATION') {
       chrome.browserAction.setBadgeText({
         text: data.data.unreadCount === 0 ? '' : data.data.unreadCount > 99 ? '99+' : data.data.unreadCount.toString()

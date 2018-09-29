@@ -26,7 +26,7 @@
            v-for="item in notifications"
            :class="{ viewed: item.isViewed && lastCheckNotificationsEnabled }">
         <!-- 点赞 - 动态 -->
-        <div class="n-like-personal-update"
+        <div class="n-item-list"
              v-if="item.type === 'LIKE_PERSONAL_UPDATE'">
           <div class="n-like-users">
             <div class="n-like-users-name">
@@ -60,7 +60,7 @@
           </div>
         </div>
         <!-- 点赞 - 评论 -->
-        <div class="n-like-personal-update"
+        <div class="n-item-list"
              v-else-if="item.type === 'LIKE_PERSONAL_UPDATE_COMMENT' ||
              item.type === 'LIKE_COMMENT'">
           <div class="n-like-users">
@@ -86,7 +86,7 @@
           </div>
         </div>
         <!-- 点赞 - 提问 -->
-        <div class="n-like-personal-update"
+        <div class="n-item-list"
              v-else-if="item.type === 'LIKE_QUESTION'">
           <div class="n-like-users">
             <div class="n-like-users-name">
@@ -109,7 +109,7 @@
           </div>
         </div>
         <!-- 点赞 - 回答 -->
-        <div class="n-like-personal-update"
+        <div class="n-item-list"
              v-else-if="item.type === 'UPVOTE_ANSWER'">
           <div class="n-like-users">
             <div class="n-like-users-name">
@@ -132,7 +132,7 @@
           </div>
         </div>
         <!-- 转发 -->
-        <div class="n-personal-update-reposted"
+        <div class="n-item-list"
              v-else-if="item.type === 'PERSONAL_UPDATE_REPOSTED'">
           <a class="n-repost-avatar"
              target="_blank"
@@ -165,7 +165,7 @@
           </div>
         </div>
         <!-- 评论 -->
-        <div class="n-comment-personal-update"
+        <div class="n-item-list"
              v-else-if="item.type === 'COMMENT_PERSONAL_UPDATE'">
           <a class="n-comment-avatar"
              target="_blank"
@@ -201,7 +201,7 @@
           </div>
         </div>
         <!-- 回复 -->
-        <div class="n-comment-personal-update"
+        <div class="n-item-list"
              v-else-if="item.type === 'REPLIED_TO_PERSONAL_UPDATE_COMMENT' ||
              item.type === 'REPLY_TO_COMMENT'">
           <a class="n-comment-avatar"
@@ -238,7 +238,7 @@
           </div>
         </div>
         <!-- 回复 - 提问 -->
-        <div class="n-comment-personal-update"
+        <div class="n-item-list"
              v-else-if="item.type === 'ANSWER_QUESTION'">
           <a class="n-comment-avatar"
              target="_blank"
@@ -270,7 +270,7 @@
           </div>
         </div>
         <!-- 评论 - 回答 -->
-        <div class="n-comment-personal-update"
+        <div class="n-item-list"
              v-else-if="item.type === 'COMMENT_ANSWER'">
           <a class="n-comment-avatar"
              target="_blank"
@@ -301,8 +301,40 @@
             </a>
           </div>
         </div>
+        <!-- 评论 - 回复 -->
+        <div class="n-item-list"
+             v-else-if="item.type === 'REPLIED_TO_ANSWER_COMMENT'">
+          <a class="n-comment-avatar"
+             target="_blank"
+             :class="{ verified: item.actionItem.users[0].isVerified }"
+             :style="{ backgroundImage: 'url(' + item.actionItem.users[0].profileImageUrl + ')' }"
+             :href="'https://web.okjike.com/user/' + item.actionItem.users[0].username"></a>
+          <div class="n-comment-user">
+            <p class="n-comment-users-name">
+              <span>{{ item.actionItem.users[0].screenName }}</span> 回复了你
+            </p>
+            <p class="n-comment-users-comment">{{ item.actionItem.content ? item.actionItem.content + '&nbsp;' : '' }}
+              <a target="_blank"
+                 :href="item.actionItem.pictures[0].picUrl"
+                 v-if="item.actionItem.pictures.length > 0">查看图片</a>
+            </p>
+          </div>
+          <div class="n-like-inline-block">
+            <!-- 动态 - 有图 -->
+            <a class="n-comment-post"
+               v-if="item.referenceItem.referenceImageUrl"
+               :style="{ backgroundImage: 'url(' + item.referenceItem.referenceImageUrl + ')' }">
+            </a>
+            <!-- 动态 - 无图 -->
+            <a class="n-comment-post"
+               v-else>
+              <span v-if="!item.referenceItem.referenceImageUrl"
+                    v-html="item.referenceItem.content.replace(/\n/g, '<br />')"></span>
+            </a>
+          </div>
+        </div>
         <!-- 新关注 -->
-        <div class="n-user-followed"
+        <div class="n-item-list"
              v-else-if="item.type === 'USER_FOLLOWED'">
           <a class="n-comment-avatar"
              target="_blank"
