@@ -85,6 +85,29 @@
             </a>
           </div>
         </div>
+        <!-- 点赞 - 回答- 评论 -->
+        <div class="n-item-list"
+             v-else-if="item.type === 'LIKE_ANSWER_COMMENT'">
+          <div class="n-like-users">
+            <div class="n-like-users-name">
+              <a v-for="user in item.actionItem.users">{{ user.screenName }}</a>
+              <span v-if="item.actionItem.users.length > 1">等 {{ item.actionItem.usersCount }} 人</span>赞了你的评论
+            </div>
+            <div class="n-like-users-avatar">
+              <a v-for="avatar in item.actionItem.users"
+                 :class="{ verified: avatar.isVerified }"
+                 :href="'https://web.okjike.com/user/' + avatar.username"
+                 :style="{ backgroundImage: 'url(' + avatar.profileImageUrl + ')' }"
+                 target="_blank"></a>
+            </div>
+          </div>
+          <div class="n-like-inline-block">
+            <a class="n-like-post">
+              <span v-if="!item.referenceItem.referenceImageUrl"
+                    v-html="item.referenceItem.content.replace(/\n/g, '<br/>')"></span>
+            </a>
+          </div>
+        </div>
         <!-- 点赞 - 提问 -->
         <div class="n-item-list"
              v-else-if="item.type === 'LIKE_QUESTION'">
@@ -355,7 +378,7 @@
         <div class="n-unknown"
              v-else>
           <div>不支持的消息类型<br>
-            <a href="https://github.com/coder-ysj/jike-meow/issues/"
+            <a :href="'https://github.com/coder-ysj/jike-meow/issues/new?title=当前正在使用的版本号: ' + chrome.runtime.getManifest().version"
                target="_blank">点击此处</a> 反馈给作者</div>
         </div>
         <!-- 时间显示 -->
