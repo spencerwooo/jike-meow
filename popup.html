@@ -10,6 +10,7 @@
 
 <body>
   <div id="app">
+    <!-- 登录 -->
     <div id="login"
          v-if="!accessToken && isUIEnabled">
       <div id="qrcode-container">
@@ -20,6 +21,7 @@
         <div id="qrcode"></div>
       </div>
     </div>
+    <!-- 通知列表 -->
     <div id="notification"
          v-if="accessToken && notifications && isUIEnabled">
       <div class="n-item"
@@ -149,7 +151,7 @@
           <div class="n-repost-user">
             <p class="n-repost-users-name">{{ item.actionItem.users[0].screenName }} 转发了你的动态</p>
             <p class="n-repost-users-comment">{{ item.actionItem.content ? item.actionItem.content + '&nbsp;' : '' }}
-              <a target="_blank"
+              <a @click.self.stop="previewImage(item.actionItem.pictures[0].picUrl)"
                  v-if="item.actionItem.pictures.length > 0">查看图片</a>
             </p>
           </div>
@@ -184,8 +186,7 @@
               <span>{{ item.actionItem.users[0].screenName }}</span> 评论了你
             </p>
             <p class="n-comment-users-comment">{{ item.actionItem.content ? item.actionItem.content + '&nbsp;' : '' }}
-              <a target="_blank"
-                 :href="item.actionItem.pictures[0].picUrl"
+              <a @click.self.stop="previewImage(item.actionItem.pictures[0].picUrl)"
                  v-if="item.actionItem.pictures.length > 0">查看图片</a>
             </p>
           </div>
@@ -221,8 +222,7 @@
               <span>{{ item.actionItem.users[0].screenName }}</span> 回复了你
             </p>
             <p class="n-comment-users-comment">{{ item.actionItem.content ? item.actionItem.content + '&nbsp;' : '' }}
-              <a target="_blank"
-                 :href="item.actionItem.pictures[0].picUrl"
+              <a @click.self.stop="previewImage(item.actionItem.pictures[0].picUrl)"
                  v-if="item.actionItem.pictures.length > 0">查看图片</a>
             </p>
           </div>
@@ -267,8 +267,7 @@
               <span>{{ item.actionItem.users[0].screenName }}</span> 回答了你的问题
             </p>
             <p class="n-comment-users-comment">{{ item.actionItem.content ? item.actionItem.content + '&nbsp;' : '' }}
-              <a target="_blank"
-                 :href="item.actionItem.pictures[0].picUrl"
+              <a @click.self.stop="previewImage(item.actionItem.pictures[0].picUrl)"
                  v-if="item.actionItem.pictures.length > 0">查看图片</a>
             </p>
           </div>
@@ -299,8 +298,7 @@
               <span>{{ item.actionItem.users[0].screenName }}</span> 评论了你的回答
             </p>
             <p class="n-comment-users-comment">{{ item.actionItem.content ? item.actionItem.content + '&nbsp;' : '' }}
-              <a target="_blank"
-                 :href="item.actionItem.pictures[0].picUrl"
+              <a @click.self.stop="previewImage(item.actionItem.pictures[0].picUrl)"
                  v-if="item.actionItem.pictures.length > 0">查看图片</a>
             </p>
           </div>
@@ -354,6 +352,7 @@
          v-if="isError"
          @click.self.stop="getNotificationList()">🌚 加载失败，请点击重试</p>
     </div>
+    <!-- 按钮 -->
     <button class="primary"
             @click.self.stop="getUuid()"
             v-if="!accessToken && isUIEnabled">刷新二维码</button>
@@ -380,6 +379,15 @@
       <button class="half"
               v-else
               @click.self.stop="isNotificationCheckingFunctionEnabled = false">关闭阅读历史</button>
+    </div>
+    <!-- 图片查看器 -->
+    <div id="image"
+         v-if="enlargedImage">
+      <div>
+        <img :src="enlargedImage"
+             @click.self.stop="enlargedImage = ''">
+        <span @click.self.stop="openImage()">查看原图</span>
+      </div>
     </div>
   </div>
   <script src="scripts/axios.min.js"></script>

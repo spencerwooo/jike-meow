@@ -380,3 +380,47 @@ button.half {
   vertical-align: middle;
   width: 125px;
 }
+
+/* 图片查看器 */
+
+div#image {
+  cursor: pointer;
+  display: block;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  font-size: 0;
+  background: rgba(255, 255, 255, .8);
+  overflow: hidden;
+  z-index: 999;
+}
+
+div#image > div {
+  display: block;
+  height: 100%;
+  overflow: hidden;
+}
+
+div#image img {
+  object-fit: contain;
+  height: 100%;
+  width: 100%;
+}
+
+div#image span {
+  display: block;
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 32px;
+  text-align: center;
+  padding: 0 15px;
+  border-radius: 18px;
+  background: linear-gradient(105deg, #fad961, #ffe411);
+  user-select: none;
+  z-index: 1000;
+}

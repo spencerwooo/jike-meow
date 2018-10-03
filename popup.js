@@ -27,7 +27,8 @@ new Vue({
       isNotificationLoading: false,
       lastCheckedNotificationId: '', // 通知列表分页显示
       isNotificationCheckingFunctionEnabled: true, // 历史位置记录功能状态
-      lastNotificationCheckingTime: '' // 最近一次查看通知的时间
+      lastNotificationCheckingTime: '', // 最近一次查看通知的时间
+      enlargedImage: '' // 图片查看器
     }
   },
   created() {
@@ -307,6 +308,16 @@ new Vue({
       } else {
         return;
       }
+    },
+    // 预览图片
+    previewImage(url) {
+      let _this = this;
+      if (url) _this.enlargedImage = url;
+    },
+    // 打开图片
+    openImage() {
+      let _this = this;
+      if (_this.enlargedImage) window.open(_this.enlargedImage);
     }
   }
 });
