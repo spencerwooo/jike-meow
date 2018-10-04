@@ -1,26 +1,22 @@
 {
   "name": "即刻喵",
-  "version": "1.1.4",
-  "author": "coder_ysj",
+  "version": "1.1.4.1",
+  "author": "coder_ysj & SpencerWoo",
   "description": "可独立使用的「即刻」非官方通知插件，并为网页端（web.okjike.com）提供一键登录功能。",
   "permissions": [
     "activeTab",
     "tabs",
     "storage",
     "alarms",
-    "background",
     "<all_urls>"
   ],
-  "incognito": "not_allowed",
-  "offline_enabled": false,
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "background": {
     "scripts": [
       "scripts/axios.min.js",
       "scripts/socket.io.js",
       "background.js"
-    ],
-    "persistent": true
+    ]
   },
   "browser_action": {
     "default_popup": "popup.html",
