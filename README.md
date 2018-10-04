@@ -1,6 +1,6 @@
 # 即刻喵 🐱 for Microsoft Edge
 
-![img](https://i.loli.net/2018/10/04/5bb6154ea8a04.png)
+![img](https://i.loli.net/2018/10/04/5bb616b2c2801.png)
 
 [![rating](https://img.shields.io/chrome-web-store/stars/gahlkoaglgmbpjoecaahganpccafojaa.svg)](https://chrome.google.com/webstore/detail/jike-web-qr/gahlkoaglgmbpjoecaahganpccafojaa?hl=zh-CN)
 [![vue: 2.5.17](https://img.shields.io/badge/vue-2.5.17-green.svg)](https://cn.vuejs.org/v2/guide/installation.html)
