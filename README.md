@@ -1,14 +1,15 @@
 # 即刻喵 🐱 for Firefox & Microsoft Edge
 
-![img](https://i.loli.net/2018/10/04/5bb616b2c2801.png)
+![img](https://i.loli.net/2018/10/05/5bb659bd1aa02.png)
 
 [![rating](https://img.shields.io/chrome-web-store/stars/gahlkoaglgmbpjoecaahganpccafojaa.svg)](https://chrome.google.com/webstore/detail/jike-web-qr/gahlkoaglgmbpjoecaahganpccafojaa?hl=zh-CN)
+![love](https://img.shields.io/badge/Made%20with-love-ff69b4.svg)
 [![vue: 2.5.17](https://img.shields.io/badge/vue-2.5.17-green.svg)](https://cn.vuejs.org/v2/guide/installation.html)
 [![License: MIT](https://img.shields.io/github/license/mashape/apistatus.svg)](https://opensource.org/licenses/MIT)
 
 基于 Vue.js 和 Socket.io 开发的第三方即刻通知插件。
 
-**现已支持火狐。正式！安排！**
+**❗❗❗ 现已支持火狐。正式！安排！**
 
 ## ❗ 说明
 
