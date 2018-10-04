@@ -1,41 +1,41 @@
 {
-  "name": "即刻喵",
-  "version": "1.1.4",
-  "author": "coder_ysj",
-  "description": "可独立使用的「即刻」非官方通知插件，并为网页端（web.okjike.com）提供一键登录功能。",
-  "permissions": [
-    "activeTab",
-    "tabs",
-    "storage",
-    "alarms",
-    "background",
-    "<all_urls>"
-  ],
-  "incognito": "not_allowed",
-  "offline_enabled": false,
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
-  "background": {
-    "scripts": [
-      "scripts/axios.min.js",
-      "scripts/socket.io.js",
-      "background.js"
+    "name": "即刻喵",
+    "version": "1.1.4",
+    "author": "coder_ysj",
+    "description": "可独立使用的「即刻」非官方通知插件，并为网页端（web.okjike.com）提供一键登录功能。",
+    "permissions": [
+        "activeTab",
+        "tabs",
+        "storage",
+        "alarms",
+        "background",
+        "<all_urls>"
     ],
-    "persistent": true
-  },
-  "browser_action": {
-    "default_popup": "popup.html",
-    "default_icon": {
-      "16": "images/jk16.png",
-      "32": "images/jk32.png",
-      "48": "images/jk48.png",
-      "128": "images/jk128.png"
+    "incognito": "not_allowed",
+    "offline_enabled": false,
+    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+    "background": {
+        "page": "background.html",
+        "persistent": true
+    },
+    "browser_action": {
+        "default_popup": "popup.html",
+        "default_icon": {
+            "16": "images/jk16.png",
+            "32": "images/jk32.png",
+            "48": "images/jk48.png",
+            "128": "images/jk128.png"
+        }
+    },
+    "icons": {
+        "16": "images/jk16.png",
+        "32": "images/jk32.png",
+        "48": "images/jk48.png",
+        "128": "images/jk128.png"
+    },
+    "manifest_version": 2,
+    "-ms-preload": {
+        "backgroundScript": "backgroundScriptsAPIBridge.js",
+        "contentScript": "contentScriptsAPIBridge.js"
     }
-  },
-  "icons": {
-    "16": "images/jk16.png",
-    "32": "images/jk32.png",
-    "48": "images/jk48.png",
-    "128": "images/jk128.png"
-  },
-  "manifest_version": 2
 }

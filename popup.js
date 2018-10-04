@@ -1,4 +1,4 @@
-// Google 官方手册访问 https://developer.chrome.com/extensions
+// Google 官方手册访问 https://developer.browser.com/extensions
 // 非官方中文教程访问 https://crxdoc-zh.appspot.com/extensions
 
 /*
@@ -36,7 +36,7 @@ new Vue({
     _this.isQrCodeLoading = false;
 
     // 获取当前 tab 页面的 URL
-    chrome.tabs.query({
+    browser.tabs.query({
       active: true,
       currentWindow: true
     }, function (tabs) {
@@ -44,7 +44,7 @@ new Vue({
     });
 
     // 从本地 storage 获取 token 数据
-    chrome.storage.local.get(null, function (result) {
+    browser.storage.local.get(null, function (result) {
       if (result['auth-token'] && result['refresh-token'] && result['access-token']) {
         _this.authToken = result['auth-token'];
         _this.refreshToken = result['refresh-token'];
@@ -62,11 +62,11 @@ new Vue({
         })
           .then(response => {
             const data = response.data;
-            chrome.storage.local.set({
+            browser.storage.local.set({
               'refresh-token': data['x-jike-refresh-token'],
               'access-token': data['x-jike-access-token']
             });
-            chrome.runtime.sendMessage({
+            browser.runtime.sendMessage({
               logged_in: true
             });
           })
@@ -84,7 +84,7 @@ new Vue({
 
     // 接收来自 background.js 的 current_url
     // 实时更新 current_url
-    chrome.runtime.onMessage.addListener(function (result) {
+    browser.runtime.onMessage.addListener(function (result) {
       if (result.current_url) {
         _this.currentPageURL = result.current_url;
       }
@@ -167,7 +167,7 @@ new Vue({
             _this.authToken = data.token;
             _this.refreshToken = data['x-jike-refresh-token'];
             _this.accessToken = data['x-jike-access-token'];
-            chrome.storage.local.set({
+            browser.storage.local.set({
               'auth-token': data.token,
               'refresh-token': data['x-jike-refresh-token'],
               'access-token': data['x-jike-access-token']
@@ -177,7 +177,7 @@ new Vue({
             _this.getNotificationList();
 
             // 通知 background.js 开始建立 socket 连接
-            chrome.runtime.sendMessage({
+            browser.runtime.sendMessage({
               logged_in: true
             });
           } else {
@@ -219,10 +219,10 @@ new Vue({
       })
         .then(function (response) {
           const res = response.data;
-          chrome.browserAction.setBadgeText({ text: '' });
+          browser.browserAction.setBadgeText({ text: '' });
 
           // 获取上次刷新动态的时间
-          chrome.storage.local.get(null, function (result) {
+          browser.storage.local.get(null, function (result) {
             if (result['last-check-notifications-time']) _this.lastNotificationCheckingTime = result['last-check-notifications-time'];
             for (var i = 0; i < res.data.length; i++) {
               if ((new Date(res.data[i].updatedAt)).getTime() <= _this.lastNotificationCheckingTime) {
@@ -233,7 +233,7 @@ new Vue({
 
             // 覆盖新的刷动态时间
             var newTime = (new Date(_this.notifications[0].updatedAt)).getTime();
-            chrome.storage.local.set({
+            browser.storage.local.set({
               'last-check-notifications-time': newTime
             });
             _this.isNotificationLoading = false;
@@ -282,19 +282,21 @@ new Vue({
     },
     // 网页登录
     logIn() {
-      chrome.tabs.query({
+      browser.tabs.query({
         active: true,
         currentWindow: true
       }, function (tabs) {
         // 当前页面为即刻官网时即直接登录
         // 否则, 就打开即刻官网并登录
         if (tabs[0].url.indexOf('web.okjike.com') > -1) {
-          chrome.tabs.executeScript(null, {
+          browser.tabs.executeScript(null, {
             file: 'scripts/store-token.js'
           });
         } else {
-          window.open('https://web.okjike.com');
-          chrome.storage.local.set({
+          // window.open('https://web.okjike.com');
+          // browser.windows.create({url: 'https://web.okjike.com'});
+          browser.tabs.create({url: 'https://web.okjike.com'});
+          browser.storage.local.set({
             'new-tab-to-login': true
           });
         }
@@ -303,8 +305,8 @@ new Vue({
     // 退出登录
     logOut() {
       if (confirm('确认退出吗？') === true) {
-        chrome.storage.local.clear();
-        chrome.runtime.reload();
+        browser.storage.local.clear();
+        browser.runtime.reload();
       } else {
         return;
       }
