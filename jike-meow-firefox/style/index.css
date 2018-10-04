@@ -1,0 +1,426 @@
+::-webkit-scrollbar {
+  width: 0 !important;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  position: relative;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+
+img {
+  border: 0;
+  display: block;
+}
+
+div,
+p,
+span,
+a {
+  hyphens: auto;
+  overflow-wrap: break-word;
+  text-decoration: none;
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+body {
+  display: block;
+  padding: 15px;
+  font-family: sans-serif;
+  color: #404040;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+}
+
+div#app {
+  display: block;
+  width: 100%;
+  font-size: 0;
+}
+
+/* 登录 */
+
+div#login {
+  display: block;
+  margin: auto;
+}
+
+img#qrcode {
+  display: block;
+  margin: -5px auto;
+}
+
+div#qrcode-container {
+  display: block;
+  height: 200px;
+  width: 200px;
+}
+
+div.qrcode-framer {
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: rgba(255, 255, 255, .8);
+  z-index: 99;
+}
+
+div.qrcode-framer > p {
+  position: absolute;
+  width: 120px;
+  padding: 5px 0;
+  top: 50%;
+  right: calc(50% - 60px);
+  transform: translateY(-50%);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.6;
+  background: #fff;
+  text-align: center;
+  border-radius: 8px;
+}
+
+div.qrcode-framer > p > b {
+  color: #03a9f4;
+}
+
+/* 通知 */
+
+div#notification {
+  display: block;
+  height: 400px;
+  width: 350px;
+  margin: auto;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+p#notification-loading,
+p#notification-error {
+  cursor: pointer;
+  display: block;
+  font-size: 14px;
+  line-height: 3;
+  text-align: center;
+}
+
+/* 通知 - 点赞 */
+
+div.n-item-list {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+}
+
+div.n-item {
+  padding-bottom: 5px;
+  transition: opacity .3s linear;
+}
+
+div.n-item:hover {
+  opacity: 1 !important;
+}
+
+div.n-item.viewed {
+  opacity: .4;
+}
+
+div.n-item + div > div {
+  border-top: 1px solid #f0f3f5;
+  padding-top: 15px;
+}
+
+div.n-like-users {
+  display: inline-block;
+  vertical-align: top;
+  width: calc(100% - 90px);
+}
+
+div.n-like-users-name,
+p.n-repost-users-name,
+p.n-comment-users-name {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #777;
+}
+
+div.n-like-users-name > a,
+p.n-repost-users-name > span,
+p.n-comment-users-name > span {
+  color: #404040;
+  text-decoration: none;
+}
+
+div.n-like-users-name > a + a:before {
+  content: ', '
+}
+
+div.n-like-users-avatar {
+  display: block;
+  width: 100%;
+  margin-top: 5px;
+  overflow: hidden;
+}
+
+div.n-like-users-avatar > a {
+  display: inline-block;
+  vertical-align: middle;
+  height: 35px;
+  width: 35px;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  background: #f0f3f5 center no-repeat;
+  background-size: cover;
+  outline: 3px;
+}
+
+div.n-like-users-avatar > a.verified:after,
+a.n-comment-avatar.verified:after {
+  content: '';
+  display: block;
+  position: absolute;
+  right: -3px;
+  bottom: 0;
+  height: 13px;
+  width: 13px;
+  background: url('../images/verified.6e5b91e.svg') center no-repeat;
+  background-size: 100%;
+}
+
+div.n-like-users-avatar > a + a {
+  margin-left: -7px;
+}
+
+div.n-like-inline-block {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 10px;
+}
+
+a.n-like-post,
+a.n-repost-post,
+a.n-comment-post {
+  display: block;
+  height: 80px;
+  width: 80px;
+  padding: 11px 0;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #777;
+  background: center no-repeat;
+  background-size: cover;
+  border-radius: 8px;
+  border-color: #f0f3f5;
+  overflow: hidden;
+}
+
+a.n-like-post > span,
+a.n-repost-post > span,
+a.n-comment-post > span {
+  display: -webkit-box;
+  height: 58px;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+p.n-comment-users-comment,
+p.n-repost-users-comment {
+  color: #999;
+}
+
+/* 通知 - 转发 */
+
+a.n-repost-avatar {
+  display: inline-block;
+  vertical-align: top;
+  height: 35px;
+  width: 35px;
+  margin-right: 10px;
+  border: 0;
+  border-radius: 50%;
+  background: #f0f3f5 center no-repeat;
+  background-size: cover;
+}
+
+div.n-repost-user {
+  display: inline-block;
+  vertical-align: top;
+  width: calc(100% - 135px);
+}
+
+p.n-repost-users-name,
+p.n-repost-users-comment {
+  display: block;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+p.n-repost-users-comment > a {
+  color: #03a9f4;
+}
+
+/* 通知 - 回复 */
+
+a.n-comment-avatar {
+  display: inline-block;
+  vertical-align: top;
+  height: 35px;
+  width: 35px;
+  margin-right: 10px;
+  border: 0;
+  border-radius: 50%;
+  background: #f0f3f5 center no-repeat;
+  background-size: cover;
+}
+
+div.n-comment-user {
+  display: inline-block;
+  vertical-align: top;
+  width: calc(100% - 135px);
+}
+
+p.n-comment-users-name,
+p.n-comment-users-comment {
+  display: block;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+p.n-comment-users-comment > a {
+  color: #03a9f4;
+}
+
+/* 通知 - 未知消息类型 */
+div.n-unknown {
+  display: block;
+  width: 100%;
+  font-size: 14px;
+  line-height: 1.6;
+  overflow: hidden;
+}
+
+div.n-unknown > div {
+  padding: 18px 0;
+  height: 80px;
+  background: #f0f3f5;
+  border-radius: 8px;
+  text-align: center;
+}
+
+div.n-unknown a {
+  font-weight: 500;
+  color: #03a9f4;
+}
+
+/* 通知 - 时间显示 */
+div.n-time-display {
+  display: block;
+  width: 100%;
+  margin-top: 5px;
+  padding: 0 !important;
+  border: 0 !important;
+  font-size: 11px;
+  line-height: 2;
+  color: #999;
+}
+
+/* 按钮 */
+
+button {
+  cursor: pointer;
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  text-align: center;
+  padding: 6px 0;
+  width: 200px;
+  margin: 15px auto 0 auto;
+  outline: 0;
+  border: 1px solid transparent;
+  color: #404040;
+  border-radius: 18px;
+  background: #f0f3f5;
+  user-select: none;
+}
+
+div.button-container {
+  display: block;
+  margin: auto;
+  text-align: center;
+  border-top: 1px solid #f0f3f5;
+}
+
+div.button-container + div {
+  border-top: 0;
+}
+
+button.warn {
+  color: #fff;
+  background: #e4583e;
+}
+
+button.primary {
+  background: linear-gradient(105deg, #fad961, #ffe411);
+}
+
+button.half {
+  display: inline-block;
+  vertical-align: middle;
+  width: 125px;
+}
+
+/* 图片查看器 */
+
+div#image {
+  cursor: pointer;
+  display: block;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  font-size: 0;
+  background: #fff;
+  overflow: hidden;
+  z-index: 999;
+}
+
+div#image > div {
+  display: block;
+  height: 100%;
+  overflow: hidden;
+}
+
+div#image img {
+  object-fit: contain;
+  height: 100%;
+  width: 100%;
+}
+
+div#image span {
+  display: block;
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 32px;
+  text-align: center;
+  padding: 0 15px;
+  border-radius: 18px;
+  background: linear-gradient(105deg, #fad961, #ffe411);
+  user-select: none;
+  z-index: 1000;
+}
