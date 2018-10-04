@@ -1,4 +1,4 @@
-# 即刻喵 🐱 for Microsoft Edge
+# 即刻喵 🐱 for Firefox & Microsoft Edge
 
 ![img](https://i.loli.net/2018/10/04/5bb616b2c2801.png)
 
@@ -8,15 +8,21 @@
 
 基于 Vue.js 和 Socket.io 开发的第三方即刻通知插件。
 
-## 说明 ❗
+**现已支持火狐。正式！安排！**
 
-**本仓库为原 Chrome 原生拓展插件移植到 Microsoft Edge 浏览器的版本。原仓库地址：[Jike Meow](https://github.com/coder-ysj/jike-meow)，本插件正在 beta 测试中。**
+## ❗ 说明
+
+本仓库为原 Chrome 原生拓展插件移植到 Firefox 和 Microsoft Edge 浏览器的版本。原仓库地址：[Jike Meow](https://github.com/coder-ysj/jike-meow)，本插件 Microsoft Edge 版本正在 beta 测试中。
+
+## Firefox 安装
+
+下载地址：[即刻喵 Jike Meow 🐱](https://addons.mozilla.org/zh-CN/firefox/addon/%E5%8D%B3%E5%88%BB%E5%96%B5/)
 
 ## Microsoft Edge 源码安装方法
 
 1. 将本仓库下载并解压缩到任意文件夹中；
 2. 依照微软官方支持文档 [Adding, moving, and removing extensions for Microsoft Edge](https://docs.microsoft.com/en-us/microsoft-edge/extensions/guides/adding-and-removing-extensions) 介绍，开启 Edge 开发者模式，允许未签名插件安装；
-3. 选择「更多 > 扩展 > 加载扩展」，然后选择刚刚下载的文件夹；
+3. 选择「更多 > 扩展 > 加载扩展」，然后选择刚刚下载的文件夹中 `jike-meow-edge` 文件夹；
 4. 这样就完成了本插件的安装。
 
 ## 主要功能
@@ -50,7 +56,7 @@
 
 ---
 
-🐱 Jike Meow on Microsoft Edge © Spencer Woo. Released under the MIT License. Originally created by [Ⓙcoder-ysj](https://web.okjike.com/user/F39BF844-7BF9-4754-8E7C-189CA3A35644/post).
+🐱 Jike Meow for Firefox & Microsoft Edge © Spencer Woo. Released under the MIT License. Originally created by [Ⓙcoder-ysj](https://web.okjike.com/user/F39BF844-7BF9-4754-8E7C-189CA3A35644/post).
 
 Transplanted and maintained by Spencer Woo.
 
