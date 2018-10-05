@@ -1,6 +1,6 @@
 # 即刻喵 🐱 for Firefox & Microsoft Edge
 
-![img](https://i.loli.net/2018/10/05/5bb659bd1aa02.png)
+![img](./images/transplant_banner_0.5x.png)
 
 [![Mozilla Add-on](https://img.shields.io/amo/stars/dustman.svg?style=flat-square)](https://addons.mozilla.org/zh-CN/firefox/addon/%E5%8D%B3%E5%88%BB%E5%96%B5/)
 ![love](https://img.shields.io/badge/Made%20with-love-ff69b4.svg?style=flat-square)
