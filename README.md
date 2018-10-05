@@ -17,7 +17,9 @@
 
 ## Firefox 安装
 
-下载地址：[即刻喵 Jike Meow 🐱](https://addons.mozilla.org/zh-CN/firefox/addon/%E5%8D%B3%E5%88%BB%E5%96%B5/)
+下载地址：
+
+[![即刻喵 Jike Meow 🐱](./images/AddonBadge.png)]((https://addons.mozilla.org/zh-CN/firefox/addon/%E5%8D%B3%E5%88%BB%E5%96%B5/))
 
 ## Microsoft Edge 源码安装方法
 
@@ -35,11 +37,20 @@
 
 ## 项目结构
 
-* **./images** Chrome Store, GitHub, 图标等素材
-* **./scripts** 引用的第三方库和 Content Scripts
-* **./scripts/store-token.js** 「网页登录」脚本
-* **background.js** 「开启消息通知角标」脚本
-* **popup.js** 插件主视图的功能
+### 项目目录结构
+
+- **./jike-meow-edge** Microsoft Edge 版本即刻喵 🐱
+- **./jike-meow-firefox** Firefox 版本即刻喵 🐱
+- **./images** Chrome Store, AMO, GitHub, 图标等素材
+- **./build** Microsoft Edge 版本插件编译打包文件夹
+
+### 插件源码目录结构（`./jike-meow-firefox` 文件夹下内容）
+
+- **./images** Chrome Store, AMO, GitHub, 图标等素材
+- **./scripts** 引用的第三方库和 Content Scripts
+- **./scripts/store-token.js** 「网页登录」脚本
+- **background.js** 「开启消息通知角标」脚本
+- **popup.js** 插件主视图的功能
 
 ## ~~源代码安装方法~~
 
@@ -54,6 +65,8 @@
 ## 逻辑示意图
 
 ![逻辑示意图](./images/jike-meow-mindmap.png)
+
+<br>
 
 ---
 
