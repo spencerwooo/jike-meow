@@ -12,7 +12,7 @@ Modified by: @SpencerWoo
 
 For Firefox compatibility, two places have been changed:
 - "chrome" namespace has been changed to "browser"
-- "window.open("https://web.okjike.com")" is incompatible with Firefox,
+- "window.open("https://web.okjike.com")" is incompatible with Firefox and MS Edge,
     Use "browser.tabs.create({url: 'https://web.okjike.com'});" instead. 
 */
 

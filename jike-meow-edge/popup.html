@@ -9,7 +9,8 @@
 </head>
 
 <body>
-  <div id="app">
+  <div id="app"
+       :class="{ full: accessToken && notifications && isUIEnabled }">
     <!-- 登录 -->
     <div id="login"
          v-if="!accessToken && isUIEnabled">

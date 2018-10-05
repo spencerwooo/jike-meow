@@ -1,6 +1,3 @@
-::-webkit-scrollbar {
-  width: 0 !important;
-}
 * {
   margin: 0;
   padding: 0;
@@ -37,8 +34,13 @@ body {
 
 div#app {
   display: block;
-  width: 100%;
+  width: auto;
   font-size: 0;
+  overflow: hidden;
+}
+
+div#app.full {
+  width: 350px;
 }
 
 /* 登录 */
@@ -96,13 +98,11 @@ div.qrcode-framer > p > b {
 div#notification {
   display: block;
   height: 400px;
-  width: 350px;
-  margin: auto;
+  width: 380px;
+  padding-right: 30px !important;
   overflow-x: hidden;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
-  -ms-overflow-style: none;
-  overflow: -moz-scrollbars-none;
 }
 
 p#notification-loading,

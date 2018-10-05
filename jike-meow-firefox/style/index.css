@@ -34,9 +34,13 @@ body {
 
 div#app {
   display: block;
-  width: 350px;
+  width: auto;
   font-size: 0;
   overflow: hidden;
+}
+
+div#app.full {
+  width: 350px;
 }
 
 /* 登录 */
