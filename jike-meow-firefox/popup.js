@@ -7,6 +7,15 @@ refresh token, 可以换取新的 token
 access token, Socket 和其它功能
 */
 
+/* 
+Modified by: @SpencerWoo
+
+For Firefox compatibility, two places have been changed:
+- "chrome" namespace has been changed to "browser"
+- "window.open("https://web.okjike.com")" is incompatible with Firefox,
+    Use "browser.tabs.create({url: 'https://web.okjike.com'});" instead. 
+*/
+
 'use strict'
 
 new Vue({
@@ -295,8 +304,9 @@ new Vue({
             file: 'scripts/store-token.js'
           });
         } else {
+          // Below deprecated for Firefox incompatibility. @SpencerWoo
           // window.open('https://web.okjike.com');
-          browser.tabs.create({url: 'https://web.okjike.com'});
+          browser.tabs.create({url: 'https://web.okjike.com'}); // Open new tab in Firefox
           browser.storage.local.set({
             'new-tab-to-login': true
           });

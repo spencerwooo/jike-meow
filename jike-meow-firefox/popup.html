@@ -160,13 +160,13 @@
             <a class="n-repost-post"
                v-if="item.referenceItem.referenceImageUrl"
                :style="{ backgroundImage: 'url(' + item.referenceItem.referenceImageUrl + ')' }"
-               :href="'https://web.okjike.com/' + (item.referenceItem.type === 'OFFICIAL_MESSAGE' ? 'message-detail/' : 'post-detail/') + item.referenceItem.id + '/' + (item.referenceItem.type === 'ORIGINAL_POST' ? 'originalPost' : item.referenceItem.type === 'OFFICIAL_MESSAGE' ? 'officialMessage' : item.referenceItem.type)"
+               :href="'https://web.okjike.com/post-detail/' + item.actionItem.id + '/repost'"
                target="_blank">
             </a>
             <!-- 动态 - 无图 -->
             <a class="n-repost-post"
                v-else
-               :href="'https://web.okjike.com/' + (item.referenceItem.type === 'OFFICIAL_MESSAGE' ? 'message-detail/' : 'post-detail/') + item.referenceItem.id + '/' + (item.referenceItem.type === 'ORIGINAL_POST' ? 'originalPost' : item.referenceItem.type === 'OFFICIAL_MESSAGE' ? 'officialMessage' : item.referenceItem.type)"
+               :href="'https://web.okjike.com/post-detail' + item.actionItem.id + '/repost'"
                target="_blank">
               <span v-if="!item.referenceItem.referenceImageUrl"
                     v-html="item.referenceItem.content.replace(/\n/g, '<br/>')"></span>

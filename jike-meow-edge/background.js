@@ -54,7 +54,7 @@ chrome.tabs.onUpdated.addListener(function (tabid, changeinfo, tab) {
 });
 
 // 同步返回 access token
-function syncReturnToken() {
+let syncReturnToken = () => {
   return new Promise(resolve => {
     chrome.storage.local.get(null, (res) => {
       if (res['access-token']) resolve(res['access-token']); else return;
@@ -63,7 +63,7 @@ function syncReturnToken() {
 }
 
 // 刷新 token
-function refreshToken() {
+let refreshToken = () => {
   chrome.storage.local.get(null, (res) => {
     if (res['refresh-token'] && res['access-token']) {
       axios({
@@ -85,7 +85,7 @@ function refreshToken() {
 }
 
 // 建立 socket 连接
-async function newSocket() {
+let newSocket = async () => {
 
   // 断开已有连接
   if (socket) socket.disconnect();

@@ -7,6 +7,15 @@ refresh token, 可以换取新的 token
 access token, Socket 和其它功能
 */
 
+/* 
+Modified by: @SpencerWoo
+
+For Firefox compatibility, two places have been changed:
+- "chrome" namespace has been changed to "browser"
+- "window.open("https://web.okjike.com")" is incompatible with Firefox,
+    Use "browser.tabs.create({url: 'https://web.okjike.com'});" instead. 
+*/
+
 'use strict'
 
 new Vue({
@@ -96,8 +105,10 @@ new Vue({
       // 清空二维码所在 container #qrcode 的标签内容
       // 以避免重复生成二维码
       // 这一方法并不完美, 将来可以改进
-      document.getElementById('qrcode').innerHTML = '';
-      let qrcode = new QRCode(document.getElementById('qrcode'), {
+      let qrElement = document.getElementById('qrcode');
+      if (!qrElement) return;
+      qrElement.innerHTML = '';
+      let qrcode = new QRCode(qrElement, {
         text: url,
         width: 200,
         height: 200,
@@ -293,9 +304,9 @@ new Vue({
             file: 'scripts/store-token.js'
           });
         } else {
+          // Below deprecated for Firefox incompatibility. @SpencerWoo
           // window.open('https://web.okjike.com');
-          // browser.windows.create({url: 'https://web.okjike.com'});
-          browser.tabs.create({url: 'https://web.okjike.com'});
+          browser.tabs.create({url: 'https://web.okjike.com'}); // Open new tab in Firefox
           browser.storage.local.set({
             'new-tab-to-login': true
           });

@@ -1,7 +1,6 @@
 ::-webkit-scrollbar {
   width: 0 !important;
 }
-
 * {
   margin: 0;
   padding: 0;
@@ -102,6 +101,8 @@ div#notification {
   overflow-x: hidden;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: none;
+  overflow: -moz-scrollbars-none;
 }
 
 p#notification-loading,
