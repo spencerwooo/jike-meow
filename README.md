@@ -19,7 +19,9 @@
 
 下载地址：
 
-[![即刻喵 Jike Meow 🐱](./images/AddonBadge.png)]((https://addons.mozilla.org/zh-CN/firefox/addon/%E5%8D%B3%E5%88%BB%E5%96%B5/))
+<a href="https://addons.mozilla.org/zh-CN/firefox/addon/%E5%8D%B3%E5%88%BB%E5%96%B5/">
+<img src="./images/AddonBadge.png" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 0 50px 0 rgba(0, 0, 0, 0.2);" alt="即刻喵 Jike Meow 🐱">
+</a>
 
 ## Microsoft Edge 源码安装方法
 
