@@ -72,7 +72,7 @@
 
 ---
 
-🐱 Jike Meow for Firefox & Microsoft Edge © Spencer Woo. Released under the MIT License. Originally created by [Ⓙcoder-ysj](https://web.okjike.com/user/F39BF844-7BF9-4754-8E7C-189CA3A35644/post).
+**🐱 Jike Meow for Firefox & Microsoft Edge** ©Spencer Woo. Released under the MIT License. Originally created by [Ⓙcoder-ysj](https://web.okjike.com/user/F39BF844-7BF9-4754-8E7C-189CA3A35644/post).
 
 Transplanted and maintained by Spencer Woo.
 
