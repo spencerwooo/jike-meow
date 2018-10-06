@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html>
 
+
 <head>
   <meta charset="utf-8">
   <link rel="stylesheet"
         href="style/index.css">
   <script src="scripts/vue.min.js"></script>
 </head>
+
 
 <body>
   <div id="app"
@@ -212,7 +214,8 @@
         <!-- 回复了你 -->
         <div class="n-item-list"
              v-else-if="item.type === 'REPLIED_TO_PERSONAL_UPDATE_COMMENT' ||
-             item.type === 'REPLY_TO_COMMENT'">
+             item.type === 'REPLY_TO_COMMENT' ||
+             item.type === 'REPLIED_TO_ANSWER_COMMENT'">
           <a class="n-comment-avatar"
              target="_blank"
              :class="{ verified: item.actionItem.users[0].isVerified }"
@@ -243,6 +246,7 @@
               <span v-if="!item.referenceItem.referenceImageUrl"
                     v-html="item.referenceItem.content.replace(/\n/g, '<br/>')"></span>
             </a>
+            <!-- 动态 - 有图 -->
             <a class="n-comment-post"
                v-else-if="item.referenceItem.referenceImageUrl && item.type === 'REPLIED_TO_ANSWER_COMMENT'"
                :style="{ backgroundImage: 'url(' + item.referenceItem.referenceImageUrl + ')' }">
@@ -376,10 +380,10 @@
               style="opacity: .6; margin-right: 10px;">刷新中…</button>
       <button class="half"
               v-if="!isNotificationCheckingFunctionEnabled"
-              @click.self.stop="isNotificationCheckingFunctionEnabled = true">开启阅读历史</button>
+              @click.self.stop="toggleNotificationFunction(true)">开启阅读历史</button>
       <button class="half"
               v-else
-              @click.self.stop="isNotificationCheckingFunctionEnabled = false">关闭阅读历史</button>
+              @click.self.stop="toggleNotificationFunction(false)">关闭阅读历史</button>
     </div>
     <!-- 图片查看器 -->
     <div id="image"
@@ -396,5 +400,6 @@
   <script src="scripts/qrcode.min.js"></script>
   <script src="popup.js"></script>
 </body>
+
 
 </html>

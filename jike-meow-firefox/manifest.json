@@ -1,6 +1,6 @@
 {
   "name": "即刻喵",
-  "version": "1.1.4.1",
+  "version": "1.1.5",
   "author": "coder_ysj & SpencerWoo",
   "description": "可独立使用的「即刻」非官方通知插件，并为网页端（web.okjike.com）提供一键登录功能。",
   "permissions": [
