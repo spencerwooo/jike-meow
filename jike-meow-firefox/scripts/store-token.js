@@ -4,7 +4,7 @@
     time_stamp = localStorage['token-timestamp'];
 
 
-  chrome.storage.local.get(null, (res) => {
+  browser.storage.local.get(null, (res) => {
     if (!refresh_token || !access_token || !time_stamp) {
       localStorage.setItem('auth-token', res['refresh-token']);
       localStorage.setItem('access-token', res['access-token']);
