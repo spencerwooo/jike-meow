@@ -1,4 +1,4 @@
-# 即刻喵 🐱 for Firefox 🦊
+# 即刻喵 🐱 for 🦊 Firefox & Edge
 
 ![img](./images/transplant_banner_0.5x.png)
 

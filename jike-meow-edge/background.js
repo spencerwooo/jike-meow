@@ -10,17 +10,17 @@ For Firefox compatibility:
 let socket;
 
 // 创建 browser 计时器
+// For comatibility in MS Edge, use setInterval
+// 'browser.alarms' is not implemented in MS Edge
+
 browser.runtime.onInstalled.addListener(function () {
   refreshToken();
-  browser.alarms.clearAll();
-  browser.alarms.create('refreshToken', {
-    delayInMinutes: 10,
-    periodInMinutes: 10
-  });
+  // clearInterval();
+
   // 每十分钟刷新一次 token
-  browser.alarms.onAlarm.addListener(function () {
-    refreshToken();
-  });
+  let tokenRefresherDelayTimeInMin = 10 * 60 * 1000;
+  setInterval(refreshToken, tokenRefresherDelayTimeInMin);
+
   // 启动 Socket 连接
   newSocket();
 });
