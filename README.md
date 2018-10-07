@@ -1,4 +1,4 @@
-# 即刻喵 🐱 for Firefox & Microsoft Edge
+# 即刻喵 🐱 for Firefox 🦊
 
 ![img](./images/transplant_banner_0.5x.png)
 
@@ -23,7 +23,9 @@
 <img src="./images/AddonBadgeDark.png" alt="即刻喵 Jike Meow 🐱">
 </a>
 
-## Microsoft Edge 源码安装方法
+## Microsoft Edge 测试安装方法
+
+> 测试中，仅支持单次安装，出现 bug 请积极反馈 🎉
 
 1. 将本仓库下载并解压缩到任意文件夹中；
 2. 依照微软官方支持文档 [Adding, moving, and removing extensions for Microsoft Edge](https://docs.microsoft.com/en-us/microsoft-edge/extensions/guides/adding-and-removing-extensions) 介绍，开启 Edge 开发者模式，允许未签名插件安装；
@@ -44,7 +46,6 @@
 - **./jike-meow-edge** Microsoft Edge 版本即刻喵 🐱
 - **./jike-meow-firefox** Firefox 版本即刻喵 🐱
 - **./images** Chrome Store, AMO, GitHub, 图标等素材
-- **./build** Microsoft Edge 版本插件编译打包文件夹
 
 ### 插件源码目录结构（`./jike-meow-firefox` 文件夹下内容）
 
@@ -72,7 +73,9 @@
 
 ---
 
-**🐱 Jike Meow for Firefox & Microsoft Edge** ©Spencer Woo. Released under the MIT License. Originally created by [Ⓙcoder-ysj](https://web.okjike.com/user/F39BF844-7BF9-4754-8E7C-189CA3A35644/post).
+**🐱 Jike Meow for Firefox & Microsoft Edge** ©Spencer Woo. Released under the MIT License. 
+
+Originally created by [Ⓙcoder-ysj](https://web.okjike.com/user/F39BF844-7BF9-4754-8E7C-189CA3A35644/post).
 
 Transplanted and maintained by Spencer Woo.
 
