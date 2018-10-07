@@ -11,7 +11,7 @@
       localStorage.setItem('token-timestamp', (new Date()).generateTimestamp());
       location.reload();
     } else {
-      alert('检测到已登陆');
+      // alert('检测到已登陆');
       return;
     }
   });
