@@ -31,6 +31,7 @@
 2. 依照微软官方支持文档 [Adding, moving, and removing extensions for Microsoft Edge](https://docs.microsoft.com/en-us/microsoft-edge/extensions/guides/adding-and-removing-extensions) 介绍，开启 Edge 开发者模式，允许未签名插件安装；
 3. 选择「更多 > 扩展 > 加载扩展」，然后选择刚刚下载的文件夹中 `jike-meow-edge` 文件夹；
 4. 这样就完成了本插件的安装。
+5. **请注意，这种加载模式是旁加载模式，由于安全问题，Edge 浏览器并不会全时允许插件的运行，如果重启电脑或长时间之后才重新打开 Edge 浏览器，请手动到扩展列表重新启用「即刻喵」。Edge 兼容性仍在开发检验中，使用步骤繁琐还请理解。**
 
 ## 主要功能
 
