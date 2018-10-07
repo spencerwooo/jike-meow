@@ -1,6 +1,6 @@
 {
-    "name": "即刻喵",
-    "version": "1.1.4.1",
+    "name": "即刻喵 for Edge",
+    "version": "1.1.5.1",
     "author": "coder_ysj & SpencerWoo",
     "description": "可独立使用的「即刻」非官方通知插件，并为网页端（web.okjike.com）提供一键登录功能。",
     "permissions": [
@@ -22,9 +22,14 @@
         "default_popup": "popup.html",
         "default_icon": {
             "16": "images/jk16.png",
-            "32": "images/jk32.png",
-            "48": "images/jk48.png",
+            "20": "images/jk32.png",
+            "40": "images/jk48.png",
             "128": "images/jk128.png"
+        }
+    },
+    "browser_specific_settings": {
+        "edge": {
+            "browser_action_next_to_addressbar": true
         }
     },
     "icons": {
