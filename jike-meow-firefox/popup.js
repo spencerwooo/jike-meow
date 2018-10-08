@@ -11,13 +11,12 @@ access token, Socket 和其它功能
 Modified by: @SpencerWoo
 
 For Firefox compatibility, two places have been changed:
-- "chrome" namespace has been changed to "browser"
+- "browser" namespace has been changed to "browser"
 - "window.open("https://web.okjike.com")" is incompatible with Firefox and MS Edge,
     Use "browser.tabs.create({url: 'https://web.okjike.com'});" instead. 
 */
 
 'use strict'
-
 
 new Vue({
   el: '#app',
@@ -45,7 +44,6 @@ new Vue({
     let _this = this;
     _this.isQrCodeLoading = false;
 
-
     // 获取当前 tab 页面的 URL
     browser.tabs.query({
       active: true,
@@ -54,7 +52,6 @@ new Vue({
       _this.currentPageURL = tabs[0].url;
     });
 
-
     // 从本地 storage 获取 token 数据
     browser.storage.local.get(null, function (result) {
       if (result['auth-token'] && result['refresh-token'] && result['access-token']) {
@@ -62,20 +59,19 @@ new Vue({
         _this.refreshToken = result['refresh-token'];
         _this.accessToken = result['access-token'];
         _this.isUIEnabled = true;
-        _this.getNotificationList();
+        _this.getNotificationList('refresh');
         if (result['notification-function']) {
           _this.isNotificationCheckingFunctionEnabled = (result['notification-function'] === 'true');
         }
 
-
         // 通知 background.js 开始建立 socket 连接
         axios({
-            url: _this.apiURL + '/app_auth_tokens.refresh',
-            method: 'get',
-            headers: {
-              'x-jike-refresh-token': result['refresh-token']
-            }
-          })
+          url: _this.apiURL + '/app_auth_tokens.refresh',
+          method: 'get',
+          headers: {
+            'x-jike-refresh-token': result['refresh-token']
+          }
+        })
           .then(response => {
             const data = response.data;
             browser.storage.local.set({
@@ -97,7 +93,6 @@ new Vue({
         _this.isUIEnabled = true;
       }
     });
-
 
     // 接收来自 background.js 的 current_url
     // 实时更新 current_url
@@ -131,7 +126,6 @@ new Vue({
       _this.isQrCodeScanning = false;
       _this.isQrCodeLoading = true;
 
-
       axios.get(_this.apiURL + '/sessions.create')
         .then(function (res) {
           _this.isQrCodeLoading = false;
@@ -149,12 +143,11 @@ new Vue({
     waitForLogin() {
       let _this = this;
 
-
       axios.get(_this.apiURL + '/sessions.wait_for_login', {
-          params: {
-            uuid: _this.uuid
-          }
-        })
+        params: {
+          uuid: _this.uuid
+        }
+      })
         .then(function (res) {
           const data = res.data;
           if (data && data.logged_in === true) {
@@ -173,18 +166,16 @@ new Vue({
     waitForConfirmation() {
       let _this = this;
 
-
       axios.get(_this.apiURL + '/sessions.wait_for_confirmation', {
-          params: {
-            uuid: _this.uuid
-          }
-        })
+        params: {
+          uuid: _this.uuid
+        }
+      })
         .then(function (res) {
           const data = res.data;
           _this.isQrCodeLoading = false;
           _this.isQrCodeScanning = false;
           if (data.confirmed === true) {
-
 
             // 确认登录后将 token 数据存在本地 storage 中
             _this.authToken = data.token;
@@ -196,10 +187,8 @@ new Vue({
               'access-token': data['x-jike-access-token']
             });
 
-
             // 然后直接刷新通知列表
             _this.getNotificationList();
-
 
             // 通知 background.js 开始建立 socket 连接
             browser.runtime.sendMessage({
@@ -221,7 +210,6 @@ new Vue({
       _this.lastNotificationCheckingTime = '';
       _this.isNotificationLoading = true;
 
-
       // 判断是滚动加载还是刷新
       // 回传 string === "refresh" 时为刷新
       // 没有回传即首次加载或滚动加载
@@ -230,45 +218,39 @@ new Vue({
         _this.lastCheckedNotificationId = '';
       }
 
-
       axios({
-          method: 'post',
-          url: _this.apiURL + '/1.0/notifications/list',
-          data: {
-            'loadMoreKey': {
-              lastNotificationId: _this.lastCheckedNotificationId
-            }
-          },
-          headers: {
-            'x-jike-app-auth-jwt': _this.authToken,
-            'app-version': '4.8.0'
+        method: 'post',
+        url: _this.apiURL + '/1.0/notifications/list',
+        data: {
+          'loadMoreKey': {
+            lastNotificationId: _this.lastCheckedNotificationId
           }
-        })
+        },
+        headers: {
+          'x-jike-app-auth-jwt': _this.authToken,
+          'app-version': '4.8.0'
+        }
+      })
         .then(function (response) {
           const res = response.data;
-          browser.browserAction.setBadgeText({
-            text: ''
-          });
-
+          if (status === 'refresh') browser.browserAction.setBadgeText({ text: '' });
 
           // 获取上次刷新动态的时间
           browser.storage.local.get(null, function (result) {
             if (result['last-check-notifications-time']) _this.lastNotificationCheckingTime = result['last-check-notifications-time'];
             for (var i = 0; i < res.data.length; i++) {
-              if ((new Date(res.data[i].updatedAt)).getTime() <= _this.lastNotificationCheckingTime) {
+              if ((new Date(res.data[i].createdAt)).getTime() <= _this.lastNotificationCheckingTime) {
                 res.data[i].isViewed = true;
               }
               _this.notifications.push(res.data[i]);
             }
 
-
             // 覆盖新的刷动态时间
-            var newTime = (new Date(_this.notifications[0].updatedAt)).getTime();
+            var newTime = (new Date(_this.notifications[0].createdAt)).getTime();
             browser.storage.local.set({
               'last-check-notifications-time': newTime
             });
             _this.isNotificationLoading = false;
-
 
             // 滚动加载
             var notificationDom = document.getElementById('notification');
@@ -332,10 +314,7 @@ new Vue({
             file: 'scripts/store-token.js'
           });
         } else {
-          // window.open('https://web.okjike.com');
-          browser.tabs.create({
-            url: 'https://web.okjike.com'
-          });
+          browser.tabs.create({url: 'https://web.okjike.com'});
           browser.storage.local.set({
             'new-tab-to-login': true
           });
