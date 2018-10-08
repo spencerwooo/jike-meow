@@ -382,6 +382,21 @@ button.half {
   width: 125px;
 }
 
+/* 该动态已删除 */
+
+div.n-like-no-link {
+  cursor: auto;
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 9;
+}
+
 /* 图片查看器 */
 
 div#image {

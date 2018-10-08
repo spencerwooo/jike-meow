@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html>
 
-
 <head>
   <meta charset="utf-8">
   <link rel="stylesheet"
         href="style/index.css">
   <script src="scripts/vue.min.js"></script>
 </head>
-
 
 <body>
   <div id="app"
@@ -47,6 +45,9 @@
             </div>
           </div>
           <div class="n-like-inline-block">
+            <!-- 该动态已删除 -->
+            <div class="n-like-no-link"
+                 v-if="item.referenceItem.status === 'DELETED'"></div>
             <!-- 动态 - 有图 -->
             <a class="n-like-post"
                v-if="item.referenceItem.referenceImageUrl"
@@ -83,6 +84,9 @@
             </div>
           </div>
           <div class="n-like-inline-block">
+            <!-- 该动态已删除 -->
+            <div class="n-like-no-link"
+                 v-if="item.referenceItem.status === 'DELETED'"></div>
             <a class="n-like-post"
                v-if="item.type === 'LIKE_PERSONAL_UPDATE_COMMENT' || item.type === 'LIKE_COMMENT'"
                :href="'https://web.okjike.com/' + (item.referenceItem.targetType === 'OFFICIAL_MESSAGE' ? 'message-detail/' : 'post-detail/') + item.referenceItem.targetId + '/' + (item.referenceItem.targetType === 'ORIGINAL_POST' ? 'originalPost' : item.referenceItem.targetType === 'OFFICIAL_MESSAGE' ? 'officialMessage' : item.referenceItem.targetType)"
@@ -114,6 +118,9 @@
             </div>
           </div>
           <div class="n-like-inline-block">
+            <!-- 该动态已删除 -->
+            <div class="n-like-no-link"
+                 v-if="item.referenceItem.status === 'DELETED'"></div>
             <a class="n-like-post">
               <span v-if="!item.referenceItem.referenceImageUrl"
                     v-html="item.referenceItem.content.replace(/\n/g, '<br/>')"></span>
@@ -137,6 +144,9 @@
             </div>
           </div>
           <div class="n-like-inline-block">
+            <!-- 该动态已删除 -->
+            <div class="n-like-no-link"
+                 v-if="item.referenceItem.status === 'DELETED'"></div>
             <a class="n-like-post">
               <span v-if="!item.referenceItem.referenceImageUrl"
                     v-html="item.referenceItem.content.replace(/\n/g, '<br/>')"></span>
@@ -159,6 +169,9 @@
             </p>
           </div>
           <div class="n-like-inline-block">
+            <!-- 该动态已删除 -->
+            <div class="n-like-no-link"
+                 v-if="item.referenceItem.status === 'DELETED'"></div>
             <!-- 动态 - 有图 -->
             <a class="n-repost-post"
                v-if="item.referenceItem.referenceImageUrl"
@@ -194,6 +207,9 @@
             </p>
           </div>
           <div class="n-like-inline-block">
+            <!-- 该动态已删除 -->
+            <div class="n-like-no-link"
+                 v-if="item.referenceItem.status === 'DELETED'"></div>
             <!-- 动态 - 有图 -->
             <a class="n-comment-post"
                v-if="item.referenceItem.referenceImageUrl"
@@ -231,6 +247,9 @@
             </p>
           </div>
           <div class="n-like-inline-block">
+            <!-- 该动态已删除 -->
+            <div class="n-like-no-link"
+                 v-if="item.referenceItem.status === 'DELETED'"></div>
             <!-- 动态 - 有图 -->
             <a class="n-comment-post"
                v-if="item.referenceItem.referenceImageUrl && item.type !== 'REPLIED_TO_ANSWER_COMMENT'"
@@ -277,6 +296,9 @@
             </p>
           </div>
           <div class="n-like-inline-block">
+            <!-- 该动态已删除 -->
+            <div class="n-like-no-link"
+                 v-if="item.referenceItem.status === 'DELETED'"></div>
             <!-- 动态 - 有图 -->
             <a class="n-comment-post"
                v-if="item.referenceItem.referenceImageUrl"
@@ -308,6 +330,9 @@
             </p>
           </div>
           <div class="n-like-inline-block">
+            <!-- 该动态已删除 -->
+            <div class="n-like-no-link"
+                 v-if="item.referenceItem.status === 'DELETED'"></div>
             <!-- 动态 - 有图 -->
             <a class="n-comment-post"
                v-if="item.referenceItem.referenceImageUrl"
@@ -343,7 +368,7 @@
         <div class="n-unknown"
              v-else>
           <div>不支持的消息类型<br>
-            <a :href="'https://github.com/coder-ysj/jike-meow/issues/new?title=当前正在使用的版本号: ' + browser.runtime.getManifest().version"
+            <a :href="'https://github.com/coder-ysj/jike-meow/issues/new?title=当前正在使用的版本号: ' + chrome.runtime.getManifest().version"
                target="_blank">点击此处</a> 反馈给作者</div>
         </div>
         <!-- 时间显示 -->
@@ -400,6 +425,5 @@
   <script src="scripts/qrcode.min.js"></script>
   <script src="popup.js"></script>
 </body>
-
 
 </html>
