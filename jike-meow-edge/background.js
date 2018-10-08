@@ -15,11 +15,16 @@ let socket;
 
 browser.runtime.onInstalled.addListener(function () {
   refreshToken();
-  // clearInterval();
 
+  browser.alarms.clearAll();
+  browser.alarms.create('refreshToken', {
+    delayInMinutes: 10,
+    periodInMinutes: 10
+  });
   // 每十分钟刷新一次 token
-  let tokenRefresherDelayTimeInMin = 10 * 60 * 1000;
-  setInterval(refreshToken, tokenRefresherDelayTimeInMin);
+  browser.alarms.onAlarm.addListener(function () {
+    refreshToken();
+  });
 
   // 启动 Socket 连接
   newSocket();
