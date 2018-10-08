@@ -1,7 +1,7 @@
 /* 
 Modified by: @SpencerWoo
 
-For Firefox compatibility:
+For MS Edge compatibility:
 - "chrome" namespace has been changed to "browser"
 */
 
@@ -10,12 +10,8 @@ For Firefox compatibility:
 let socket;
 
 // 创建 browser 计时器
-// For comatibility in MS Edge, use setInterval
-// 'browser.alarms' is not implemented in MS Edge
-
 browser.runtime.onInstalled.addListener(function () {
   refreshToken();
-
   browser.alarms.clearAll();
   browser.alarms.create('refreshToken', {
     delayInMinutes: 10,
@@ -25,7 +21,6 @@ browser.runtime.onInstalled.addListener(function () {
   browser.alarms.onAlarm.addListener(function () {
     refreshToken();
   });
-
   // 启动 Socket 连接
   newSocket();
 });

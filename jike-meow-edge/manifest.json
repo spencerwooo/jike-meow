@@ -18,18 +18,18 @@
         "page": "background.html",
         "persistent": true
     },
-    "browser_action": {
-        "default_popup": "popup.html",
-        "default_icon": {
-            "16": "images/jk16.png",
-            "20": "images/jk32.png",
-            "40": "images/jk48.png",
-            "128": "images/jk128.png"
-        }
-    },
     "browser_specific_settings": {
         "edge": {
             "browser_action_next_to_addressbar": true
+        }
+    },
+    "browser_action": {
+        "default_popup": "popup.html",
+        "default_icon": {
+            "20": "images/jk16.png",
+            "40": "images/jk32.png",
+            "48": "images/jk48.png",
+            "128": "images/jk128.png"
         }
     },
     "icons": {
