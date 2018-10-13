@@ -1,11 +1,15 @@
-# 即刻喵 🐱 for 🦊 Firefox & Edge
+# 即刻喵 🐱 for Firefox
 
-![img](./images/transplant_banner_0.5x.png)
+> And maybe for Edge, who knows. 😀
+
+![img](./images/firefox_banner.jpg)
 
 [![Mozilla Add-on](https://img.shields.io/amo/stars/dustman.svg?style=flat-square)](https://addons.mozilla.org/zh-CN/firefox/addon/%E5%8D%B3%E5%88%BB%E5%96%B5/)
 ![love](https://img.shields.io/badge/Made%20with-love-ff69b4.svg?style=flat-square)
 [![vue: 2.5.17](https://img.shields.io/badge/vue-2.5.17-green.svg?style=flat-square)](https://cn.vuejs.org/v2/guide/installation.html)
 [![License: MIT](https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+
+> 「即刻喵」是一个为社区平台「即刻」开发的 Chrome 浏览器插件，主要弥补了网页端无法查看消息内容的缺陷，让「即刻」用户能够在不接触手机的前提下，尽可能得到接近客户端的完整体验。
 
 基于 Vue.js 和 Socket.io 开发的第三方即刻通知插件。
 
@@ -71,11 +75,9 @@
 
 当然也欢迎 Star 本仓库，让我们共同帮扶即刻做大做强！💪
 
-<br>
-
 ---
 
-**🐱 Jike Meow for Firefox & Microsoft Edge** ©Spencer Woo. Released under the MIT License. 
+**🐱 Jike Meow for Firefox** ©Spencer Woo. Released under the MIT License. 
 
 Originally created by [Ⓙcoder-ysj](https://web.okjike.com/user/F39BF844-7BF9-4754-8E7C-189CA3A35644/post).
 
