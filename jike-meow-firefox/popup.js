@@ -1,6 +1,3 @@
-// Google 官方手册访问 https://developer.browser.com/extensions
-// 非官方中文教程访问 https://crxdoc-zh.appspot.com/extensions
-
 /*
 auth token, 用来获取通知列表
 refresh token, 可以换取新的 token
@@ -23,19 +20,20 @@ new Vue({
   data() {
     return {
       isUIEnabled: false, // 优化 UI 闪烁问题
-      apiURL: 'https://app.jike.ruguoapp.com',
-      currentPageURL: '',
+      isQrCodeLoading: true, // 二维码加载指示
+      isQrCodeScanning: false, // 二维码扫描指示
+      isError: false, // 通知列表加载失败
+      isNotificationLoading: false, // 通知列表正在加载指示
+      isNotificationCheckingFunctionEnabled: '1', // 历史位置记录功能状态
+      isEnlargedImageLoading: false, // 图片查看器加载指示
+      apiURL: 'https://app.jike.ruguoapp.com', // 全局 API 地址
+      currentPageURL: '', // 当前捕捉到的页面地址
       uuid: '',
       authToken: '',
       refreshToken: '',
       accessToken: '',
-      isError: false, // 通知列表加载失败
-      isQrCodeLoading: true,
-      isQrCodeScanning: false,
-      notifications: [], // 通知消息列表
-      isNotificationLoading: false,
+      notifications: [], // 通知列表
       lastCheckedNotificationId: '', // 通知列表分页显示
-      isNotificationCheckingFunctionEnabled: '1', // 历史位置记录功能状态
       lastNotificationCheckingTime: '', // 最近一次查看通知的时间
       enlargedImage: '' // 图片查看器
     }
@@ -90,7 +88,6 @@ new Vue({
         // 如果 storage 本地没有 token 数据
         // 则重新登录 => 显示二维码供用户扫描
         _this.getUuid();
-        _this.isUIEnabled = true;
       }
     });
 
@@ -105,10 +102,7 @@ new Vue({
   methods: {
     // 二维码生成
     newQRCode(url) {
-      // 清空二维码所在 container #qrcode 的标签内容
-      // 以避免重复生成二维码
-      // 这一方法并不完美, 将来可以改进
-      let qrElement = document.getElementById('qrcode');
+      let qrElement = this.$refs['login-qrcode'];
       if (!qrElement) return;
       qrElement.innerHTML = '';
       let qrcode = new QRCode(qrElement, {
@@ -120,6 +114,13 @@ new Vue({
         correctLevel: QRCode.CorrectLevel.H
       });
     },
+    // UI Enabled
+    enabledUI() {
+      return new Promise(resolve => {
+        this.isUIEnabled = true;
+        resolve();
+      });
+    },
     // 获取 Session
     getUuid() {
       let _this = this;
@@ -128,14 +129,21 @@ new Vue({
 
       axios.get(_this.apiURL + '/sessions.create')
         .then(function (res) {
-          _this.isQrCodeLoading = false;
+          if (res.status !== 200) {
+            _this.isQrCodeLoading = false;
+            _this.isUIEnabled = false;
+            return;
+          }
           _this.uuid = res.data.uuid;
-          _this.newQRCode('jike://page.jk/web?url=https%3A%2F%2Fruguoapp.com%2Faccount%2Fscan%3Fuuid%3D' + _this.uuid + '&displayHeader=false&displayFooter=false');
+          _this.isQrCodeLoading = false;
+          _this.enabledUI().then(() => {
+            _this.newQRCode('jike://page.jk/web?url=https%3A%2F%2Fruguoapp.com%2Faccount%2Fscan%3Fuuid%3D' + _this.uuid + '&displayHeader=false&displayFooter=false');
+          })
           _this.waitForLogin();
         })
         .catch(function () {
           _this.isQrCodeLoading = false;
-          alert('二维码生成失败');
+          _this.isUIEnabled = false;
           return;
         });
     },
@@ -176,7 +184,7 @@ new Vue({
           _this.isQrCodeLoading = false;
           _this.isQrCodeScanning = false;
           if (data.confirmed === true) {
-
+            _this.uuid = '';
             // 确认登录后将 token 数据存在本地 storage 中
             _this.authToken = data.token;
             _this.refreshToken = data['x-jike-refresh-token'];
@@ -232,37 +240,31 @@ new Vue({
         }
       })
         .then(function (response) {
+          if (response.status !== 200) {
+            _this.isNotificationLoading = false;
+            _this.isError = true;
+            return;
+          }
           const res = response.data;
           if (status === 'refresh') browser.browserAction.setBadgeText({ text: '' });
 
           // 获取上次刷新动态的时间
+          if (res.data.length <= 0) {
+            _this.isNotificationLoading = false;
+            return;
+          }
           browser.storage.local.get(null, function (result) {
             if (result['last-check-notifications-time']) _this.lastNotificationCheckingTime = result['last-check-notifications-time'];
-            for (var i = 0; i < res.data.length; i++) {
-              if ((new Date(res.data[i].createdAt)).getTime() <= _this.lastNotificationCheckingTime) {
-                res.data[i].isViewed = true;
-              }
-              _this.notifications.push(res.data[i]);
-            }
+            res.data.map(item => {
+              if ((new Date(item.createdAt)).getTime() <= _this.lastNotificationCheckingTime) item.isViewed = true;
+              _this.notifications.push(item);
+            });
 
             // 覆盖新的刷动态时间
-            var newTime = (new Date(_this.notifications[0].createdAt)).getTime();
             browser.storage.local.set({
-              'last-check-notifications-time': newTime
+              'last-check-notifications-time': (new Date(_this.notifications[0].createdAt)).getTime()
             });
             _this.isNotificationLoading = false;
-
-            // 滚动加载
-            var notificationDom = document.getElementById('notification');
-            notificationDom.addEventListener('scroll', function () {
-              var scrollHeight = notificationDom.scrollHeight;
-              var scrollTop = notificationDom.scrollTop;
-              if (scrollHeight - scrollTop < 700 && _this.isNotificationLoading === false) {
-                _this.lastCheckedNotificationId = _this.notifications[_this.notifications.length - 1].id;
-                _this.getNotificationList();
-                return;
-              }
-            })
           });
         })
         .catch(function () {
@@ -270,6 +272,22 @@ new Vue({
           _this.isError = true;
           return;
         });
+    },
+    // 通知列表滚动加载
+    notificationScrolling(e) {
+      let _this = this
+      if (_this.enlargedImage && isUIEnabled) {
+        e.preventDefault();
+        return;
+      }
+      let notificationDom = document.getElementById('notification');
+      let scrollHeight = notificationDom.scrollHeight;
+      let scrollTop = notificationDom.scrollTop;
+      if (scrollHeight - scrollTop < 700 && _this.isNotificationLoading === false) {
+        _this.lastCheckedNotificationId = _this.notifications[_this.notifications.length - 1].id;
+        _this.getNotificationList();
+        return;
+      }
     },
     // 时间格式转换
     reformatTime(updateTime) {
@@ -294,6 +312,40 @@ new Vue({
         }
       }
     },
+    // 关注用户
+    followUser(item) {
+      let _this = this;
+      axios({
+        method: 'post',
+        url: _this.apiURL + '/1.0/userRelation/follow',
+        headers: { 'x-jike-access-token': _this.accessToken },
+        data: { username: item.actionItem.users[0].username }
+      })
+        .then(function (res) {
+          if (res.status !== 200) return;
+          item.actionItem.users[0].following = true;
+        })
+        .catch(function () {
+          return;
+        });
+    },
+    // 取消关注用户
+    unfollowUser(item) {
+      let _this = this;
+      axios({
+        method: 'post',
+        url: _this.apiURL + '/1.0/userRelation/unfollow',
+        headers: { 'x-jike-access-token': _this.accessToken },
+        data: { username: item.actionItem.users[0].username }
+      })
+        .then(function (res) {
+          if (res.status !== 200) return;
+          item.actionItem.users[0].following = false;
+        })
+        .catch(function () {
+          return;
+        });
+    },
     // 历史阅读位置记录
     toggleNotificationFunction(response) {
       browser.storage.local.set({
@@ -314,6 +366,7 @@ new Vue({
             file: 'scripts/store-token.js'
           });
         } else {
+          // window.open('https://web.okjike.com');
           browser.tabs.create({url: 'https://web.okjike.com'});
           browser.storage.local.set({
             'new-tab-to-login': true
@@ -338,6 +391,7 @@ new Vue({
     // 打开图片
     openImage() {
       let _this = this;
+      _this.isEnlargedImageLoading = true;
       if (_this.enlargedImage) window.open(_this.enlargedImage);
     }
   }

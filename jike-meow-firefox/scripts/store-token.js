@@ -3,20 +3,17 @@
     access_token = localStorage['access-token'],
     time_stamp = localStorage['token-timestamp'];
 
-
-  browser.storage.local.get(null, (res) => {
+  chrome.storage.local.get(null, (res) => {
     if (!refresh_token || !access_token || !time_stamp) {
       localStorage.setItem('auth-token', res['refresh-token']);
       localStorage.setItem('access-token', res['access-token']);
       localStorage.setItem('token-timestamp', (new Date()).generateTimestamp());
       location.reload();
     } else {
-      // alert('检测到已登陆');
       return;
     }
   });
 })()
-
 
 Date.prototype.generateTimestamp = function () {
   var tzo = -this.getTimezoneOffset(),

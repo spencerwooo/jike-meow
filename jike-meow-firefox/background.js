@@ -1,10 +1,3 @@
-/* 
-Modified by: @SpencerWoo
-
-For Firefox compatibility:
-- "chrome" namespace has been changed to "browser"
-*/
-
 'use strict'
 
 let socket;
@@ -12,24 +5,21 @@ let socket;
 // 创建 browser 计时器
 browser.runtime.onInstalled.addListener(function () {
   refreshToken();
-  browser.alarms.clearAll();
-  browser.alarms.create('refreshToken', {
-    delayInMinutes: 10,
-    periodInMinutes: 10
-  });
-  // 每十分钟刷新一次 token
-  browser.alarms.onAlarm.addListener(function () {
-    refreshToken();
-  });
-  // 启动 Socket 连接
-  newSocket();
 });
 
 // 监听 popup.js 的回调
 browser.runtime.onMessage.addListener(
   function (request) {
     if (request.logged_in === true) {
-      refreshToken();
+      browser.alarms.clearAll();
+      browser.alarms.create('refreshToken', {
+        delayInMinutes: 10,
+        periodInMinutes: 10
+      });
+      // 每十分钟刷新一次 token
+      browser.alarms.onAlarm.addListener(function () {
+        refreshToken();
+      });
       newSocket();
     }
   });
