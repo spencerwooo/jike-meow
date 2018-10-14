@@ -29,7 +29,9 @@
 
 ## Microsoft Edge 测试安装方法
 
-> 测试中，仅支持单次安装，出现 bug 请积极反馈 🎉
+> 测试中，仅支持单次安装，~~出现 bug 请积极反馈 🎉~~
+> 
+> 可能不会更新了。请大家谅解。
 
 1. 将本仓库下载并解压缩到任意文件夹中；
 2. 依照微软官方支持文档 [Adding, moving, and removing extensions for Microsoft Edge](https://docs.microsoft.com/en-us/microsoft-edge/extensions/guides/adding-and-removing-extensions) 介绍，开启 Edge 开发者模式，允许未签名插件安装；
