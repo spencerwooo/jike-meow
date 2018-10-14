@@ -61,7 +61,6 @@ new Vue({
         if (result['notification-function']) {
           _this.isNotificationCheckingFunctionEnabled = (result['notification-function'] === 'true');
         }
-
         // 通知 background.js 开始建立 socket 连接
         axios({
           url: _this.apiURL + '/app_auth_tokens.refresh',
