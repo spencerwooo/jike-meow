@@ -391,7 +391,7 @@
          v-if="isNotificationLoading">🐱 正在加载数据…</p>
       <!-- 加载失败 -->
       <p id="notification-error"
-         v-if="isError"
+         v-if="isNotificationError"
          @click.self.stop="getNotificationList()">🌚 加载失败，请点击重试</p>
     </div>
     <!-- 按钮 -->
