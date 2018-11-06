@@ -28,6 +28,7 @@ new Vue({
       isNotificationError: false,
       isNotificationLoading: false,
       isNotificationCheckingFunctionEnabled: false,
+      isNotificationCheckingEnabled: true,
       isEnlargedImageLoading: false, // 图片查看器加载指示
       apiURL: 'https://app.jike.ruguoapp.com', // 全局 API 地址
       currentPageURL: '', // 当前捕捉到的页面地址
@@ -45,7 +46,6 @@ new Vue({
     let _this = this;
     _this.isQrCodeLoading = false;
 
-    // Get current tab URL
     browser.tabs.query({
       active: true,
       currentWindow: true
@@ -53,43 +53,20 @@ new Vue({
       _this.currentPageURL = tabs[0].url;
     });
 
-    // Get token from browser storage
     browser.storage.local.get(null, function (result) {
       if (result['auth-token'] && result['refresh-token'] && result['access-token']) {
         if (result['notification-function']) {
           _this.isNotificationCheckingFunctionEnabled = (result['notification-function'] === 'true');
         }
+
         _this.authToken = result['auth-token'];
-        // Refresh token from browser storage
-        axios({
-          url: _this.apiURL + '/app_auth_tokens.refresh',
-          method: 'get',
-          headers: {
-            'x-jike-refresh-token': result['refresh-token']
-          }
-        })
-          .then(response => {
-            if (response.status !== 200) {
-              alert('系统错误, 若多次刷新均无法获取数据, 建议重新登录');
-              return;
-            }
-            const data = response.data;
-            _this.refreshToken = data['x-jike-refresh-token'];
-            _this.accessToken = data['x-jike-access-token'];
-            _this.isUIEnabled = true;
-            browser.storage.local.set({
-              'refresh-token': data['x-jike-refresh-token'],
-              'access-token': data['x-jike-access-token']
-            });
-            _this.getNotificationList('refresh');
-            browser.runtime.sendMessage({
-              logged_in: true
-            });
-          })
-          .catch(() => {
-            alert('网络错误');
-            return;
-          });
+        _this.refreshToken = result['refresh-token'];
+        _this.accessToken = result['access-token'];
+        _this.isUIEnabled = true;
+        _this.getNotificationList('refresh');
+        browser.runtime.sendMessage({
+          logged_in: true
+        });
       } else {
         _this.getUuid();
       }
@@ -208,6 +185,7 @@ new Vue({
     },
     getNotificationList(status) {
       let _this = this;
+      if (_this.isNotificationCheckingEnabled === false) return;
       _this.isNotificationError = false;
       _this.lastNotificationCheckingTime = '';
       _this.isNotificationLoading = true;
@@ -229,7 +207,7 @@ new Vue({
         },
         headers: {
           'x-jike-app-auth-jwt': _this.authToken,
-          'app-version': '4.8.0'
+          'app-version': '4.17.0'
         }
       })
         .then(function (response) {
@@ -240,6 +218,7 @@ new Vue({
             return;
           }
           const res = response.data;
+          if (res.data.length <= 0) _this.isNotificationCheckingEnabled = false;
           if (status === 'refresh') browser.browserAction.setBadgeText({ text: '' });
 
           if (res.data.length <= 0) {
@@ -259,7 +238,13 @@ new Vue({
             _this.isNotificationLoading = false;
           });
         })
-        .catch(function () {
+        .catch(function (error) {
+          if (error.response.status === 401) {
+            alert('授权过期，请重新登录');
+            browser.storage.local.clear();
+            browser.runtime.reload();
+            return;
+          }
           _this.isNotificationLoading = false;
           _this.isNotificationError = true;
           alert('网络错误');

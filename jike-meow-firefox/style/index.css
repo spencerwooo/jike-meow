@@ -93,8 +93,8 @@ div.login-qrcode-framer > p > b {
 div#notification {
   display: block;
   height: 400px;
-  padding: 10px 20px 0 20px;
   width: 380px;
+  padding: 10px 20px 0 20px;
   padding-right: 30px !important;
   overflow-x: hidden;
   overflow-y: scroll;

@@ -1,13 +1,14 @@
 {
   "name": "即刻喵 for Firefox",
-  "version": "1.2.2",
+  "version": "1.2.9",
   "author": "coder_ysj & SpencerWoo",
   "description": "可独立使用的「即刻」非官方通知插件，并为网页版（web.okjike.com）提供一键登录功能。",
   "permissions": [
     "activeTab",
-    "tabs",
-    "storage",
     "alarms",
+    "notifications",
+    "storage",
+    "tabs",
     "<all_urls>"
   ],
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",

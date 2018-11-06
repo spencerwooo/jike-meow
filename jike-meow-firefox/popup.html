@@ -188,8 +188,40 @@
             <!-- 动态 - 无图 -->
             <a class="n-repost-post"
                v-else
-               :href="'https://web.okjike.com/post-detail' + item.actionItem.id + '/repost'"
+               :href="'https://web.okjike.com/post-detail/' + item.actionItem.id + '/repost'"
                target="_blank">
+              <span v-if="!item.referenceItem.referenceImageUrl"
+                    v-html="item.referenceItem.content.replace(/\n/g, '<br/>')"></span>
+            </a>
+          </div>
+        </div>
+        <!-- 转发了你的问题 -->
+        <div class="n-item-list"
+             v-else-if="item.type === 'REPOST' && item.actionItem.targetType === 'QUESTION'">
+          <a class="n-repost-avatar"
+             target="_blank"
+             :class="{ verified: item.actionItem.users[0].isVerified }"
+             :style="{ backgroundImage: 'url(' + item.actionItem.users[0].profileImageUrl + ')' }"
+             :href="'https://web.okjike.com/user/' + item.actionItem.users[0].username"></a>
+          <div class="n-repost-user">
+            <p class="n-repost-users-name">{{ item.actionItem.users[0].screenName }} 转发了你的问题</p>
+            <p class="n-repost-users-comment">{{ item.actionItem.content ? item.actionItem.content + '&nbsp;' : '' }}
+              <a @click.self.stop="previewImage(item.actionItem.pictures[0].picUrl)"
+                 v-if="item.actionItem.pictures && item.actionItem.pictures.length > 0">查看图片</a>
+            </p>
+          </div>
+          <div class="n-like-inline-block">
+            <!-- 该动态已删除 -->
+            <div class="n-like-no-link"
+                 v-if="item.referenceItem.status === 'DELETED'"></div>
+            <!-- 动态 - 有图 -->
+            <a class="n-repost-post"
+               v-if="item.referenceItem.referenceImageUrl"
+               :style="{ backgroundImage: 'url(' + item.referenceItem.referenceImageUrl + ')' }">
+            </a>
+            <!-- 动态 - 无图 -->
+            <a class="n-repost-post"
+               v-else>
               <span v-if="!item.referenceItem.referenceImageUrl"
                     v-html="item.referenceItem.content.replace(/\n/g, '<br/>')"></span>
             </a>
@@ -352,6 +384,42 @@
             </a>
           </div>
         </div>
+        <!-- @ 了你 -->
+        <div class="n-item-list"
+             v-else-if="item.type === 'MENTION'">
+          <a class="n-repost-avatar"
+             target="_blank"
+             :class="{ verified: item.actionItem.users[0].isVerified }"
+             :style="{ backgroundImage: 'url(' + item.actionItem.users[0].profileImageUrl + ')' }"
+             :href="'https://web.okjike.com/user/' + item.actionItem.users[0].username"></a>
+          <div class="n-repost-user">
+            <p class="n-repost-users-name">{{ item.actionItem.users[0].screenName }} @了你</p>
+            <p class="n-repost-users-comment">{{ item.actionItem.content ? item.actionItem.content + '&nbsp;' : '' }}
+              <a @click.self.stop="previewImage(item.actionItem.pictures[0].picUrl)"
+                 v-if="item.actionItem.pictures && item.actionItem.pictures.length > 0">查看图片</a>
+            </p>
+          </div>
+          <div class="n-like-inline-block">
+            <!-- 该动态已删除 -->
+            <div class="n-like-no-link"
+                 v-if="item.referenceItem.status === 'DELETED'"></div>
+            <!-- 动态 - 有图 -->
+            <a class="n-repost-post"
+               v-if="item.referenceItem.referenceImageUrl"
+               :style="{ backgroundImage: 'url(' + item.referenceItem.referenceImageUrl + ')' }"
+               :href="'https://web.okjike.com/message-detail/' + item.referenceItem.id + '/originalPost'"
+               target="_blank">
+            </a>
+            <!-- 动态 - 无图 -->
+            <a class="n-repost-post"
+               v-else
+               :href="'https://web.okjike.com/message-detail/' + item.referenceItem.id + '/originalPost'"
+               target="_blank">
+              <span v-if="!item.referenceItem.referenceImageUrl"
+                    v-html="item.referenceItem.content.replace(/\n/g, '<br/>')"></span>
+            </a>
+          </div>
+        </div>
         <!-- 关注了你 -->
         <div class="n-item-list"
              v-else-if="item.type === 'USER_FOLLOWED'">
@@ -380,7 +448,7 @@
         <div class="n-unknown"
              v-else>
           <div>不支持的消息类型<br>
-            <a :href="'https://github.com/coder-ysj/jike-meow/issues/new?title=当前正在使用的版本号: ' + chrome.runtime.getManifest().version"
+            <a :href="'https://github.com/coder-ysj/jike-meow/issues/new?title=当前正在使用的版本号: ' + browser.runtime.getManifest().version"
                target="_blank">点击此处</a> 反馈给作者</div>
         </div>
         <!-- 时间显示 -->
