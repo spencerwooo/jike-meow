@@ -9,8 +9,7 @@
 </head>
 
 <body>
-  <div id="app"
-       :class="{ full: accessToken && notifications && isUIEnabled }">
+  <div id="app">
     <!-- 登录 -->
     <div id="login"
          v-if="(!authToken || !refreshToken || !accessToken) && isUIEnabled">
@@ -442,6 +441,30 @@
                     v-else
                     style="background-color: #ccc;"
                     @click.self.stop="unfollowUser(item)">已关注</button>
+          </div>
+        </div>
+        <!-- 赞了你的头像 -->
+        <div class="n-item-list"
+             v-else-if="item.type === 'LIKE_AVATAR'">
+          <div class="n-like-users">
+            <div class="n-like-users-name">
+              <a v-for="user in item.actionItem.users">{{ user.screenName }}</a>
+              <span v-if="item.actionItem.users.length > 1">等 {{ item.actionItem.usersCount }} 人</span>赞了你的头像
+            </div>
+            <div class="n-like-users-avatar">
+              <a v-for="avatar in item.actionItem.users"
+                 :class="{ verified: avatar.isVerified }"
+                 :href="'https://web.okjike.com/user/' + avatar.username"
+                 :style="{ backgroundImage: 'url(' + avatar.profileImageUrl + ')' }"
+                 target="_blank"></a>
+            </div>
+          </div>
+          <div class="n-like-inline-block">
+            <!-- 动态 - 有图 -->
+            <a class="n-repost-post"
+               v-if="item.referenceItem.referenceImageUrl"
+               :style="{ backgroundImage: 'url(' + item.referenceItem.referenceImageUrl + ')' }">
+            </a>
           </div>
         </div>
         <!-- 未知消息类型 -->

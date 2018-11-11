@@ -9,7 +9,6 @@ access token, Socket and other functions
 
 /* 
 Modified by: @SpencerWoo
-
 For Firefox compatibility, two places have been changed:
 - "browser" namespace has been changed to "browser"
 - "window.open("https://web.okjike.com")" is incompatible with Firefox and MS Edge,

@@ -39,10 +39,6 @@ div#app {
   overflow: hidden;
 }
 
-div#app.full {
-  width: 350px;
-}
-
 /* 登录 */
 
 div#login {
@@ -93,9 +89,8 @@ div.login-qrcode-framer > p > b {
 div#notification {
   display: block;
   height: 400px;
-  width: 380px;
+  width: 400px;
   padding: 10px 20px 0 20px;
-  padding-right: 30px !important;
   overflow-x: hidden;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
