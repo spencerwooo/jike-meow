@@ -341,6 +341,7 @@ div.n-time-display {
 button {
   cursor: pointer;
   display: block;
+  font-family: sans-serif;
   font-size: 14px;
   font-weight: 500;
   line-height: 20px;
